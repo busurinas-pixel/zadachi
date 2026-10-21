@@ -1,0 +1,4 @@
+window.KANBAN_CONFIG = {
+  SUPABASE_URL: "https://bodadqkvknrvtuymavxs.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJvZGFkcWt2a25ydnR1eW1hdnhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI2MTI1NjAsImV4cCI6MjEwODE4ODU2MH0.kXGhQOJg7cnecpNNg2PyxRz8fUNh8phlbkRhY505y3A"
+};
