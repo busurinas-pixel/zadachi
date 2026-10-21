@@ -201,6 +201,34 @@
   :root:not([data-theme="dark"]) .col-head{border-bottom:none}
   :root:not([data-theme="dark"]) .col-head .badge{background:rgba(255,255,255,.8);border:none}
   :root:not([data-theme="dark"]) .empty-col{color:rgba(74,58,64,.55)}
+  .view-toggle{display:flex;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:3px;gap:2px}
+  .view-toggle button{border:none;background:transparent;color:var(--muted);font:inherit;font-weight:600;font-size:13px;padding:6px 12px;border-radius:8px;cursor:pointer}
+  .view-toggle button.on{background:var(--primary);color:#fff}
+  .tlist{flex:1;overflow-y:auto;padding-bottom:24px;display:flex;flex-direction:column;gap:14px}
+  .tl-sec{border-radius:16px;background:var(--card-2);overflow:hidden;box-shadow:var(--shadow);flex-shrink:0}
+  .tl-head{display:flex;align-items:center;gap:10px;padding:11px 16px;font-weight:600;font-size:13.5px;cursor:pointer;user-select:none}
+  .tl-head .badge{margin-left:auto;font-weight:700;font-size:12px;min-width:26px;text-align:center;background:rgba(255,255,255,.8);border-radius:8px;padding:1px 7px;color:#2c2822}
+  .tl-head .chev{transition:.15s;display:inline-block} .tl-sec.closed .chev{transform:rotate(-90deg)} .tl-sec.closed .tl-rows{display:none}
+  .tl-row{display:flex;align-items:center;gap:12px;padding:11px 16px;background:var(--card);border-top:1px solid var(--border-soft);cursor:pointer}
+  .tl-row:hover{background:var(--card-2)}
+  .tl-chk{width:22px;height:22px;flex-shrink:0;border-radius:50%;border:2px solid var(--border);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff}
+  .tl-chk svg{width:13px;height:13px}
+  .tl-chk:hover{border-color:var(--green)} .tl-row.done .tl-chk{background:var(--green);border-color:var(--green)}
+  .tl-main{flex:1;min-width:0}
+  .tl-title{font-weight:600;font-size:14px;line-height:1.35;word-break:break-word}
+  .tl-row.done .tl-title{text-decoration:line-through;color:var(--muted)}
+  .tl-meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:3px;font-size:12px;color:var(--muted);align-items:center}
+  .tl-meta .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:5px}
+  .tl-meta .overdue{color:var(--red);font-weight:600} .tl-meta .today{color:var(--orange);font-weight:600}
+  .tl-prio{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .tl-prio.urgent{background:var(--red)} .tl-prio.high{background:var(--orange)} .tl-prio.medium{background:var(--yellow)} .tl-prio.low{background:var(--green)}
+  .tl-empty{padding:12px 16px;color:var(--muted);font-size:13px;background:var(--card)}
+  .tl-sec.new .tl-head{background:var(--slate-bg)} .tl-sec.backlog .tl-head{background:var(--primary-soft)} .tl-sec.progress .tl-head{background:var(--blue-bg)}
+  .tl-sec.approval .tl-head{background:var(--amber-bg)} .tl-sec.done .tl-head{background:var(--emerald-bg)}
+  :root:not([data-theme="dark"]) .tl-sec.new .tl-head{background:#cfc2ec} :root:not([data-theme="dark"]) .tl-sec.backlog .tl-head{background:#b7d2ea}
+  :root:not([data-theme="dark"]) .tl-sec.progress .tl-head{background:#f8c3a3} :root:not([data-theme="dark"]) .tl-sec.approval .tl-head{background:#f2d97f}
+  :root:not([data-theme="dark"]) .tl-sec.done .tl-head{background:#b4dbbe}
+  @media(max-width:700px){.toolbar{flex-wrap:wrap}.tl-row{padding:12px 14px}}
 </style>
 </head>
 <body>
@@ -252,6 +280,7 @@
           <option value="all">Все приоритеты</option>
           <option value="urgent">🔴 Срочный</option><option value="high">🟠 Высокий</option><option value="medium">🟡 Средний</option><option value="low">🟢 Низкий</option>
         </select>
+        <div class="view-toggle" id="viewToggle"><button data-view="board">Доска</button><button data-view="list">Список</button></div>
         <div class="archive-toggle"><span>Архив</span><div class="switch" id="archiveSwitch"></div></div>
         <button class="btn-primary" id="newTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -259,6 +288,7 @@
         </button>
       </div>
       <div class="columns" id="columns"></div>
+      <div class="tlist" id="tlist" style="display:none"></div>
     </main>
   </div>
 </div>
@@ -495,7 +525,39 @@ function cardHTML(t){
     <div class="card-bot">${dl?`<span class="deadline ${dl.state}">${ICON.cal}${dl.label}</span>`:'<span></span>'}<span class="meta">${meta}</span></div>
   </div>`;
 }
-function renderBoard(){
+let view=localStorage.getItem('kanban.view')||(window.innerWidth<700?'list':'board');
+let closedSecs=JSON.parse(localStorage.getItem('kanban.closed')||'["done"]');
+function renderView(){
+  document.querySelectorAll('#viewToggle button').forEach(b=>b.classList.toggle('on',b.dataset.view===view));
+  document.getElementById('columns').style.display=view==='board'?'':'none';
+  document.getElementById('tlist').style.display=view==='list'?'':'none';
+  view==='list'?renderList():renderBoardInner();
+}
+const PRIO_ORDER={urgent:0,high:1,medium:2,low:3};
+function renderList(){
+  const vis=visible();
+  document.getElementById('tlist').innerHTML=COLUMNS.map(col=>{
+    const list=vis.filter(t=>t.status===col.status).sort((a,b)=>(PRIO_ORDER[a.priority]??9)-(PRIO_ORDER[b.priority]??9)||((a.deadline||'9')>(b.deadline||'9')?1:-1));
+    const rows=list.length?list.map(t=>{
+      const dl=fmtDeadline(t.deadline), pn=projName(t.project_id), an=memberName(t.assignee_id), sc=subCount(t.id);
+      return `<div class="tl-row ${t.status==='done'?'done':''}" data-id="${t.id}">
+        <div class="tl-chk" data-chk="${t.id}" title="${t.status==='done'?'Вернуть в работу':'Готово'}">${t.status==='done'?ICON.check:''}</div>
+        <div class="tl-main"><div class="tl-title">${esc(t.title)}</div>
+          <div class="tl-meta">${pn?`<span><span class="dot" style="background:${projColor(t.project_id)}"></span>${esc(pn)}</span>`:''}${dl?`<span class="${dl.state}">${dl.label}</span>`:''}${sc.total?`<span>${sc.done}/${sc.total}</span>`:''}${an?`<span>${esc(an)}</span>`:''}</div></div>
+        <span class="tl-prio ${t.priority}"></span></div>`;}).join(''):'<div class="tl-empty">Нет задач</div>';
+    return `<div class="tl-sec ${col.cls} ${closedSecs.includes(col.status)?'closed':''}" data-status="${col.status}"><div class="tl-head"><span class="chev">▾</span>${col.title}<span class="badge">${list.length}</span></div><div class="tl-rows">${rows}</div></div>`;
+  }).join('');
+  document.querySelectorAll('.tl-head').forEach(h=>h.onclick=()=>{const st=h.parentElement.dataset.status;closedSecs=closedSecs.includes(st)?closedSecs.filter(x=>x!==st):[...closedSecs,st];localStorage.setItem('kanban.closed',JSON.stringify(closedSecs));h.parentElement.classList.toggle('closed');});
+  document.querySelectorAll('.tl-row').forEach(r=>r.onclick=e=>{if(e.target.closest('.tl-chk'))return;openDialog(r.dataset.id);});
+  document.querySelectorAll('.tl-chk').forEach(c=>c.onclick=async e=>{
+    e.stopPropagation(); const t=D.tasks.find(x=>x.id===c.dataset.chk); if(!t)return;
+    t.status=t.status==='done'?'in_progress':'done'; renderList(); renderSide();
+    const {error}=await sb.from('tasks').update({status:t.status,updated_at:new Date().toISOString()}).eq('id',t.id);
+    if(error)toast('Не сохранилось: '+error.message);
+  });
+}
+function renderBoard(){renderView();}
+function renderBoardInner(){
   const vis=visible();
   document.getElementById('columns').innerHTML=COLUMNS.map(col=>{
     const list=vis.filter(t=>t.status===col.status);
@@ -711,6 +773,7 @@ document.getElementById('sourceFilter').onchange=e=>{filters.source=e.target.val
 document.getElementById('prioFilter').onchange=e=>{filters.prio=e.target.value;renderBoard();};
 document.getElementById('archiveSwitch').onclick=function(){filters.archived=!filters.archived;this.classList.toggle('on',filters.archived);renderBoard();};
 document.getElementById('newTaskBtn').onclick=()=>openDialog(null);
+document.querySelectorAll('#viewToggle button').forEach(b=>b.onclick=()=>{view=b.dataset.view;localStorage.setItem('kanban.view',view);renderView();});
 document.getElementById('addProj').onclick=addProject;
 document.getElementById('addMember').onclick=addMember;
 document.getElementById('dlgSave').onclick=saveDialog;
