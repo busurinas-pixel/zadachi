@@ -758,7 +758,8 @@ function showLogin(){
     err.style.display='none'; btn.disabled=true; btn.textContent='Вхожу…';
     const {error}=await sb.auth.signInWithPassword({email:em.value.trim(),password:pw.value});
     btn.disabled=false; btn.textContent='Войти';
-    if(error){ err.textContent='Неверный email или пароль'; err.style.display='block'; pw.value=''; pw.focus(); }
+    if(error){ const net=error.name==='AuthRetryableFetchError'||!error.status||/fetch|network|load failed/i.test(error.message||'');
+      err.textContent=net?'Нет связи с базой. Проверьте интернет или включите/выключите VPN':'Неверный email или пароль'; err.style.display='block'; pw.value=''; pw.focus(); }
     else { startApp(); }
   }
   btn.onclick=submit;
