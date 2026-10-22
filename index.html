@@ -231,6 +231,16 @@
   @media(max-width:700px){.toolbar{flex-wrap:wrap}.tl-row{padding:12px 14px}}
   #projFilterMobile{display:none}
   @media(max-width:900px){#projFilterMobile{display:block}#sourceFilter{display:none}}
+  /* Фон — лес со светлячками, как в Trello */
+  body{background:#23382c url("bg.jpg") center center / cover no-repeat fixed}
+  :root:not([data-theme="dark"]) body{background:#23382c url("bg.jpg") center center / cover no-repeat fixed}
+  @media(max-width:900px){body,:root:not([data-theme="dark"]) body{background-attachment:scroll}}
+  .app,main.board{background:transparent}
+  :root:not([data-theme="dark"]) header.topbar{background:linear-gradient(90deg,rgba(243,198,208,.92),rgba(251,217,196,.92) 35%,rgba(247,231,174,.92) 65%,rgba(207,232,213,.92))}
+  :root:not([data-theme="dark"]) aside.side{background:rgba(255,255,255,.82)}
+  [data-theme="dark"] header.topbar,[data-theme="dark"] aside.side{background:rgba(21,27,44,.85)}
+  [data-theme="dark"] .col{background:rgba(17,23,38,.85)}
+  .tl-sec{box-shadow:0 4px 18px rgba(0,0,0,.25)}
 </style>
 </head>
 <body>
