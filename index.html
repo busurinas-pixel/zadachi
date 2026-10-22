@@ -229,6 +229,8 @@
   :root:not([data-theme="dark"]) .tl-sec.progress .tl-head{background:#f8c3a3} :root:not([data-theme="dark"]) .tl-sec.approval .tl-head{background:#f2d97f}
   :root:not([data-theme="dark"]) .tl-sec.done .tl-head{background:#b4dbbe}
   @media(max-width:700px){.toolbar{flex-wrap:wrap}.tl-row{padding:12px 14px}}
+  #projFilterMobile{display:none}
+  @media(max-width:900px){#projFilterMobile{display:block}#sourceFilter{display:none}}
 </style>
 </head>
 <body>
@@ -272,6 +274,7 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           <input id="searchInput" placeholder="Поиск задач…">
         </div>
+        <select class="filter" id="projFilterMobile"></select>
         <select class="filter" id="sourceFilter">
           <option value="all">Все источники</option>
           <option value="crm">🏢 CRM</option><option value="mentor">👤 Наставник</option><option value="self">✨ Мои</option>
@@ -486,6 +489,9 @@ function renderSide(){
     h+=`<div class="row-item ${active===p.id?'active':''}" data-proj="${p.id}"><span class="dot" style="background:${p.color}"></span><span class="name">${esc(p.name)}</span><span class="cnt">${c}</span></div>`;
   });
   document.getElementById('projList').innerHTML=h;
+  const pm=document.getElementById('projFilterMobile');
+  pm.innerHTML='<option value="">Все проекты</option>'+D.projects.map(p=>`<option value="${p.id}" ${active===p.id?'selected':''}>${esc(p.name)}</option>`).join('');
+  pm.onchange=()=>{filters.project=pm.value||null;render();};
   document.querySelectorAll('#projList .row-item').forEach(it=>it.onclick=()=>{filters.project=it.dataset.proj||null;render();});
 
   document.getElementById('memberList').innerHTML=D.members.map(m=>{
