@@ -241,6 +241,41 @@
   [data-theme="dark"] header.topbar,[data-theme="dark"] aside.side{background:rgba(21,27,44,.85)}
   [data-theme="dark"] .col{background:rgba(17,23,38,.85)}
   .tl-sec{box-shadow:0 4px 18px rgba(0,0,0,.25)}
+  /* Привычки */
+  .hview{flex:1;overflow-y:auto;padding-bottom:24px;display:flex;flex-direction:column;gap:14px;max-width:760px;width:100%}
+  .hview>*{flex-shrink:0}
+  .h-top{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card-2);border-radius:16px;padding:10px 12px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+  .h-week{font-weight:700;font-size:15px;text-align:center;display:flex;flex-direction:column;gap:2px}
+  .h-week small{font-weight:600;font-size:12px;color:var(--muted)}
+  .h-nav{width:34px;height:34px;border-radius:50%;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:20px;line-height:1;cursor:pointer}
+  .h-nav:disabled{opacity:.35;cursor:default}
+  .h-sec{background:var(--card-2);border-radius:16px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.25);padding-bottom:6px}
+  .h-sec-head{padding:11px 16px;font-weight:600;font-size:13.5px}
+  .h-sec.daily .h-sec-head{background:var(--primary-soft)} .h-sec.regular .h-sec-head{background:var(--blue-bg)}
+  :root:not([data-theme="dark"]) .h-sec.daily .h-sec-head{background:#f3c6d0} :root:not([data-theme="dark"]) .h-sec.regular .h-sec-head{background:#b7d2ea}
+  .h-days,.h-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(7,34px);gap:6px;align-items:center;padding:6px 14px}
+  .h-days{font-size:11px;font-weight:700;color:var(--muted);text-align:center;padding-top:10px}
+  .h-days span{display:flex;flex-direction:column;line-height:1.25}
+  .h-days b{font-size:12px;color:var(--text)}
+  .h-days .today,.h-days .today b{color:var(--primary)}
+  .h-row{border-top:1px solid var(--border-soft)}
+  .h-name{display:flex;flex-direction:column;gap:2px;font-size:14px;font-weight:600;position:relative;padding-right:22px;overflow-wrap:anywhere}
+  .h-name small{font-size:12px;font-weight:500;color:var(--muted)}
+  .h-prog{font-weight:800;color:var(--orange)} .h-prog.ok{color:var(--green)}
+  .h-del{position:absolute;right:0;top:0;border:none;background:none;color:var(--muted);font-size:17px;cursor:pointer;opacity:0;padding:0 4px}
+  .h-row:hover .h-del,.h-del:focus-visible{opacity:1}
+  @media(hover:none){.h-del{opacity:.5}}
+  .h-dot{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;padding:0}
+  .h-dot svg{width:16px;height:16px}
+  .h-dot.on{background:var(--primary);border-color:var(--primary)}
+  .h-dot.today{box-shadow:0 0 0 2px var(--primary-soft),0 0 0 4px var(--primary)}
+  .h-dot.future{opacity:.4}
+  .h-add{display:flex;gap:8px;flex-wrap:wrap;background:var(--card-2);border-radius:16px;padding:10px 12px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
+  .h-add input,.h-add select{font:inherit;font-size:14px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--text)}
+  .h-add input{flex:1;min-width:160px}
+  .h-add-btn,.h-cancel{border:none;background:none;color:var(--primary);font:inherit;font-weight:600;font-size:14px;cursor:pointer;padding:6px 4px}
+  .h-cancel{color:var(--muted)}
+  @media(max-width:520px){.h-days,.h-row{grid-template-columns:minmax(0,1fr) repeat(7,30px);gap:4px;padding:6px 10px}.h-dot{width:30px;height:30px}}
 </style>
 </head>
 <body>
@@ -293,7 +328,7 @@
           <option value="all">Все приоритеты</option>
           <option value="urgent">🔴 Срочный</option><option value="high">🟠 Высокий</option><option value="medium">🟡 Средний</option><option value="low">🟢 Низкий</option>
         </select>
-        <div class="view-toggle" id="viewToggle"><button data-view="board">Доска</button><button data-view="list">Список</button></div>
+        <div class="view-toggle" id="viewToggle"><button data-view="board">Доска</button><button data-view="list">Список</button><button data-view="habits">Привычки</button></div>
         <div class="archive-toggle"><span>Архив</span><div class="switch" id="archiveSwitch"></div></div>
         <button class="btn-primary" id="newTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -302,6 +337,7 @@
       </div>
       <div class="columns" id="columns"></div>
       <div class="tlist" id="tlist" style="display:none"></div>
+      <div class="hview" id="hview" style="display:none"></div>
     </main>
   </div>
 </div>
@@ -547,7 +583,8 @@ function renderView(){
   document.querySelectorAll('#viewToggle button').forEach(b=>b.classList.toggle('on',b.dataset.view===view));
   document.getElementById('columns').style.display=view==='board'?'':'none';
   document.getElementById('tlist').style.display=view==='list'?'':'none';
-  view==='list'?renderList():renderBoardInner();
+  document.getElementById('hview').style.display=view==='habits'?'':'none';
+  if(view==='list')renderList(); else if(view==='habits')renderHabits(); else renderBoardInner();
 }
 const PRIO_ORDER={urgent:0,high:1,medium:2,low:3};
 function renderList(){
@@ -783,6 +820,69 @@ async function addMember(){
   loadAll();
 }
 
+/* ---------- привычки ---------- */
+let H={list:[],days:new Set()}, hWeek=0, hAddOpen=false;
+const H_DOW=['Пн','Вт','Ср','Чт','Пт','Сб','Вс'];
+const H_ANCHOR=new Date(2026,8,21); // понедельник, от него считаются периоды в 2 и 4 недели
+const H_FREQ=[{v:'1/1',l:'Каждый день'},{v:'1/7',l:'Раз в неделю'},{v:'2/7',l:'2 раза в неделю'},{v:'3/7',l:'3 раза в неделю'},{v:'1/14',l:'Раз в 2 недели'},{v:'1/28',l:'Раз в 4 недели'}];
+function hYmd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function hToday(){const d=new Date();d.setHours(0,0,0,0);return d;}
+function hWeekDays(){const t=hToday();t.setDate(t.getDate()+hWeek*7);const mon=new Date(t);mon.setDate(t.getDate()-((t.getDay()+6)%7));return [...Array(7)].map((_,i)=>{const d=new Date(mon);d.setDate(mon.getDate()+i);return d;});}
+function hOn(id,key){return H.days.has(id+'|'+key);}
+function hFreqLabel(h){if(h.period_days===1)return '';const f=H_FREQ.find(x=>x.v===h.target+'/'+h.period_days);return f?f.l.toLowerCase():`${h.target} раз за ${h.period_days} дн.`;}
+function hCount(h){
+  const mon=hWeekDays()[0], end=hWeek===0?hToday():new Date(mon.getFullYear(),mon.getMonth(),mon.getDate()+6);
+  let start;
+  if(h.period_days===7)start=mon;
+  else{const n=Math.floor((mon-H_ANCHOR)/864e5/h.period_days);start=new Date(H_ANCHOR);start.setDate(H_ANCHOR.getDate()+n*h.period_days);}
+  let c=0;for(let i=0;i<h.period_days;i++){const d=new Date(start);d.setDate(start.getDate()+i);if(d>end)break;if(hOn(h.id,hYmd(d)))c++;}
+  return c;
+}
+async function loadHabits(){
+  const from=new Date();from.setDate(from.getDate()-120);
+  const [a,b]=await Promise.all([sb.from('habits').select('*').eq('archived',false).order('sort'),sb.from('habit_days').select('habit_id,day').gte('day',hYmd(from))]);
+  if(a.error||b.error){console.error(a.error||b.error);return;}
+  H.list=a.data;H.days=new Set(b.data.map(r=>r.habit_id+'|'+r.day));
+  if(view==='habits')renderHabits();
+}
+let hRefreshT=null;function softHabits(){clearTimeout(hRefreshT);hRefreshT=setTimeout(loadHabits,400);}
+async function hToggle(id,key){
+  const k=id+'|'+key,on=H.days.has(k);
+  on?H.days.delete(k):H.days.add(k);renderHabits();
+  const r=on?await sb.from('habit_days').delete().eq('habit_id',id).eq('day',key):await sb.from('habit_days').insert({habit_id:id,day:key});
+  if(r.error){on?H.days.add(k):H.days.delete(k);renderHabits();toast('Не сохранилось: '+r.error.message);}
+}
+function renderHabits(){
+  const el=document.getElementById('hview'), days=hWeekDays(), tk=hYmd(new Date()), now=new Date();
+  const daily=H.list.filter(h=>h.period_days===1), reg=H.list.filter(h=>h.period_days!==1);
+  const doneToday=daily.filter(h=>hOn(h.id,tk)).length;
+  const head=`<div class="h-days"><span></span>${days.map((d,i)=>`<span class="${hYmd(d)===tk?'today':''}">${H_DOW[i]}<b>${d.getDate()}</b></span>`).join('')}</div>`;
+  const row=h=>{
+    let sub='';
+    if(h.period_days!==1){const c=hCount(h);sub=`<small><span class="h-prog ${c>=h.target?'ok':''}">${c}/${h.target}</span> ${esc(hFreqLabel(h))}</small>`;}
+    return `<div class="h-row"><div class="h-name"><span>${esc(h.name)}</span>${sub}<button class="h-del" data-hdel="${h.id}" title="Убрать привычку">×</button></div>${days.map(d=>{const k=hYmd(d),on=hOn(h.id,k);return `<button class="h-dot ${on?'on':''} ${k===tk?'today':''} ${d>now?'future':''}" data-h="${h.id}" data-d="${k}" aria-pressed="${on}" aria-label="${esc(h.name)}, ${d.toLocaleDateString('ru',{weekday:'long',day:'numeric',month:'long'})}">${on?ICON.check:''}</button>`;}).join('')}</div>`;
+  };
+  const grp=(t,cls,l)=>l.length?`<section class="h-sec ${cls}"><div class="h-sec-head">${t}</div>${head}${l.map(row).join('')}</section>`:'';
+  const wl=hWeek===0?'Эта неделя':`${days[0].toLocaleDateString('ru',{day:'numeric',month:'short'})} – ${days[6].toLocaleDateString('ru',{day:'numeric',month:'short'})}`;
+  el.innerHTML=`<div class="h-top"><button class="h-nav" id="hPrev" aria-label="Прошлая неделя">‹</button><div class="h-week">${wl}${daily.length?`<small>сегодня ${doneToday} из ${daily.length}</small>`:''}</div><button class="h-nav" id="hNext" aria-label="Следующая неделя" ${hWeek>=0?'disabled':''}>›</button></div>
+    ${H.list.length?'':'<div class="tl-empty">Привычек пока нет</div>'}
+    ${grp('Каждый день','daily',daily)}${grp('Регулярно','regular',reg)}
+    <div class="h-add">${hAddOpen?`<input id="hNewName" placeholder="Новая привычка"><select id="hNewFreq">${H_FREQ.map(f=>`<option value="${f.v}">${f.l}</option>`).join('')}</select><button class="btn-primary" id="hNewOk">Добавить</button><button class="h-cancel" id="hNewNo">Отмена</button>`:'<button class="h-add-btn" id="hAddBtn">+ Добавить привычку</button>'}</div>`;
+  document.getElementById('hPrev').onclick=()=>{hWeek--;renderHabits();};
+  document.getElementById('hNext').onclick=()=>{if(hWeek<0){hWeek++;renderHabits();}};
+  el.querySelectorAll('.h-dot').forEach(b=>b.onclick=()=>hToggle(b.dataset.h,b.dataset.d));
+  el.querySelectorAll('.h-del').forEach(b=>b.onclick=async()=>{const h=H.list.find(x=>x.id===b.dataset.hdel);if(!h||!confirm(`Убрать привычку «${h.name}»?`))return;const {error}=await sb.from('habits').update({archived:true}).eq('id',h.id);if(error)return toast('Ошибка: '+error.message);H.list=H.list.filter(x=>x.id!==h.id);renderHabits();});
+  if(hAddOpen){
+    const inp=document.getElementById('hNewName');inp.focus();
+    const ok=async()=>{const n=inp.value.trim();if(!n)return inp.focus();const [t,p]=document.getElementById('hNewFreq').value.split('/').map(Number);
+      const {error}=await sb.from('habits').insert({name:n,target:t,period_days:p,sort:(H.list.reduce((m,x)=>Math.max(m,x.sort||0),0)+1)});
+      if(error)return toast('Ошибка: '+error.message);hAddOpen=false;loadHabits();};
+    document.getElementById('hNewOk').onclick=ok;inp.onkeydown=e=>{if(e.key==='Enter')ok();if(e.key==='Escape'){hAddOpen=false;renderHabits();}};
+    document.getElementById('hNewNo').onclick=()=>{hAddOpen=false;renderHabits();};
+  }else document.getElementById('hAddBtn').onclick=()=>{hAddOpen=true;renderHabits();};
+}
+setInterval(()=>{if(view==='habits'&&!hAddOpen)renderHabits();},5*60*1000);
+
 /* ---------- wiring ---------- */
 document.getElementById('searchInput').oninput=e=>{filters.q=e.target.value;renderBoard();};
 document.getElementById('sourceFilter').onchange=e=>{filters.source=e.target.value;renderBoard();};
@@ -824,8 +924,10 @@ function startApp(){
     .on('postgres_changes',{event:'*',schema:'public',table:'subtasks'},softRefresh)
     .on('postgres_changes',{event:'*',schema:'public',table:'comments'},softRefresh)
     .on('postgres_changes',{event:'*',schema:'public',table:'attachments'},softRefresh)
+    .on('postgres_changes',{event:'*',schema:'public',table:'habits'},softHabits)
+    .on('postgres_changes',{event:'*',schema:'public',table:'habit_days'},softHabits)
     .subscribe();
-  loadAll();
+  loadAll(); loadHabits();
 }
 function showLogin(){
   document.getElementById('app').style.display='none';
