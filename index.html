@@ -88,7 +88,7 @@
   .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
   .card:active{cursor:grabbing}
   .card.dragging{opacity:.4}
-  .card.p-urgent{border-left-color:var(--red)} .card.p-high{border-left-color:var(--orange)}
+  .card.p-urgent{border-left-color:var(--red)} .fire{margin-right:4px} .card.p-high{border-left-color:var(--orange)}
   .card.p-medium{border-left-color:var(--yellow)} .card.p-low{border-left-color:var(--green)}
   .card.is-done{opacity:.62}
   .card.src-crm{background:linear-gradient(0deg,var(--blue-bg),var(--blue-bg)),var(--card)}
@@ -398,13 +398,10 @@
           <input id="searchInput" placeholder="Поиск задач…">
         </div>
         <select class="filter" id="projFilterMobile"></select>
-        <select class="filter" id="sourceFilter">
-          <option value="all">Все источники</option>
-          <option value="crm">🏢 CRM</option><option value="mentor">👤 Наставник</option><option value="self">✨ Мои</option>
-        </select>
+        <input type="hidden" id="sourceFilter" value="all">
         <select class="filter" id="prioFilter">
           <option value="all">Все приоритеты</option>
-          <option value="urgent">🔴 Срочный</option><option value="high">🟠 Высокий</option><option value="medium">🟡 Средний</option><option value="low">🟢 Низкий</option>
+          <option value="urgent">🔥 Горит</option><option value="high">🟠 Высокий</option><option value="medium">🟡 Средний</option><option value="low">🟢 Низкий</option>
         </select>
         <div class="view-toggle" id="viewToggle"><button data-view="today">Сегодня</button><button data-view="board">Доска</button><button data-view="list">Список</button><button data-view="week">Неделя</button><button data-view="habits">Привычки</button></div>
         <div class="archive-toggle"><span>Архив</span><div class="switch" id="archiveSwitch"></div></div>
@@ -433,7 +430,7 @@
       <div class="field"><label>Название</label><input id="fTitle" placeholder="Что нужно сделать?"></div>
       <div class="field"><label>Описание</label><textarea id="fDesc" placeholder="Детали (необязательно)"></textarea></div>
       <div class="row2">
-        <div class="field"><label>Приоритет</label><select id="fPrio"><option value="urgent">🔴 Срочный</option><option value="high">🟠 Высокий</option><option value="medium" selected>🟡 Средний</option><option value="low">🟢 Низкий</option></select></div>
+        <div class="field"><label>Приоритет</label><select id="fPrio"><option value="urgent">🔥 Горит</option><option value="high">🟠 Высокий</option><option value="medium" selected>🟡 Средний</option><option value="low">🟢 Низкий</option></select></div>
         <div class="field"><label>Ответственный</label><select id="fAssignee"></select></div>
       </div>
       <div class="row2">
@@ -447,7 +444,7 @@
       </div>
       <div class="row2">
         <div class="field"><label>Статус</label><select id="fStatus"><option value="new">Новая</option><option value="backlog">Бэклог</option><option value="in_progress">В работе</option><option value="pending_approval">На рассмотрении</option><option value="done">Готово</option></select></div>
-        <div class="field"><label>Источник</label><select id="fSource"><option value="self">✨ Моя</option><option value="crm">🏢 CRM</option><option value="mentor">👤 Наставник</option></select></div>
+        <input type="hidden" id="fSource" value="self">
       </div>
 
       <!-- Subtasks -->
@@ -663,6 +660,7 @@ function goalHTML(t){
   return `<div class="goal"><div class="goal-track"><div class="goal-fill ${pct>=100?'full':''}" style="width:${Math.min(pct,100)}%"></div></div><div class="goal-txt"><span>${fmtNum(cur)} из ${fmtNum(tg)}${t.goal_unit?' '+esc(t.goal_unit):''}</span><b>${pct}%</b></div></div>`;
 }
 function repeatHTML(t){return t.repeat?`<span class="rep" title="Повторяется ${REPEAT_LABEL[t.repeat]||''}">↻ ${REPEAT_LABEL[t.repeat]||''}</span>`:'';}
+const fire=t=>t.priority==='urgent'&&t.status!=='done'?'<span class="fire" title="Горит">🔥</span>':'';
 function cardHTML(t){
   const s=SRC[t.source]||SRC.self, isDone=t.status==='done', dl=fmtDeadline(t.deadline), pn=projName(t.project_id);
   const sc=subCount(t.id), cc=cmtCount(t.id), ac=attCount(t.id), an=memberName(t.assignee_id);
@@ -672,8 +670,7 @@ function cardHTML(t){
   if(ac.total-ac.voice>0)meta+=`<span>${ICON.paper}${ac.total-ac.voice}</span>`;
   if(cc)meta+=`<span>${ICON.msg}${cc}</span>`;
   return `<div class="card p-${t.priority} src-${t.source} ${isDone?'is-done':''}" draggable="true" data-id="${t.id}">
-    <div class="card-top"><span class="src-badge ${s.cls}">${s.ic}${s.label}</span><span class="prio-ic ${t.priority}">${ICON[t.priority]}</span></div>
-    <h4>${esc(t.title)}</h4>
+    <h4>${fire(t)}${esc(t.title)}</h4>
     ${goalHTML(t)}${t.repeat?`<div class="rep-line">${repeatHTML(t)}</div>`:''}
     ${pn?`<div class="proj"><span class="dot" style="background:${projColor(t.project_id)}"></span><span>${esc(pn)}</span></div>`:''}
     ${an?`<div class="assignee-chip"><span class="avatar">${initials(an)}</span><span>${esc(an)}</span></div>`:''}
@@ -702,7 +699,7 @@ function renderList(){
       const dl=fmtDeadline(t.deadline), pn=projName(t.project_id), an=memberName(t.assignee_id), sc=subCount(t.id);
       return `<div class="tl-row ${t.status==='done'?'done':''}" data-id="${t.id}">
         <div class="tl-chk" data-chk="${t.id}" title="${t.status==='done'?'Вернуть в работу':'Готово'}">${t.status==='done'?ICON.check:''}</div>
-        <div class="tl-main"><div class="tl-title">${esc(t.title)}</div>
+        <div class="tl-main"><div class="tl-title">${fire(t)}${esc(t.title)}</div>
           <div class="tl-meta">${pn?`<span><span class="dot" style="background:${projColor(t.project_id)}"></span>${esc(pn)}</span>`:''}${dl?`<span class="${dl.state}">${dl.label}</span>`:''}${sc.total?`<span>${sc.done}/${sc.total}</span>`:''}${an?`<span>${esc(an)}</span>`:''}${repeatHTML(t)}</div>${goalHTML(t)}</div>
         <span class="tl-prio ${t.priority}"></span></div>`;}).join(''):'<div class="tl-empty">Нет задач</div>';
     return `<div class="tl-sec ${col.cls} ${closedSecs.includes(col.key)?'closed':''}" data-status="${col.key}"${col.color?` style="--sub:${col.color}"`:''}><div class="tl-head"><span class="chev">▾</span>${col.title}<span class="badge">${list.length}</span></div><div class="tl-rows">${rows}</div></div>`;
@@ -950,8 +947,8 @@ function trow(t,opts={}){
   const dl=fmtDeadline(t.deadline), pn=projName(t.project_id), done=t.status==='done';
   return `<div class="td-row ${done?'done':''}" data-id="${t.id}">
     <div class="tl-chk" data-tchk="${t.id}" title="${done?'Вернуть в работу':'Готово'}">${done?ICON.check:''}</div>
-    <div class="tl-main"><div class="tl-title">${esc(t.title)}</div>
-      <div class="tl-meta">${pn?`<span><span class="dot" style="background:${projColor(t.project_id)}"></span>${esc(pn)}</span>`:''}${dl&&opts.showDate?`<span class="${dl.state}">${dl.label}</span>`:''}${t.priority==='urgent'?'<span class="urg">фокус дня</span>':''}${repeatHTML(t)}</div>${goalHTML(t)}</div>
+    <div class="tl-main"><div class="tl-title">${fire(t)}${esc(t.title)}</div>
+      <div class="tl-meta">${pn?`<span><span class="dot" style="background:${projColor(t.project_id)}"></span>${esc(pn)}</span>`:''}${dl&&opts.showDate?`<span class="${dl.state}">${dl.label}</span>`:''}${t.priority==='urgent'?'<span class="urg">горит</span>':''}${repeatHTML(t)}</div>${goalHTML(t)}</div>
     ${done?'':`<div class="td-move">${t.deadline===dayStr(0)?'':`<button data-mv="${t.id}" data-to="0" title="На сегодня">Сегодня</button>`}${t.deadline===dayStr(1)?`<button data-mv="${t.id}" data-to="7" title="Через неделю">+неделя</button>`:`<button data-mv="${t.id}" data-to="1" title="На завтра">Завтра</button>`}</div>`}
   </div>`;
 }
@@ -977,7 +974,7 @@ function renderToday(){
     ${sec('now','Сегодня',todays.length||doneToday.length?todays.map(t=>trow(t)).join('')+doneToday.map(t=>trow(t)).join(''):'<div class="tl-empty">Свободный день. Добавь задачу или перетащи на сегодня из списка</div>',`<button class="td-add" id="tdAdd">+ Задача на сегодня</button>`)}
     ${daily.length?sec('habits','Привычки дня',`<div class="td-habits">${daily.map(h=>{const on=hOn(h.id,today);return `<button class="td-hab ${on?'on':''}" data-hab="${h.id}">${on?ICON.check:''}<span>${esc(h.name)}</span></button>`;}).join('')}</div>`):''}
     ${tmr.length?sec('next',`Завтра <b>${tmr.length}</b>`,tmr.map(t=>trow(t)).join('')):''}
-    ${goals.length?sec('goals','Цели',goals.map(t=>`<div class="td-goal" data-id="${t.id}"><div class="tl-title">${esc(t.title)}</div>${goalHTML(t)}</div>`).join('')):''}`;
+    ${goals.length?sec('goals','Цели',goals.map(t=>`<div class="td-goal" data-id="${t.id}"><div class="tl-title">${fire(t)}${esc(t.title)}</div>${goalHTML(t)}</div>`).join('')):''}`;
   wireTRows(el);
   el.querySelectorAll('[data-bulk]').forEach(b=>b.onclick=()=>{patchTasks(overdue.map(t=>t.id),{deadline:dayStr(+b.dataset.bulk)});toast(`Перенесла ${overdue.length} ${b.dataset.bulk==='0'?'на сегодня':'на завтра'}`);});
   el.querySelectorAll('[data-hab]').forEach(b=>b.onclick=()=>hToggle(b.dataset.hab,today).then(()=>{if(view==='today')renderToday();}));
@@ -995,7 +992,7 @@ function renderWeek(){
   const wl=wWeek===0?'Эта неделя':wWeek===1?'Следующая неделя':wWeek===-1?'Прошлая неделя':`${days[0].toLocaleDateString('ru',{day:'numeric',month:'short'})} – ${days[6].toLocaleDateString('ru',{day:'numeric',month:'short'})}`;
   el.innerHTML=`<div class="h-top"><button class="h-nav" id="wPrev" aria-label="Прошлая неделя">‹</button><div class="h-week">${wl}<small>${days[0].toLocaleDateString('ru',{day:'numeric',month:'long'})} – ${days[6].toLocaleDateString('ru',{day:'numeric',month:'long'})}</small></div><button class="h-nav" id="wNext" aria-label="Следующая неделя">›</button></div>
     <div class="w-grid">${days.map((d,i)=>{const k=hYmd(d),list=vis.filter(t=>t.deadline===k).sort((a,b)=>(a.status==='done')-(b.status==='done')||(PRIO_ORDER[a.priority]??9)-(PRIO_ORDER[b.priority]??9));
-      return `<div class="w-day ${k===today?'today':''} ${k<today?'past':''}" data-day="${k}"><div class="w-head"><span>${DOW[i]}</span><b>${d.getDate()}</b></div><div class="w-body">${list.map(t=>`<div class="w-task p-${t.priority} ${t.status==='done'?'done':''}" draggable="true" data-id="${t.id}"><span class="dot" style="background:${projColor(t.project_id)}"></span><span>${esc(t.title)}</span></div>`).join('')||'<div class="w-empty">—</div>'}</div><button class="w-add" data-addday="${k}">+</button></div>`;}).join('')}</div>
+      return `<div class="w-day ${k===today?'today':''} ${k<today?'past':''}" data-day="${k}"><div class="w-head"><span>${DOW[i]}</span><b>${d.getDate()}</b></div><div class="w-body">${list.map(t=>`<div class="w-task p-${t.priority} ${t.status==='done'?'done':''}" draggable="true" data-id="${t.id}"><span class="dot" style="background:${projColor(t.project_id)}"></span><span>${fire(t)}${esc(t.title)}</span></div>`).join('')||'<div class="w-empty">—</div>'}</div><button class="w-add" data-addday="${k}">+</button></div>`;}).join('')}</div>
     <div class="w-hint">Перетащи задачу на другой день, чтобы перенести срок. Задачи без срока здесь не видны: их ищи на доске или в списке.</div>`;
   document.getElementById('wPrev').onclick=()=>{wWeek--;renderWeek();};
   document.getElementById('wNext').onclick=()=>{wWeek++;renderWeek();};
