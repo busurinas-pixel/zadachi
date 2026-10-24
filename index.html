@@ -241,6 +241,13 @@
   [data-theme="dark"] header.topbar,[data-theme="dark"] aside.side{background:rgba(21,27,44,.85)}
   [data-theme="dark"] .col{background:rgba(17,23,38,.85)}
   .tl-sec{box-shadow:0 4px 18px rgba(0,0,0,.25)}
+  /* Подпроекты */
+  .row-item.child{margin-left:18px}
+  .col.sub{background:color-mix(in srgb,var(--sub) 18%,var(--card-2))}
+  .col.sub .col-head{background:color-mix(in srgb,var(--sub) 38%,var(--card-2))}
+  .col.sub .col-head .dot{width:12px;height:12px;border-radius:50%;display:block}
+  .sub-st{font-size:11.5px;font-weight:600;color:var(--muted);margin:2px 0 6px}
+  .tl-sec.sub .tl-head{background:color-mix(in srgb,var(--sub) 38%,var(--card-2))}
   /* Привычки */
   .hview{flex:1;overflow-y:auto;padding-bottom:24px;display:flex;flex-direction:column;gap:14px;max-width:760px;width:100%}
   .hview>*{flex-shrink:0}
@@ -530,13 +537,15 @@ function renderSide(){
   let h=`<div class="row-item ${active===null?'active':''}" data-proj="">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
     <span class="name">Все задачи</span><span class="cnt">${countAll}</span></div>`;
-  D.projects.forEach(p=>{
-    const c=D.tasks.filter(t=>t.project_id===p.id&&!t.archived&&t.status!=='done').length;
-    h+=`<div class="row-item ${active===p.id?'active':''}" data-proj="${p.id}"><span class="dot" style="background:${p.color}"></span><span class="name">${esc(p.name)}</span><span class="cnt">${c}</span></div>`;
+  const open=t=>!t.archived&&t.status!=='done';
+  projTree().forEach(({p,child})=>{
+    const ids=[p.id,...kidIds(p.id)];
+    const c=D.tasks.filter(t=>ids.includes(t.project_id)&&open(t)).length;
+    h+=`<div class="row-item ${child?'child':''} ${active===p.id?'active':''}" data-proj="${p.id}"><span class="dot" style="background:${p.color}"></span><span class="name">${esc(p.name)}</span><span class="cnt">${c}</span></div>`;
   });
   document.getElementById('projList').innerHTML=h;
   const pm=document.getElementById('projFilterMobile');
-  pm.innerHTML='<option value="">Все проекты</option>'+D.projects.map(p=>`<option value="${p.id}" ${active===p.id?'selected':''}>${esc(p.name)}</option>`).join('');
+  pm.innerHTML='<option value="">Все проекты</option>'+projTree().map(({p,child})=>`<option value="${p.id}" ${active===p.id?'selected':''}>${child?'— ':''}${esc(p.name)}</option>`).join('');
   pm.onchange=()=>{filters.project=pm.value||null;render();};
   document.querySelectorAll('#projList .row-item').forEach(it=>it.onclick=()=>{filters.project=it.dataset.proj||null;render();});
 
@@ -551,10 +560,16 @@ function subCount(id){const s=D.sub.filter(x=>x.task_id===id);return{total:s.len
 function cmtCount(id){return D.cmt.filter(x=>x.task_id===id).length;}
 function attCount(id){const a=D.att.filter(x=>x.task_id===id);return{total:a.length,voice:a.filter(x=>x.kind==='voice').length};}
 
+/* подпроекты: Ремонт внутри Личного */
+function kids(id){return D.projects.filter(p=>p.parent_id===id);}
+function kidIds(id){return kids(id).map(p=>p.id);}
+function projTree(){const out=[];D.projects.filter(p=>!p.parent_id||!D.projects.some(x=>x.id===p.parent_id)).forEach(p=>{out.push({p,child:false});kids(p.id).forEach(k=>out.push({p:k,child:true}));});return out;}
+function activeKids(){return filters.project?kids(filters.project):[];}
 function visible(){
+  const fk=filters.project?kidIds(filters.project):[];
   return D.tasks.filter(t=>{
     if(!!t.archived!==filters.archived)return false;
-    if(filters.project&&t.project_id!==filters.project)return false;
+    if(filters.project&&t.project_id!==filters.project&&!fk.includes(t.project_id))return false;
     if(filters.source!=='all'&&t.source!==filters.source)return false;
     if(filters.prio!=='all'&&t.priority!==filters.prio)return false;
     if(filters.q&&!t.title.toLowerCase().includes(filters.q.toLowerCase()))return false;
@@ -588,9 +603,11 @@ function renderView(){
 }
 const PRIO_ORDER={urgent:0,high:1,medium:2,low:3};
 function renderList(){
-  const vis=visible();
-  document.getElementById('tlist').innerHTML=COLUMNS.map(col=>{
-    const list=vis.filter(t=>t.status===col.status).sort((a,b)=>(PRIO_ORDER[a.priority]??9)-(PRIO_ORDER[b.priority]??9)||((a.deadline||'9')>(b.deadline||'9')?1:-1));
+  const vis=visible(), ak=activeKids(), akIds=ak.map(k=>k.id);
+  const secs=[...COLUMNS.map(col=>({...col,key:col.status,pick:t=>t.status===col.status&&(col.status==='done'||!akIds.includes(t.project_id))})),
+    ...ak.map(k=>({key:'proj:'+k.id,title:esc(k.name),cls:'sub',color:k.color,pick:t=>t.project_id===k.id&&t.status!=='done'}))];
+  document.getElementById('tlist').innerHTML=secs.map(col=>{
+    const list=vis.filter(col.pick).sort((a,b)=>(PRIO_ORDER[a.priority]??9)-(PRIO_ORDER[b.priority]??9)||((a.deadline||'9')>(b.deadline||'9')?1:-1));
     const rows=list.length?list.map(t=>{
       const dl=fmtDeadline(t.deadline), pn=projName(t.project_id), an=memberName(t.assignee_id), sc=subCount(t.id);
       return `<div class="tl-row ${t.status==='done'?'done':''}" data-id="${t.id}">
@@ -598,7 +615,7 @@ function renderList(){
         <div class="tl-main"><div class="tl-title">${esc(t.title)}</div>
           <div class="tl-meta">${pn?`<span><span class="dot" style="background:${projColor(t.project_id)}"></span>${esc(pn)}</span>`:''}${dl?`<span class="${dl.state}">${dl.label}</span>`:''}${sc.total?`<span>${sc.done}/${sc.total}</span>`:''}${an?`<span>${esc(an)}</span>`:''}</div></div>
         <span class="tl-prio ${t.priority}"></span></div>`;}).join(''):'<div class="tl-empty">Нет задач</div>';
-    return `<div class="tl-sec ${col.cls} ${closedSecs.includes(col.status)?'closed':''}" data-status="${col.status}"><div class="tl-head"><span class="chev">▾</span>${col.title}<span class="badge">${list.length}</span></div><div class="tl-rows">${rows}</div></div>`;
+    return `<div class="tl-sec ${col.cls} ${closedSecs.includes(col.key)?'closed':''}" data-status="${col.key}"${col.color?` style="--sub:${col.color}"`:''}><div class="tl-head"><span class="chev">▾</span>${col.title}<span class="badge">${list.length}</span></div><div class="tl-rows">${rows}</div></div>`;
   }).join('');
   document.querySelectorAll('.tl-head').forEach(h=>h.onclick=()=>{const st=h.parentElement.dataset.status;closedSecs=closedSecs.includes(st)?closedSecs.filter(x=>x!==st):[...closedSecs,st];localStorage.setItem('kanban.closed',JSON.stringify(closedSecs));h.parentElement.classList.toggle('closed');});
   document.querySelectorAll('.tl-row').forEach(r=>r.onclick=e=>{if(e.target.closest('.tl-chk'))return;openDialog(r.dataset.id);});
@@ -611,11 +628,17 @@ function renderList(){
 }
 function renderBoard(){renderView();}
 function renderBoardInner(){
-  const vis=visible();
+  const vis=visible(), ak=activeKids(), akIds=ak.map(k=>k.id);
+  const empty=`<div class="empty-col"><div class="circ">${ICON.check}</div><span>Нет задач</span></div>`;
+  const stLabel=s=>(COLUMNS.find(c=>c.status===s)||{}).title||'';
   document.getElementById('columns').innerHTML=COLUMNS.map(col=>{
-    const list=vis.filter(t=>t.status===col.status);
-    const body=list.length?list.map(cardHTML).join(''):`<div class="empty-col"><div class="circ">${ICON.check}</div><span>Нет задач</span></div>`;
+    const list=vis.filter(t=>t.status===col.status&&(col.status==='done'||!akIds.includes(t.project_id)));
+    const body=list.length?list.map(cardHTML).join(''):empty;
     return `<div class="col ${col.cls}" data-status="${col.status}"><div class="col-head"><div class="l"><div class="ic">${col.icon}</div><div class="t">${col.title}</div></div><div class="badge">${list.length}</div></div><div class="col-body">${body}</div></div>`;
+  }).join('')+ak.map(k=>{
+    const list=vis.filter(t=>t.project_id===k.id&&t.status!=='done');
+    const body=list.length?list.map(t=>cardHTML(t).replace('<div class="card-bot">',`<div class="sub-st">${stLabel(t.status)}</div><div class="card-bot">`)).join(''):empty;
+    return `<div class="col sub" data-proj="${k.id}" style="--sub:${k.color}"><div class="col-head"><div class="l"><div class="ic"><span class="dot" style="background:${k.color}"></span></div><div class="t">${esc(k.name)}</div></div><div class="badge">${list.length}</div></div><div class="col-body">${body}</div></div>`;
   }).join('');
   wireCards(); wireColumns();
 }
@@ -636,12 +659,20 @@ function wireColumns(){
     col.addEventListener('drop',async e=>{
       e.preventDefault();col.classList.remove('dragover');
       if(!dragId)return;
-      const t=D.tasks.find(x=>x.id===dragId);
-      if(t&&t.status!==col.dataset.status){
-        t.status=col.dataset.status; renderBoard();
-        const {error}=await sb.from('tasks').update({status:t.status,updated_at:new Date().toISOString()}).eq('id',t.id);
-        if(error)toast('Не сохранилось: '+error.message);
+      const t=D.tasks.find(x=>x.id===dragId); if(!t)return;
+      const upd={};
+      if(col.dataset.proj){ // колонка подпроекта (Ремонт): задача переходит в него
+        if(t.project_id!==col.dataset.proj)upd.project_id=col.dataset.proj;
+        if(t.status==='done')upd.status='in_progress';
+      }else{
+        if(t.status!==col.dataset.status)upd.status=col.dataset.status;
+        // из колонки подпроекта в колонку статуса — задача возвращается в основной проект (кроме «Готово»)
+        if(col.dataset.status!=='done'&&kidIds(filters.project).includes(t.project_id))upd.project_id=filters.project;
       }
+      if(!Object.keys(upd).length)return;
+      Object.assign(t,upd); renderBoard(); renderSide();
+      const {error}=await sb.from('tasks').update({...upd,updated_at:new Date().toISOString()}).eq('id',t.id);
+      if(error)toast('Не сохранилось: '+error.message);
     });
   });
 }
@@ -919,6 +950,12 @@ function startApp(){
   document.getElementById('gate').style.display='none';
   document.getElementById('app').style.display='flex';
   document.getElementById('meName').textContent=meName||'аноним';
+  // Имя по умолчанию — по почте входа, чтобы не было «аноним»
+  if(!meName) sb.auth.getUser().then(({data})=>{
+    const em=(data&&data.user&&data.user.email||'').toLowerCase();
+    const n=({'busurinas@gmail.com':'София'})[em]||(data&&data.user&&data.user.user_metadata&&data.user.user_metadata.name)||'';
+    if(n&&!meName){meName=n;localStorage.setItem('kanban.me',n);document.getElementById('meName').textContent=n;}
+  });
   sb.channel('kanban-live')
     .on('postgres_changes',{event:'*',schema:'public',table:'tasks'},softRefresh)
     .on('postgres_changes',{event:'*',schema:'public',table:'subtasks'},softRefresh)
