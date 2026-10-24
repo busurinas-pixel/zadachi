@@ -1,6 +1,6 @@
 {
-  "name": "Задачи Софии",
-  "short_name": "Задачи",
+  "name": "Продюсер дня",
+  "short_name": "Продюсер дня",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
