@@ -356,6 +356,76 @@
   .g-sph-add{width:26px;height:26px;border-radius:8px;border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.6);font-size:16px;line-height:1;cursor:pointer;color:inherit}
   .g-sph-empty{font-size:12.5px;color:var(--muted);padding:0 14px;margin-top:-4px}
   .g-sphere.empty .g-sph-empty{color:#fff;opacity:.85;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+  .g-card[draggable="true"]{cursor:grab}
+  .g-card.dragging{opacity:.45}
+  .g-card.drop-before{box-shadow:-4px 0 0 0 var(--primary),0 4px 18px rgba(0,0,0,.25)}
+  .g-sphere.dragover .g-sph-head{outline:3px dashed var(--primary);outline-offset:2px}
+  .g-sphere.dragover.empty .g-sph-empty{min-height:60px;border:2px dashed rgba(255,255,255,.7);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0}
+  .g-top{flex-wrap:wrap}
+  .g-hzt button.on{background:var(--primary);color:#fff}
+  .g-cover{height:120px;margin:-14px -16px 2px;border-radius:16px 16px 0 0;background-size:cover;background-position:center}
+  .g-card.focus{outline:2px solid #e8b931;outline-offset:-2px}
+  .g-hz{background:var(--primary-soft);color:var(--text);padding:1px 8px;border-radius:99px;font-weight:600}
+  .g-parent{font-size:12px;color:var(--muted);cursor:pointer} .g-parent:hover{color:var(--primary)}
+  .g-why{font-size:13px;font-style:italic;color:var(--text);opacity:.85;border-left:3px solid var(--primary-soft);padding-left:8px;line-height:1.4}
+  .g-tick{position:absolute;top:-3px;bottom:-3px;width:3px;margin-left:-1.5px;background:var(--card);border:1px solid var(--muted);border-radius:2px}
+  .g-tick.ok{background:var(--green);border-color:var(--green)}
+  .g-cp{font-size:12px;color:var(--muted)} .g-cp.behind{color:var(--orange);font-weight:600} .g-cp.ok{color:var(--green);font-weight:600}
+  .g-spark svg{width:100%;height:54px;display:block}
+  .g-sp-line{fill:none;stroke:var(--primary);stroke-width:2.2;vector-effect:non-scaling-stroke;stroke-linejoin:round}
+  .g-sp-ideal{stroke:var(--muted);stroke-width:1.4;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+  .g-sp-dot{fill:var(--primary)}
+  .g-sp-lbl{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted)}
+  .g-kids{display:flex;flex-direction:column;gap:5px;border-top:1px solid var(--border-soft);padding-top:7px}
+  .g-kid{display:grid;grid-template-columns:minmax(0,1fr) 60px 36px;gap:8px;align-items:center;font-size:12.5px;cursor:pointer}
+  .g-kid span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .g-kid-bar{height:6px;border-radius:99px;background:var(--border-soft);overflow:hidden} .g-kid-bar div{height:100%;background:var(--primary)}
+  .g-kid b{text-align:right;font-size:12px}
+  .g-habs{display:flex;flex-wrap:wrap;gap:6px}
+  .g-hab{font-size:11.5px;padding:3px 9px;border-radius:99px;background:var(--border-soft);color:var(--text)} .g-hab.ok{background:color-mix(in srgb,var(--green) 22%,transparent)}
+  .g-reward{font-size:12.5px;color:var(--text);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .g-reward.due{background:#fff3c4;color:#5a4300;padding:7px 10px;border-radius:10px;font-weight:600}
+  .g-reward.given{color:var(--green)}
+  .g-gift{height:28px;font-size:12px}
+  .g-note{font-size:12px;color:var(--muted);line-height:1.4;background:var(--card);border-radius:10px;padding:6px 10px}
+  .g-note b{color:var(--text)}
+  .g-actions{display:flex;gap:8px;margin:8px 16px 4px} .g-actions .g-addtask{margin:0}
+  .g-check{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin:2px 0 4px}
+  .g-check input{width:16px;height:16px;accent-color:var(--primary)}
+  .g-habpick{display:flex;flex-wrap:wrap;gap:6px 14px}
+  .field label.g-hp{display:flex;flex-direction:row;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;margin:0;text-transform:none;letter-spacing:0} .field .g-hp input{width:16px;height:16px;padding:0;margin:0;accent-color:var(--primary);flex-shrink:0} .g-hp small{color:var(--muted);font-weight:400}
+  .g-imgpick{display:flex;flex-direction:column;gap:8px} .g-imgpick img{width:100%;max-height:160px;object-fit:cover;border-radius:12px}
+  .g-focus-banner{position:relative;border-radius:18px;padding:16px 18px;color:var(--text);background:linear-gradient(135deg,#fff6d6,#fde3ea);box-shadow:0 6px 22px rgba(0,0,0,.28);cursor:pointer;display:flex;flex-direction:column;gap:6px;overflow:hidden}
+  .g-focus-banner[style*="--fimg"]{background:linear-gradient(90deg,rgba(255,250,240,.97) 55%,rgba(255,250,240,.6)),var(--fimg) center/cover}
+  [data-theme="dark"] .g-focus-banner{background:var(--card-2)}
+  .g-fb-lbl{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#a07800}
+  .g-fb-title{font-size:19px;font-weight:800;line-height:1.25}
+  .g-fb-why{font-size:13px;font-style:italic;opacity:.85}
+  .g-wheel{background:var(--card-2);border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.25);overflow:hidden}
+  .g-wh-head{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer}
+  .g-wh-head span:last-child{font-size:12px;color:var(--muted);font-weight:600}
+  .g-wh-body{display:grid;grid-template-columns:240px 1fr;gap:16px;align-items:center;padding:4px 16px 14px}
+  .g-wh-svg{width:240px;height:240px}
+  .g-wh-ring{fill:none;stroke:var(--border);stroke-width:.6}
+  .g-wh-t{font-size:15px}
+  .g-wh-list{display:flex;flex-direction:column;gap:6px}
+  .g-wh-row{display:grid;grid-template-columns:12px 1fr 44px 74px;gap:8px;align-items:center;font-size:13px}
+  .g-wh-row b{text-align:right} .g-wh-row small{color:var(--muted);font-size:11.5px}
+  .g-wh-dot{width:10px;height:10px;border-radius:3px}
+  .g-wh-hint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .y-dialog{max-width:640px}
+  .y-dialog .dialog-head{gap:8px}
+  .y-dialog h4{margin:16px 0 6px;font-size:14px}
+  .y-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .y-stats div{background:var(--card-2);border-radius:14px;padding:12px;text-align:center;display:flex;flex-direction:column;gap:2px}
+  .y-stats b{font-size:26px;color:var(--primary)} .y-stats span{font-size:12px;color:var(--muted)}
+  .y-row{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--border-soft);font-size:13.5px}
+  .y-row small{color:var(--muted);white-space:nowrap}
+  .y-bars{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;height:130px;align-items:end}
+  .y-bar{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:3px;font-size:10.5px;color:var(--muted)}
+  .y-bar div{width:100%;background:var(--primary);border-radius:5px 5px 2px 2px;min-height:2px}
+  .y-bar b{font-size:10.5px;color:var(--text);order:-1}
+  @media(max-width:600px){.g-wh-body{grid-template-columns:1fr;justify-items:center}.g-wh-list{width:100%}.y-stats b{font-size:20px}}
   .g-chip{font-size:11.5px;color:var(--muted);margin-top:4px}
   .g-hint{font-size:11.5px;color:var(--muted);margin-top:5px}
   .td-goal .goal-txt span{white-space:normal}
@@ -547,13 +617,23 @@
     </div>
     <div class="dialog-body">
       <div class="field"><label>Цель</label><input id="gTitle" placeholder="Например: 1500 регистраций на МП"></div>
+      <div class="field"><label>Зачем мне это</label><textarea id="gWhy" rows="2" placeholder="Например: чтобы чувствовать себя лёгкой и уверенной"></textarea></div>
       <div class="field"><label>Сфера</label><select id="gProject"></select></div>
+      <div class="row2">
+        <div class="field"><label>Горизонт</label><select id="gHorizon"><option value="">Без горизонта</option><option value="year">Цель года</option><option value="quarter">Цель квартала</option><option value="month">Цель месяца</option></select></div>
+        <div class="field"><label>Часть большой цели</label><select id="gParent"></select></div>
+      </div>
+      <label class="g-check"><input type="checkbox" id="gFocus"> ⭐ Главная цель месяца: крупно на экранах «Сегодня» и «Цели»</label>
       <div class="row2">
         <div class="field"><label>Срок</label><input id="gDeadline" type="date"></div>
         <div class="field"><label>Начало (от него считается темп)</label><input id="gStart" type="date"></div>
       </div>
       <div class="field"><label>Прогресс в числах (необязательно)</label><div class="goal-in"><input id="gCur" inputmode="decimal" placeholder="Сейчас"><span>из</span><input id="gTarget" inputmode="decimal" placeholder="Цель"><input id="gUnit" placeholder="чего"></div>
-        <div class="g-hint">Без чисел прогресс считается по задачам, привязанным к цели.</div></div>
+        <div class="g-hint">Без чисел прогресс считается по шагам, подцелям и привычкам цели.</div></div>
+      <div class="field"><label>Контрольные точки (для цели в числах)</label><textarea id="gChecks" rows="2" placeholder="10.11 500&#10;20.11 1000"></textarea><div class="g-hint">Каждая с новой строки: дата и сколько должно быть к ней.</div></div>
+      <div class="field"><label>Привычки, которые ведут к цели</label><div id="gHabits" class="g-habpick"></div></div>
+      <div class="field"><label>Награда себе за цель</label><input id="gReward" placeholder="Например: массаж в спа или новая сумка"></div>
+      <div class="field"><label>Картинка цели</label><div class="g-imgpick"><img id="gImgPrev" alt="" style="display:none"><div style="display:flex;gap:8px"><button type="button" class="g-btn" id="gImgBtn">Выбрать картинку</button><button type="button" class="g-btn" id="gImgDel" style="display:none">Убрать</button></div><input type="file" id="gImgInput" accept="image/*" style="display:none"></div></div>
     </div>
     <div class="dialog-foot">
       <button class="btn-ghost btn-danger" id="gDelete" style="visibility:hidden">Убрать цель</button>
@@ -562,6 +642,28 @@
         <button class="btn-primary" id="gSave" style="height:38px">Сохранить</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Goal review -->
+<div class="overlay" id="nOverlay">
+  <div class="dialog" style="max-width:480px">
+    <div class="dialog-head"><h3 id="nTitle">Сверка</h3></div>
+    <div class="dialog-body">
+      <div class="field"><label>Что продвинуло за неделю?</label><textarea id="nMoved" rows="2"></textarea></div>
+      <div class="field"><label>Что мешало?</label><textarea id="nBlocked" rows="2"></textarea></div>
+      <div class="field"><label>Один шаг на следующую неделю</label><input id="nNext" placeholder="Например: записаться к тренеру"></div>
+      <label class="g-check"><input type="checkbox" id="nTask" checked> Поставить этот шаг задачей на понедельник</label>
+    </div>
+    <div class="dialog-foot"><div style="display:flex;gap:10px;margin-left:auto"><button class="btn-ghost" id="nCancel">Закрыть</button><button class="btn-primary" id="nSave" style="height:38px">Сохранить</button></div></div>
+  </div>
+</div>
+
+<!-- Year results -->
+<div class="overlay" id="yOverlay">
+  <div class="dialog y-dialog">
+    <div class="dialog-head"><button class="h-nav" id="yPrev" aria-label="Прошлый год">‹</button><h3 id="yTitle" style="flex:1;text-align:center">Итоги года</h3><button class="h-nav" id="yNext" aria-label="Следующий год">›</button><button class="icon-btn" id="yClose" style="width:32px;height:32px;border:none;margin-left:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+    <div class="dialog-body" id="yBody"></div>
   </div>
 </div>
 
@@ -1039,19 +1141,21 @@ function renderToday(){
   const doneToday=vis.filter(t=>t.status==='done'&&t.done_at&&hYmd(new Date(t.done_at))===today);
   const tmr=open.filter(t=>t.deadline===tomorrow&&!todays.includes(t));
   const goals=open.filter(t=>Number(t.goal_target)>0);
-  const bigGoals=G.filter(g=>!g.achieved_at);
+  const bigGoals=G.filter(g=>!g.achieved_at&&!g.month_focus&&!g.parent_id);
   const daily=H.list.filter(h=>h.period_days===1);
   const dLabel=new Date().toLocaleDateString('ru',{weekday:'long',day:'numeric',month:'long'});
   const sec=(cls,title,rows,extra='')=>`<section class="td-sec ${cls}"><div class="td-head"><span>${title}</span>${extra}</div>${rows}</section>`;
-  el.innerHTML=`<div class="td-top"><div class="td-date">${dLabel.charAt(0).toUpperCase()+dLabel.slice(1)}</div><div class="td-sum">${todays.length?`на сегодня ${todays.length}`:'на сегодня задач нет'}${doneToday.length?` · сделано ${doneToday.length}`:''}${overdue.length?` · просрочено ${overdue.length}`:''}</div></div>
+  const fgoal=gFocusGoal();
+  el.innerHTML=`${fgoal?gFocusHTML(fgoal):''}<div class="td-top"><div class="td-date">${dLabel.charAt(0).toUpperCase()+dLabel.slice(1)}</div><div class="td-sum">${todays.length?`на сегодня ${todays.length}`:'на сегодня задач нет'}${doneToday.length?` · сделано ${doneToday.length}`:''}${overdue.length?` · просрочено ${overdue.length}`:''}</div></div>
     ${overdue.length?sec('late',`Просрочено <b>${overdue.length}</b>`,overdue.map(t=>trow(t,{showDate:true})).join(''),`<div class="td-bulk"><button data-bulk="0">Все на сегодня</button><button data-bulk="1">Все на завтра</button></div>`):''}
     ${sec('now','Сегодня',todays.length||doneToday.length?todays.map(t=>trow(t)).join('')+doneToday.map(t=>trow(t)).join(''):'<div class="tl-empty">Свободный день. Добавь задачу или перетащи на сегодня из списка</div>',`<button class="td-add" id="tdAdd">+ Задача на сегодня</button>`)}
     ${daily.length?sec('habits','Привычки дня',`<div class="td-habits">${daily.map(h=>{const on=hOn(h.id,today);return `<button class="td-hab ${on?'on':''}" data-hab="${h.id}">${on?ICON.check:''}<span>${esc(h.name)}</span></button>`;}).join('')}</div>`):''}
     ${tmr.length?sec('next',`Завтра <b>${tmr.length}</b>`,tmr.map(t=>trow(t)).join('')):''}
-    ${goals.length||bigGoals.length?sec('goals','Цели',bigGoals.map(g=>{const p=gProgress(g),pace=gPace(g,p);return `<div class="td-goal" data-goal="${g.id}"><div class="tl-title">🎯 ${esc(g.title)}</div>${gBar(p,pace)}<div class="goal-txt"><span>${pace?esc(pace.txt):gNumTxt(g,p)}</span><b>${p.pct}%</b></div></div>`;}).join('')+goals.map(t=>`<div class="td-goal" data-id="${t.id}"><div class="tl-title">${fire(t)}${esc(t.title)}</div>${goalHTML(t)}</div>`).join('')):''}`;
+    ${goals.length||bigGoals.length?sec('goals','Цели',bigGoals.map(g=>{const p=gProgress(g),pace=gPace(g,p);return `<div class="td-goal" data-goal="${g.id}"><div class="tl-title">🎯 ${esc(g.title)}</div>${gBar(g,p,pace)}<div class="goal-txt"><span>${pace?esc(pace.txt):gNumTxt(g,p)}</span><b>${p.pct}%</b></div></div>`;}).join('')+goals.map(t=>`<div class="td-goal" data-id="${t.id}"><div class="tl-title">${fire(t)}${esc(t.title)}</div>${goalHTML(t)}</div>`).join('')):''}`;
   wireTRows(el);
   el.querySelectorAll('[data-bulk]').forEach(b=>b.onclick=()=>{patchTasks(overdue.map(t=>t.id),{deadline:dayStr(+b.dataset.bulk)});toast(`Перенесла ${overdue.length} ${b.dataset.bulk==='0'?'на сегодня':'на завтра'}`);});
   el.querySelectorAll('[data-hab]').forEach(b=>b.onclick=()=>hToggle(b.dataset.hab,today).then(()=>{if(view==='today')renderToday();}));
+  el.querySelectorAll('[data-gfocus]').forEach(b=>b.onclick=()=>{view='goals';localStorage.setItem('kanban.view2',view);renderView();});
   el.querySelectorAll('.td-goal').forEach(g=>g.onclick=()=>{if(g.dataset.goal){view='goals';localStorage.setItem('kanban.view2',view);renderView();}else openDialog(g.dataset.id);});
   const add=document.getElementById('tdAdd'); if(add)add.onclick=()=>openDialog(null);
 }
@@ -1085,135 +1189,329 @@ function renderWeek(){
 document.querySelectorAll('.quick-dates button').forEach(b=>b.onclick=()=>{document.getElementById('fDeadline').value=b.dataset.qd===''?'':dayStr(+b.dataset.qd);});
 
 /* ---------- цели ---------- */
-let G=[], gShowWon=false, gEditing=null;
+let G=[], GL=[], GN=[], gImg={}, gShowWon=false, gEditing=null, gImgFile=null, gImgRemove=false, gHz=localStorage.getItem('kanban.ghz')||'', gWheelOpen=localStorage.getItem('kanban.wheel')!=='0', gYear=new Date().getFullYear(), gNoteFor=null;
+const HORIZON={year:'Цель года',quarter:'Цель квартала',month:'Цель месяца'};
 function gName(id){const g=id&&G.find(x=>x.id===id);return g?g.title:null;}
 async function loadGoals(){
-  const r=await sb.from('goals').select('*').eq('archived',false).order('sort').order('created_at');
+  const [r,l,n]=await Promise.all([
+    sb.from('goals').select('*').eq('archived',false).order('sort').order('created_at'),
+    sb.from('goal_log').select('goal_id,value,day').order('day'),
+    sb.from('goal_notes').select('*').order('created_at',{ascending:false}).limit(300)]);
   if(r.error){console.error(r.error);return;}
-  G=r.data;
+  G=r.data; GL=l.data||[]; GN=n.data||[];
+  const paths=[...new Set(G.filter(g=>g.image_path&&!gImg[g.image_path]).map(g=>g.image_path))];
+  if(paths.length){const {data}=await sb.storage.from(BUCKET).createSignedUrls(paths,86400);(data||[]).forEach(x=>{if(x.signedUrl&&x.path)gImg[x.path]=x.signedUrl;});}
   if(view==='goals')renderGoals(); else if(view==='today')renderToday(); else if(view==='board')renderBoardInner();
 }
 let gRefreshT=null;function softGoals(){clearTimeout(gRefreshT);gRefreshT=setTimeout(loadGoals,400);}
 function gTasks(g){return D.tasks.filter(t=>t.goal_id===g.id);}
-function gProgress(g){
+function gKids(g){return G.filter(x=>x.parent_id===g.id);}
+function gHabits(g){return H.list.filter(h=>h.goal_id===g.id);}
+function hScore28(h){
+  const t=hToday();let c=0;for(let i=0;i<28;i++){const d=new Date(t);d.setDate(t.getDate()-i);if(hOn(h.id,hYmd(d)))c++;}
+  const exp=Math.max(1,h.target*28/h.period_days);return{c,exp:Math.round(exp),f:Math.min(1,c/exp)};
+}
+function hWeekDone(h){const t=hToday();let c=0;for(let i=0;i<7;i++){const d=new Date(t);d.setDate(t.getDate()-i);if(hOn(h.id,hYmd(d)))c++;}return c;}
+function gProgress(g,depth=0){
   if(Number(g.target)>0){const cur=Number(g.current)||0,tg=Number(g.target);return{mode:'num',cur,tg,pct:Math.round(cur/tg*100)};}
   const ts=gTasks(g),done=ts.filter(t=>t.status==='done').length;
-  return{mode:'tasks',cur:done,tg:ts.length,pct:ts.length?Math.round(done/ts.length*100):0};
+  const kids=depth<3?gKids(g):[], hs=gHabits(g);
+  const items=ts.length+kids.length+hs.length;
+  if(!items)return{mode:'mix',cur:0,tg:0,kids:0,habits:0,items:0,pct:g.achieved_at?100:0};
+  const sum=done+kids.reduce((s,k)=>s+(k.achieved_at?1:Math.min(1,gProgress(k,depth+1).pct/100)),0)+hs.reduce((s,h)=>s+hScore28(h).f,0);
+  return{mode:'mix',cur:done,tg:ts.length,kids:kids.length,habits:hs.length,items,pct:Math.round(sum/items*100)};
 }
 function gPlural(n,a,b,c){n=Math.abs(Math.round(n))%100;const m=n%10;return n>10&&n<20?c:m===1?a:m>=2&&m<=4?b:c;}
 function gDays(a,b){return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/864e5);}
-function gNumTxt(g,p){return p.mode==='num'?`${fmtNum(p.cur)} из ${fmtNum(p.tg)}${g.unit?' '+esc(g.unit):''}`:(p.tg?`${p.cur} из ${p.tg} ${gPlural(p.tg,'задачи','задач','задач')}`:'Привяжи к цели задачи');}
+function gFmtD(iso,long){return new Date(iso+'T00:00:00').toLocaleDateString('ru',{day:'numeric',month:long?'long':'short'});}
+function gNumTxt(g,p){
+  if(p.mode==='num')return `${fmtNum(p.cur)} из ${fmtNum(p.tg)}${g.unit?' '+esc(g.unit):''}`;
+  if(!p.items)return 'Добавь шаги, подцели или привычки';
+  const a=[];
+  if(p.tg)a.push(`${p.cur} из ${p.tg} ${gPlural(p.tg,'шага','шагов','шагов')}`);
+  if(p.kids)a.push(`${p.kids} ${gPlural(p.kids,'подцель','подцели','подцелей')}`);
+  if(p.habits)a.push(`${p.habits} ${gPlural(p.habits,'привычка','привычки','привычек')}`);
+  return a.join(' · ');
+}
+function gStart(g){return g.start_date||hYmd(new Date(g.created_at));}
 function gPace(g,p){
   if(!g.deadline||p.pct>=100||g.achieved_at)return null;
-  if(p.mode==='tasks'&&!p.tg)return null;
-  const today=dayStr(0), left=gDays(today,g.deadline), rest=p.tg-p.cur;
-  const unit=p.mode==='num'?(g.unit||''):gPlural(rest,'задача','задачи','задач');
-  if(left<0)return{cls:'behind',txt:`Срок прошёл ${-left} ${gPlural(-left,'день','дня','дней')} назад, осталось ${fmtNum(rest)} ${unit}`};
-  if(left===0)return{cls:'behind',txt:`Срок сегодня, осталось ${fmtNum(rest)} ${unit}`};
-  const start=g.start_date||hYmd(new Date(g.created_at));
-  const total=Math.max(gDays(start,g.deadline),1), passed=Math.min(Math.max(gDays(start,today),0),total);
+  if(p.mode!=='num'&&!p.items)return null;
+  const today=dayStr(0), left=gDays(today,g.deadline);
+  const unit=p.mode==='num'?(g.unit||''):'';
+  const rest=p.mode==='num'?p.tg-p.cur:null;
+  const lagTxt=g.lag_since&&gDays(g.lag_since,today)>=7?` Отстаёт с ${gFmtD(g.lag_since)}: сдвинь срок, уменьши цель или добавь шаги.`:'';
+  if(left<0)return{cls:'behind',txt:`Срок прошёл ${-left} ${gPlural(-left,'день','дня','дней')} назад${rest!=null?`, осталось ${fmtNum(rest)} ${unit}`:''}.${lagTxt}`};
+  if(left===0)return{cls:'behind',txt:`Срок сегодня${rest!=null?`, осталось ${fmtNum(rest)} ${unit}`:''}.`};
+  const start=gStart(g), total=Math.max(gDays(start,g.deadline),1), passed=Math.min(Math.max(gDays(start,today),0),total);
   const timePct=Math.round(passed/total*100), ok=p.pct>=timePct-5;
   const lead=ok?'Идёшь по плану. ':'Отстаёшь от плана. ';
   if(p.mode==='num'){
     const f=n=>fmtNum(n>=10?Math.round(n):Math.round(n*10)/10);
     const need=rest/left, have=passed>0?p.cur/passed:null;
-    return{cls:ok?'ok':'behind',timePct,txt:`${lead}Чтобы успеть, нужно ${f(need)} ${unit} в день${have!=null?`, сейчас идёшь по ${f(have)}`:''}`};
+    return{cls:ok?'ok':'behind',timePct,txt:`${lead}Чтобы успеть, нужно ${f(need)} ${unit} в день${have!=null?`, сейчас идёшь по ${f(have)}`:''}.${ok?'':lagTxt}`};
   }
-  return{cls:ok?'ok':'behind',timePct,txt:`${lead}Осталось ${rest} ${unit} за ${left} ${gPlural(left,'день','дня','дней')}`};
+  return{cls:ok?'ok':'behind',timePct,txt:`${lead}Прошло ${timePct}% времени, сделано ${p.pct}%. До срока ${left} ${gPlural(left,'день','дня','дней')}.${ok?'':lagTxt}`};
 }
-function gBar(p,pace){
-  return `<div class="g-track"><div class="g-fill ${p.pct>=100?'full':pace&&pace.cls==='behind'?'behind':''}" style="width:${Math.min(p.pct,100)}%"></div>${pace&&pace.timePct!=null?`<div class="g-time" style="left:${pace.timePct}%" title="Сколько времени до срока уже прошло"></div>`:''}</div>`;
+function gChecks(g){return (Array.isArray(g.checkpoints)?g.checkpoints:[]).filter(c=>c&&c.date&&c.value!=null).sort((a,b)=>a.date<b.date?-1:1);}
+function gBar(g,p,pace){
+  const ticks=p.mode==='num'?gChecks(g).map(c=>{const x=Math.min(100,Number(c.value)/p.tg*100);return `<div class="g-tick ${p.cur>=Number(c.value)?'ok':''}" style="left:${x}%" title="${fmtNum(c.value)} к ${gFmtD(c.date,true)}"></div>`;}).join(''):'';
+  return `<div class="g-track"><div class="g-fill ${p.pct>=100?'full':pace&&pace.cls==='behind'?'behind':''}" style="width:${Math.min(p.pct,100)}%"></div>${ticks}${pace&&pace.timePct!=null?`<div class="g-time" style="left:${pace.timePct}%" title="Сколько времени до срока уже прошло"></div>`:''}</div>`;
 }
+function gCheckTxt(g,p){
+  if(p.mode!=='num')return '';
+  const cs=gChecks(g);if(!cs.length)return '';
+  const today=dayStr(0), done=cs.filter(c=>p.cur>=Number(c.value)).length;
+  const next=cs.find(c=>p.cur<Number(c.value));
+  if(!next)return `<div class="g-cp ok">✓ Все контрольные точки пройдены (${cs.length})</div>`;
+  const missed=next.date<today;
+  return `<div class="g-cp ${missed?'behind':''}">${done?`✓ ${done} из ${cs.length} ${gPlural(cs.length,'точки','точек','точек')} · `:''}${missed?'Точка пропущена':'Следующая точка'}: ${fmtNum(next.value)} к ${gFmtD(next.date,true)}</div>`;
+}
+function gSpark(g,p){
+  if(p.mode!=='num')return '';
+  const pts=GL.filter(x=>x.goal_id===g.id);
+  if(!pts.length)return '';
+  const today=dayStr(0), start=gStart(g), end=g.deadline&&g.deadline>today?g.deadline:today;
+  const span=Math.max(gDays(start,end),1), W=300, Hh=54, maxV=Math.max(p.tg,...pts.map(x=>Number(x.value)))||1;
+  const X=d=>Math.max(0,Math.min(W,gDays(start,d)/span*W)), Y=v=>Hh-3-(Number(v)/maxV)*(Hh-8);
+  const line=pts.map(x=>`${X(x.day).toFixed(1)},${Y(x.value).toFixed(1)}`).join(' ');
+  const first=pts[0];
+  const ideal=g.deadline?`<line x1="${X(first.day)}" y1="${Y(first.value)}" x2="${X(g.deadline)}" y2="${Y(p.tg)}" class="g-sp-ideal"/>`:'';
+  const last=pts[pts.length-1];
+  return `<div class="g-spark" title="Как менялся прогресс. Пунктир: как надо, чтобы успеть"><svg viewBox="0 0 ${W} ${Hh}" preserveAspectRatio="none">${ideal}<polyline points="${line}" class="g-sp-line"/><circle cx="${X(last.day)}" cy="${Y(last.value)}" r="3.5" class="g-sp-dot"/></svg><div class="g-sp-lbl"><span>${gFmtD(start)}</span><span>${pts.length} ${gPlural(pts.length,'отметка','отметки','отметок')}</span><span>${g.deadline?gFmtD(g.deadline):''}</span></div></div>`;
+}
+function gSphereLbl(g){const pn=projName(g.project_id);if(pn)return `<span><span class="dot" style="background:${projColor(g.project_id)}"></span>${esc(pn)}</span>`;const sp=SPHERES.find(x=>x.n===g.sphere);return sp?`<span>${sp.e} ${esc(sp.n)}</span>`:'';}
 function gCard(g,opts={}){
-  const p=gProgress(g), pace=gPace(g,p), pn=projName(g.project_id);
-  const dl=g.deadline?new Date(g.deadline+'T00:00:00').toLocaleDateString('ru',{day:'numeric',month:'long'}):'';
+  const p=gProgress(g), pace=gPace(g,p);
+  const won=!!g.achieved_at, par=g.parent_id&&G.find(x=>x.id===g.parent_id), kids=gKids(g), hs=gHabits(g), note=GN.find(n=>n.goal_id===g.id);
   const open=gTasks(g).filter(t=>t.status!=='done'&&!t.archived).sort((a,b)=>(PRIO_ORDER[a.priority]??9)-(PRIO_ORDER[b.priority]??9)||((a.deadline||'9')>(b.deadline||'9')?1:-1));
-  const won=!!g.achieved_at;
-  return `<section class="g-card ${won?'won':''}">
-    <div class="g-head"><div class="g-title">${won?'🏆 ':''}${esc(g.title)}</div><button class="g-edit" data-gedit="${g.id}" title="Изменить цель">✎</button></div>
-    <div class="g-meta">${pn?`<span><span class="dot" style="background:${projColor(g.project_id)}"></span>${esc(pn)}</span>`:''}${!pn&&g.sphere&&opts.showSphere?`<span>${esc(g.sphere)}</span>`:''}${dl?`<span>до ${dl}</span>`:''}${won?`<span>достигнута ${new Date(g.achieved_at).toLocaleDateString('ru',{day:'numeric',month:'long'})}</span>`:''}</div>
-    ${gBar(p,pace)}
+  const img=g.image_path&&gImg[g.image_path];
+  return `<section class="g-card ${won?'won':''} ${g.month_focus&&!won?'focus':''}" ${won?'':`draggable="true" data-gid="${g.id}"`}>
+    ${img?`<div class="g-cover" style="background-image:url('${img}')"></div>`:''}
+    <div class="g-head"><div class="g-title">${won?'🏆 ':''}${g.month_focus&&!won?'⭐ ':''}${esc(g.title)}</div><button class="g-edit" data-gedit="${g.id}" title="Изменить цель">✎</button></div>
+    <div class="g-meta">${opts.showSphere?gSphereLbl(g):''}${g.horizon?`<span class="g-hz">${HORIZON[g.horizon]}</span>`:''}${g.deadline?`<span>до ${gFmtD(g.deadline,true)}</span>`:''}${won?`<span>достигнута ${new Date(g.achieved_at).toLocaleDateString('ru',{day:'numeric',month:'long'})}</span>`:''}</div>
+    ${par?`<div class="g-parent" data-gedit="${par.id}">↑ часть цели «${esc(par.title)}»</div>`:''}
+    ${g.why?`<div class="g-why">${esc(g.why)}</div>`:''}
+    ${gBar(g,p,pace)}
     <div class="g-nums"><span>${gNumTxt(g,p)}</span><b>${p.pct}%</b></div>
+    ${gSpark(g,p)}
+    ${gCheckTxt(g,p)}
     ${pace?`<div class="g-pace ${pace.cls}">${esc(pace.txt)}</div>`:''}
     ${!won&&p.mode==='num'?`<div class="g-upd"><input data-gcur="${g.id}" inputmode="decimal" placeholder="Сколько сейчас? было ${fmtNum(p.cur)}"><button class="g-btn" data-gset="${g.id}">Обновить</button></div>`:''}
+    ${kids.length?`<div class="g-kids">${kids.map(k=>{const kp=gProgress(k,1);return `<div class="g-kid" data-gedit="${k.id}"><span>${k.achieved_at?'🏆 ':''}${esc(k.title)}</span><div class="g-kid-bar"><div style="width:${Math.min(kp.pct,100)}%"></div></div><b>${kp.pct}%</b></div>`;}).join('')}</div>`:''}
+    ${hs.length?`<div class="g-habs">${hs.map(h=>{const w=hWeekDone(h),need=h.period_days===1?7:Math.round(h.target*7/h.period_days)||h.target;return `<span class="g-hab ${w>=need?'ok':''}" title="За последние 7 дней">${esc(h.name)} · ${w}/${need}</span>`;}).join('')}</div>`:''}
+    ${g.reward?`<div class="g-reward ${won?(g.reward_given?'given':'due'):''}">🎁 ${won?(g.reward_given?'Подарила себе: ':'Пора подарить себе: '):'Награда: '}${esc(g.reward)}${won&&!g.reward_given?` <button class="g-btn g-gift" data-ggift="${g.id}">Подарила ✓</button>`:''}</div>`:''}
+    ${note?`<div class="g-note" title="Последняя сверка"><b>Сверка ${gFmtD(note.week)}:</b>${note.moved?` продвинуло: ${esc(note.moved)}.`:''}${note.blocked?` мешало: ${esc(note.blocked)}.`:''}${note.next_step?` дальше: ${esc(note.next_step)}.`:''}</div>`:''}
     ${!won&&p.pct>=100?`<button class="g-btn g-win" data-gwin="${g.id}">🏆 Цель достигнута, в копилку побед</button>`:''}
-    ${won?'':`<div class="g-tasks">${open.slice(0,6).map(t=>trow(t,{showDate:true})).join('')}${open.length>6?`<div class="g-more">и ещё ${open.length-6}</div>`:''}<button class="g-btn g-addtask" data-gtask="${g.id}">+ Шаг к цели</button></div>`}
+    ${won?'':`<div class="g-tasks">${open.slice(0,6).map(t=>trow(t,{showDate:true})).join('')}${open.length>6?`<div class="g-more">и ещё ${open.length-6}</div>`:''}<div class="g-actions"><button class="g-btn g-addtask" data-gtask="${g.id}">+ Шаг к цели</button><button class="g-btn g-addtask" data-gnote="${g.id}">📝 Сверка</button></div></div>`}
   </section>`;
 }
 async function gPatch(id,upd){
   const g=G.find(x=>x.id===id); if(g)Object.assign(g,upd); renderGoals();
   const {error}=await sb.from('goals').update({...upd,updated_at:new Date().toISOString()}).eq('id',id);
   if(error){toast('Не сохранилось: '+error.message);loadGoals();}
+  else if('current' in upd)loadGoals();
 }
 const SPHERES=[
-  {n:'Здоровье и красота',e:'💪',c:'#f6c9d4'},
-  {n:'Развитие и обучение',e:'📚',c:'#c9dcf2'},
-  {n:'Финансовое благополучие',e:'💰',c:'#cfe8d5'},
-  {n:'Семья и любовь',e:'❤️',c:'#f3d0c4'},
-  {n:'Яркость жизни и хобби',e:'🎨',c:'#e3d4f0'},
+  {n:'Здоровье и красота',e:'💪',c:'#f6c9d4',s:'Здоровье',w:'#e07a9a'},
+  {n:'Развитие и обучение',e:'📚',c:'#c9dcf2',s:'Развитие',w:'#5b8fd0'},
+  {n:'Финансовое благополучие',e:'💰',c:'#cfe8d5',s:'Финансы',w:'#4a9d6a'},
+  {n:'Семья и любовь',e:'❤️',c:'#f3d0c4',s:'Семья',w:'#d9654a'},
+  {n:'Яркость жизни и хобби',e:'🎨',c:'#e3d4f0',s:'Яркость',w:'#8a6db0'},
 ];
+function gHzOk(g){return !gHz||g.horizon===gHz;}
 function gGroups(act,filtered){
-  if(filtered)return act.length?`<div class="g-grid">${act.map(g=>gCard(g)).join('')}</div>`:'<div class="g-empty">В этом проекте целей пока нет.</div>';
+  if(filtered)return act.length?`<div class="g-grid">${act.map(g=>gCard(g)).join('')}</div>`:'<div class="g-empty">Здесь целей пока нет.</div>';
   const out=[];
   const work=D.projects.filter(p=>act.some(g=>g.project_id===p.id));
   work.forEach(p=>out.push({key:'p:'+p.id,title:esc(p.name),dot:p.color,list:act.filter(g=>g.project_id===p.id)}));
   SPHERES.forEach(sp=>out.push({key:'s:'+sp.n,title:`${sp.e} ${esc(sp.n)}`,bg:sp.c,list:act.filter(g=>!g.project_id&&g.sphere===sp.n)}));
   const other=act.filter(g=>!g.project_id&&!SPHERES.some(sp=>sp.n===g.sphere));
   if(other.length)out.push({key:'s:',title:'Другое',list:other});
-  return out.map(gr=>`<section class="g-sphere ${gr.list.length?'':'empty'}">
+  return out.map(gr=>`<section class="g-sphere ${gr.list.length?'':'empty'}" data-gkey="${esc(gr.key)}">
     <div class="g-sph-head" ${gr.bg?`style="--sph:${gr.bg}"`:''}><span>${gr.dot?`<span class="dot" style="background:${gr.dot}"></span>`:''}${gr.title}</span><span class="g-sph-r">${gr.list.length?gr.list.length:''}<button class="g-sph-add" data-gnew="${esc(gr.key)}" title="Новая цель в этой сфере">+</button></span></div>
     ${gr.list.length?`<div class="g-grid">${gr.list.map(g=>gCard(g)).join('')}</div>`:`<div class="g-sph-empty">Целей пока нет</div>`}
   </section>`).join('');
+}
+/* колесо баланса */
+function gWheel(act){
+  const secs=[{s:'Работа',e:'💼',w:'#b0476a',list:act.filter(g=>g.project_id)},...SPHERES.map(sp=>({s:sp.s,e:sp.e,w:sp.w,list:act.filter(g=>!g.project_id&&g.sphere===sp.n)}))];
+  const n=secs.length, R=96, r0=16;
+  const pt=(r,a)=>[(r*Math.cos(a)).toFixed(1),(r*Math.sin(a)).toFixed(1)];
+  const wedge=(r,a0,a1)=>{const [x0,y0]=pt(r,a0),[x1,y1]=pt(r,a1);return `M0 0 L${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1} Z`;};
+  let svg='';
+  secs.forEach((s,i)=>{
+    const a0=-Math.PI/2+i*2*Math.PI/n+0.02, a1=-Math.PI/2+(i+1)*2*Math.PI/n-0.02, am=(a0+a1)/2;
+    s.pct=s.list.length?Math.round(s.list.reduce((t,g)=>t+Math.min(100,gProgress(g).pct),0)/s.list.length):null;
+    svg+=`<path d="${wedge(R,a0,a1)}" fill="${s.w}" opacity=".13"/>`;
+    if(s.pct!=null)svg+=`<path d="${wedge(r0+(R-r0)*Math.max(s.pct,4)/100,a0,a1)}" fill="${s.w}" opacity=".85"/>`;
+    const [lx,ly]=pt(R+20,am);
+    svg+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" class="g-wh-t">${s.e}</text>`;
+  });
+  [.25,.5,.75,1].forEach(f=>svg+=`<circle r="${(r0+(R-r0)*f).toFixed(1)}" class="g-wh-ring"/>`);
+  const empty=secs.filter(s=>!s.list.length).map(s=>s.s);
+  return `<section class="g-wheel"><div class="g-wh-head" id="gWheelToggle"><span>☯ Колесо баланса</span><span>${gWheelOpen?'скрыть':'показать'}</span></div>
+    ${gWheelOpen?`<div class="g-wh-body"><svg viewBox="-125 -125 250 250" class="g-wh-svg">${svg}</svg>
+    <div class="g-wh-list">${secs.map(s=>`<div class="g-wh-row"><span class="g-wh-dot" style="background:${s.w}"></span><span>${s.e} ${s.s}</span><b>${s.pct==null?'—':s.pct+'%'}</b><small>${s.list.length?`${s.list.length} ${gPlural(s.list.length,'цель','цели','целей')}`:'нет целей'}</small></div>`).join('')}
+    ${empty.length?`<div class="g-wh-hint">Без целей: ${empty.join(', ')}. Здесь легко пропустить важное.</div>`:'<div class="g-wh-hint">Во всех сферах есть цели. Длина лепестка: средний прогресс сферы.</div>'}</div></div>`:''}
+  </section>`;
+}
+function gFocusGoal(){return G.find(g=>g.month_focus&&!g.achieved_at);}
+function gFocusHTML(g,where){
+  const p=gProgress(g),pace=gPace(g,p),img=g.image_path&&gImg[g.image_path];
+  return `<section class="g-focus-banner" data-gfocus="${g.id}" ${img?`style="--fimg:url('${img}')"`:''}>
+    <div class="g-fb-lbl">⭐ Цель месяца</div>
+    <div class="g-fb-title">${esc(g.title)}</div>
+    ${g.why?`<div class="g-fb-why">${esc(g.why)}</div>`:''}
+    ${gBar(g,p,pace)}
+    <div class="g-nums"><span>${gNumTxt(g,p)}</span><b>${p.pct}%</b></div>
+    ${pace?`<div class="g-pace ${pace.cls}">${esc(pace.txt)}</div>`:''}
+  </section>`;
+}
+let gDragId=null;
+function gWireDrag(el){
+  el.querySelectorAll('.g-card[data-gid]').forEach(c=>{
+    c.addEventListener('dragstart',e=>{gDragId=c.dataset.gid;c.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',gDragId);});
+    c.addEventListener('dragend',()=>{gDragId=null;c.classList.remove('dragging');el.querySelectorAll('.dragover,.drop-before').forEach(x=>x.classList.remove('dragover','drop-before'));});
+    c.querySelectorAll('input').forEach(i=>{i.addEventListener('mousedown',()=>c.setAttribute('draggable','false'));i.addEventListener('blur',()=>c.setAttribute('draggable','true'));});
+  });
+  el.querySelectorAll('.g-sphere[data-gkey]').forEach(sec=>{
+    sec.addEventListener('dragover',e=>{if(!gDragId)return;e.preventDefault();sec.classList.add('dragover');
+      el.querySelectorAll('.drop-before').forEach(x=>x.classList.remove('drop-before'));
+      const t=e.target.closest('.g-card[data-gid]');if(t&&t.dataset.gid!==gDragId)t.classList.add('drop-before');});
+    sec.addEventListener('dragleave',e=>{if(!sec.contains(e.relatedTarget))sec.classList.remove('dragover');});
+    sec.addEventListener('drop',e=>{e.preventDefault();sec.classList.remove('dragover');if(!gDragId)return;
+      const t=e.target.closest('.g-card[data-gid]');gMove(gDragId,sec.dataset.gkey,t&&t.dataset.gid!==gDragId?t.dataset.gid:null);});
+  });
+}
+async function gMove(id,key,beforeId){
+  const g=G.find(x=>x.id===id);if(!g)return;
+  const upd=key.startsWith('p:')?{project_id:key.slice(2),sphere:null}:{project_id:null,sphere:key.slice(2)||null};
+  Object.assign(g,upd);
+  const same=x=>key.startsWith('p:')?x.project_id===upd.project_id:(!x.project_id&&(x.sphere||null)===upd.sphere);
+  const list=G.filter(x=>!x.achieved_at&&x.id!==id&&same(x));
+  const at=beforeId?list.findIndex(x=>x.id===beforeId):-1;
+  list.splice(at<0?list.length:at,0,g);
+  const changes=[];
+  list.forEach((x,i)=>{if(x.id===id||x.sort!==i){x.sort=i;changes.push(x.id===id?{id,...upd,sort:i}:{id:x.id,sort:i});}});
+  G.sort((a,b)=>(a.sort??0)-(b.sort??0)||(a.created_at<b.created_at?-1:1));
+  renderGoals();
+  for(const c of changes){const {id:cid,...u}=c;const {error}=await sb.from('goals').update(u).eq('id',cid);if(error){toast('Не сохранилось: '+error.message);loadGoals();return;}}
+  const sp=SPHERES.find(x=>'s:'+x.n===key);if(sp)toast('Перенесла в «'+sp.n+'»');
 }
 function renderGoals(){
   const el=document.getElementById('gview');
   const fk=filters.project?[filters.project,...kidIds(filters.project)]:null;
   const list=G.filter(g=>!fk||fk.includes(g.project_id));
-  const act=list.filter(g=>!g.achieved_at), won=list.filter(g=>g.achieved_at).sort((a,b)=>a.achieved_at<b.achieved_at?1:-1);
-  el.innerHTML=`<div class="h-top"><div class="h-week" style="text-align:left;flex:1;padding-left:4px">Цели<small>${act.length?`в работе ${act.length}`:'целей пока нет'}${won.length?` · достигнуто ${won.length}`:''}</small></div><button class="btn-primary" id="gNew" style="height:36px">+ Цель</button></div>
+  const actAll=list.filter(g=>!g.achieved_at), act=actAll.filter(gHzOk), won=list.filter(g=>g.achieved_at).sort((a,b)=>a.achieved_at<b.achieved_at?1:-1);
+  const fg=gFocusGoal();
+  const hzBtns=[['','Все'],['year','Год'],['quarter','Квартал'],['month','Месяц']].map(([v,l])=>`<button class="${gHz===v?'on':''}" data-ghz="${v}">${l}</button>`).join('');
+  el.innerHTML=`<div class="h-top g-top"><div class="h-week" style="text-align:left;flex:1;padding-left:4px">Цели<small>${actAll.length?`в работе ${actAll.length}`:'целей пока нет'}${won.length?` · достигнуто ${won.length}`:''}</small></div><div class="view-toggle g-hzt">${hzBtns}</div><button class="g-btn" id="gYearBtn">🏆 Итоги года</button><button class="btn-primary" id="gNew" style="height:36px">+ Цель</button></div>
+    ${fg&&!fk?gFocusHTML(fg):''}
+    ${!fk&&actAll.length?gWheel(actAll):''}
     ${gGroups(act,!!fk)}
-    ${won.length?`<section class="h-sec g-won"><div class="h-sec-head g-won-head" id="gWonToggle">🏆 Копилка побед · ${won.length}<span>${gShowWon?'скрыть':'показать'}</span></div>${gShowWon?`<div class="g-grid">${won.map(gCard).join('')}</div>`:''}</section>`:''}`;
+    ${won.length?`<section class="h-sec g-won"><div class="h-sec-head g-won-head" id="gWonToggle">🏆 Копилка побед · ${won.length}<span>${gShowWon?'скрыть':'показать'}</span></div>${gShowWon?`<div class="g-grid">${won.map(g=>gCard(g,{showSphere:true})).join('')}</div>`:''}</section>`:''}`;
   document.getElementById('gNew').onclick=()=>openGoalDialog(null);
+  document.getElementById('gYearBtn').onclick=openYear;
+  el.querySelectorAll('[data-ghz]').forEach(b=>b.onclick=()=>{gHz=b.dataset.ghz;localStorage.setItem('kanban.ghz',gHz);renderGoals();});
   el.querySelectorAll('[data-gnew]').forEach(b=>b.onclick=()=>openGoalDialog(null,b.dataset.gnew));
-  const wt=document.getElementById('gWonToggle'); if(wt)wt.onclick=()=>{gShowWon=!gShowWon;renderGoals();};
-  el.querySelectorAll('[data-gedit]').forEach(b=>b.onclick=()=>openGoalDialog(b.dataset.gedit));
+  const wt=document.getElementById('gWheelToggle'); if(wt)wt.onclick=()=>{gWheelOpen=!gWheelOpen;localStorage.setItem('kanban.wheel',gWheelOpen?'1':'0');renderGoals();};
+  el.querySelectorAll('[data-gfocus]').forEach(b=>b.onclick=()=>openGoalDialog(b.dataset.gfocus));
+  gWireDrag(el);
+  const wo=document.getElementById('gWonToggle'); if(wo)wo.onclick=()=>{gShowWon=!gShowWon;renderGoals();};
+  el.querySelectorAll('[data-gedit]').forEach(b=>b.onclick=e=>{e.stopPropagation();openGoalDialog(b.dataset.gedit);});
   const setCur=id=>{const inp=el.querySelector(`[data-gcur="${id}"]`),v=parseNum(inp.value);if(v==null)return inp.focus();gPatch(id,{current:v});toast('Прогресс обновлён');};
   el.querySelectorAll('[data-gset]').forEach(b=>b.onclick=()=>setCur(b.dataset.gset));
   el.querySelectorAll('[data-gcur]').forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')setCur(i.dataset.gcur);});
-  el.querySelectorAll('[data-gwin]').forEach(b=>b.onclick=()=>{gPatch(b.dataset.gwin,{achieved_at:new Date().toISOString()});toast('Поздравляю! Цель в копилке побед');});
+  el.querySelectorAll('[data-gwin]').forEach(b=>b.onclick=()=>{const g=G.find(x=>x.id===b.dataset.gwin);gPatch(b.dataset.gwin,{achieved_at:new Date().toISOString(),month_focus:false});toast(g&&g.reward?'Поздравляю! Теперь награда: '+g.reward:'Поздравляю! Цель в копилке побед');});
+  el.querySelectorAll('[data-ggift]').forEach(b=>b.onclick=()=>{gPatch(b.dataset.ggift,{reward_given:true});toast('Так держать!');});
   el.querySelectorAll('[data-gtask]').forEach(b=>b.onclick=()=>{const g=G.find(x=>x.id===b.dataset.gtask);openDialog(null);document.getElementById('fGoal').value=g.id;if(g.project_id)document.getElementById('fProject').value=g.project_id;document.getElementById('fDeadline').value='';});
+  el.querySelectorAll('[data-gnote]').forEach(b=>b.onclick=()=>openNote(b.dataset.gnote));
   wireTRows(el);
 }
+/* диалог цели */
+function gDescendants(id){const out=new Set([id]);let ch=true;while(ch){ch=false;G.forEach(x=>{if(x.parent_id&&out.has(x.parent_id)&&!out.has(x.id)){out.add(x.id);ch=true;}});}return out;}
+function gChecksToText(g){return gChecks(g).map(c=>{const [y,m,d]=c.date.split('-');return `${d}.${m}.${y} ${String(c.value).replace('.',',')}`;}).join('\n');}
+function gParseChecks(txt){
+  const out=[],bad=[];
+  txt.split('\n').map(s=>s.trim()).filter(Boolean).forEach(line=>{
+    const m=line.match(/^(\d{1,2})[.\/](\d{1,2})(?:[.\/](\d{2,4}))?\s*[-—:–]?\s*([\d\s.,]+)/)||line.match(/^(\d{4})-(\d{2})-(\d{2})\s+([\d\s.,]+)/);
+    if(!m){bad.push(line);return;}
+    let y,mo,d;
+    if(m[0].match(/^\d{4}-/)){y=+m[1];mo=+m[2];d=+m[3];}
+    else{d=+m[1];mo=+m[2];y=m[3]?(+m[3]<100?2000+ +m[3]:+m[3]):new Date().getFullYear();
+      if(!m[3]){const t=new Date();t.setDate(t.getDate()-60);if(new Date(y,mo-1,d)<t)y++;}}
+    const v=parseNum(m[4]);if(v==null){bad.push(line);return;}
+    out.push({date:`${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`,value:v});
+  });
+  return{out:out.sort((a,b)=>a.date<b.date?-1:1),bad};
+}
 function openGoalDialog(id,preset){
-  gEditing=id||null; const g=id?G.find(x=>x.id===id):null, $=x=>document.getElementById(x);
+  gEditing=id||null; gImgFile=null; gImgRemove=false;
+  const g=id?G.find(x=>x.id===id):null, $=x=>document.getElementById(x);
   const gnum=v=>v==null?'':String(v).replace('.',',');
   $('gDlgTitle').textContent=g?'Цель':'Новая цель';
   $('gTitle').value=g?g.title:'';
+  $('gWhy').value=g?(g.why||''):'';
   const cur=g?(g.project_id?'p:'+g.project_id:(g.sphere?'s:'+g.sphere:'')):(preset||(filters.project?'p:'+filters.project:''));
   $('gProject').innerHTML='<option value="">Без сферы</option><optgroup label="Сферы жизни">'+SPHERES.map(sp=>`<option value="s:${esc(sp.n)}">${sp.e} ${esc(sp.n)}</option>`).join('')+'</optgroup><optgroup label="Работа и проекты">'+projTree().map(({p,child})=>`<option value="p:${p.id}">${child?'— ':''}${esc(p.name)}</option>`).join('')+'</optgroup>';
   $('gProject').value=cur;
+  $('gHorizon').value=g?(g.horizon||''):(gHz||'');
+  const excl=g?gDescendants(g.id):new Set();
+  $('gParent').innerHTML='<option value="">Самостоятельная цель</option>'+G.filter(x=>!x.achieved_at&&!excl.has(x.id)).map(x=>`<option value="${x.id}">${x.horizon?HORIZON[x.horizon]+': ':''}${esc(x.title)}</option>`).join('');
+  $('gParent').value=g?(g.parent_id||''):'';
+  $('gFocus').checked=g?!!g.month_focus:false;
   $('gDeadline').value=g?(g.deadline||''):'';
   $('gStart').value=g?(g.start_date||''):dayStr(0);
   $('gCur').value=g?gnum(g.current):''; $('gTarget').value=g?gnum(g.target):''; $('gUnit').value=g?(g.unit||''):'';
+  $('gChecks').value=g?gChecksToText(g):'';
+  $('gReward').value=g?(g.reward||''):'';
+  $('gHabits').innerHTML=H.list.length?H.list.map(h=>{const other=h.goal_id&&(!g||h.goal_id!==g.id)?gName(h.goal_id):null;return `<label class="g-hp"><input type="checkbox" value="${h.id}" ${g&&h.goal_id===g.id?'checked':''}> ${esc(h.name)}${other?` <small>(сейчас: ${esc(other)})</small>`:''}</label>`;}).join(''):'<span class="g-hint">Привычек пока нет</span>';
+  const img=g&&g.image_path&&gImg[g.image_path];
+  $('gImgPrev').src=img||''; $('gImgPrev').style.display=img?'block':'none'; $('gImgDel').style.display=img?'':'none';
   $('gDelete').style.visibility=g?'visible':'hidden';
   $('gOverlay').classList.add('show'); $('gTitle').focus();
 }
-function closeGoalDialog(){document.getElementById('gOverlay').classList.remove('show');gEditing=null;}
+function closeGoalDialog(){document.getElementById('gOverlay').classList.remove('show');gEditing=null;gImgFile=null;}
 async function saveGoal(){
   const $=x=>document.getElementById(x), title=$('gTitle').value.trim();
   if(!title)return $('gTitle').focus();
   const target=parseNum($('gTarget').value);
-  const sv=$('gProject').value;
-  const data={title,project_id:sv.startsWith('p:')?sv.slice(2):null,sphere:sv.startsWith('s:')?sv.slice(2):null,deadline:$('gDeadline').value||null,start_date:$('gStart').value||null,
-    target,current:target!=null?(parseNum($('gCur').value)??0):null,unit:$('gUnit').value.trim()||null,updated_at:new Date().toISOString()};
-  const r=gEditing?await sb.from('goals').update(data).eq('id',gEditing):await sb.from('goals').insert({...data,sort:G.length});
-  if(r.error)return toast('Ошибка: '+r.error.message);
+  const ck=gParseChecks($('gChecks').value);
+  if(ck.bad.length){toast('Не поняла строку точки: «'+ck.bad[0]+'». Пиши так: 10.11 500');return $('gChecks').focus();}
+  const sv=$('gProject').value, focus=$('gFocus').checked;
+  const data={title,why:$('gWhy').value.trim()||null,project_id:sv.startsWith('p:')?sv.slice(2):null,sphere:sv.startsWith('s:')?sv.slice(2):null,
+    horizon:$('gHorizon').value||null,parent_id:$('gParent').value||null,month_focus:focus,
+    deadline:$('gDeadline').value||null,start_date:$('gStart').value||null,
+    target,current:target!=null?(parseNum($('gCur').value)??0):null,unit:$('gUnit').value.trim()||null,
+    checkpoints:ck.out,reward:$('gReward').value.trim()||null,updated_at:new Date().toISOString()};
+  if(gImgRemove)data.image_path=null;
+  $('gSave').disabled=true;
+  try{
+    let id=gEditing;
+    if(id){const r=await sb.from('goals').update(data).eq('id',id);if(r.error)throw r.error;}
+    else{const r=await sb.from('goals').insert({...data,sort:G.length}).select('id').single();if(r.error)throw r.error;id=r.data.id;}
+    if(focus){const r=await sb.from('goals').update({month_focus:false}).eq('month_focus',true).neq('id',id);if(r.error)throw r.error;}
+    if(gImgFile){
+      const ext=(gImgFile.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
+      const path=`goals/${id}/${Date.now()}.${ext}`;
+      const u=await sb.storage.from(BUCKET).upload(path,gImgFile,{contentType:gImgFile.type||'image/jpeg'});if(u.error)throw u.error;
+      const r=await sb.from('goals').update({image_path:path}).eq('id',id);if(r.error)throw r.error;
+    }
+    const picked=[...document.querySelectorAll('#gHabits input:checked')].map(i=>i.value);
+    for(const h of H.list){
+      const want=picked.includes(h.id);
+      if(want&&h.goal_id!==id){await sb.from('habits').update({goal_id:id}).eq('id',h.id);h.goal_id=id;}
+      else if(!want&&h.goal_id===id){await sb.from('habits').update({goal_id:null}).eq('id',h.id);h.goal_id=null;}
+    }
+  }catch(e){$('gSave').disabled=false;return toast('Ошибка: '+(e.message||e));}
+  $('gSave').disabled=false;
   closeGoalDialog(); loadGoals();
 }
 async function deleteGoal(){
   const g=G.find(x=>x.id===gEditing); if(!g)return;
   if(!confirm(`Убрать цель «${g.title}»? Задачи останутся на доске.`))return;
-  const {error}=await sb.from('goals').update({archived:true}).eq('id',g.id); if(error)return toast('Ошибка: '+error.message);
+  const {error}=await sb.from('goals').update({archived:true,month_focus:false}).eq('id',g.id); if(error)return toast('Ошибка: '+error.message);
   closeGoalDialog(); loadGoals();
 }
 document.getElementById('gSave').onclick=saveGoal;
@@ -1221,6 +1519,76 @@ document.getElementById('gCancel').onclick=closeGoalDialog;
 document.getElementById('gClose').onclick=closeGoalDialog;
 document.getElementById('gDelete').onclick=deleteGoal;
 document.getElementById('gOverlay').onclick=e=>{if(e.target.id==='gOverlay')closeGoalDialog();};
+document.getElementById('gImgBtn').onclick=()=>document.getElementById('gImgInput').click();
+document.getElementById('gImgInput').onchange=e=>{const f=e.target.files[0];e.target.value='';if(!f)return;if(f.size>8e6)return toast('Картинка больше 8 МБ, выбери поменьше');gImgFile=f;gImgRemove=false;const pv=document.getElementById('gImgPrev');pv.src=URL.createObjectURL(f);pv.style.display='block';document.getElementById('gImgDel').style.display='';};
+document.getElementById('gImgDel').onclick=()=>{gImgFile=null;gImgRemove=true;const pv=document.getElementById('gImgPrev');pv.src='';pv.style.display='none';document.getElementById('gImgDel').style.display='none';};
+
+/* сверка цели */
+function nextMonday(){const d=new Date();d.setDate(d.getDate()+((8-d.getDay())%7||7));return hYmd(d);}
+function openNote(id){
+  gNoteFor=id; const g=G.find(x=>x.id===id), $=x=>document.getElementById(x);
+  $('nTitle').textContent='Сверка: '+g.title;
+  ['nMoved','nBlocked','nNext'].forEach(x=>$(x).value='');
+  $('nTask').checked=true;
+  $('nOverlay').classList.add('show'); $('nMoved').focus();
+}
+function closeNote(){document.getElementById('nOverlay').classList.remove('show');gNoteFor=null;}
+async function saveNote(){
+  const $=x=>document.getElementById(x), g=G.find(x=>x.id===gNoteFor); if(!g)return closeNote();
+  const moved=$('nMoved').value.trim(), blocked=$('nBlocked').value.trim(), next=$('nNext').value.trim();
+  if(!moved&&!blocked&&!next)return $('nMoved').focus();
+  const r=await sb.from('goal_notes').insert({goal_id:g.id,moved:moved||null,blocked:blocked||null,next_step:next||null});
+  if(r.error)return toast('Ошибка: '+r.error.message);
+  if(next&&$('nTask').checked){
+    const me=D.members.find(m=>m.name===meName);
+    const t=await sb.from('tasks').insert({title:next,status:'new',priority:'high',goal_id:g.id,project_id:g.project_id||null,deadline:nextMonday(),assignee_id:me?me.id:null});
+    if(t.error)toast('Шаг не создался: '+t.error.message);
+  }
+  closeNote(); toast('Сверка сохранена'); loadAll(); loadGoals();
+}
+document.getElementById('nSave').onclick=saveNote;
+document.getElementById('nCancel').onclick=closeNote;
+document.getElementById('nOverlay').onclick=e=>{if(e.target.id==='nOverlay')closeNote();};
+
+/* итоги года */
+async function openYear(){
+  document.getElementById('yOverlay').classList.add('show');
+  await renderYear();
+}
+function closeYear(){document.getElementById('yOverlay').classList.remove('show');}
+async function renderYear(){
+  const el=document.getElementById('yBody'), y=gYear, from=`${y}-01-01`, to=`${y}-12-31`;
+  document.getElementById('yTitle').textContent='Итоги '+y+' года';
+  el.innerHTML='<div class="g-hint">Собираю…</div>';
+  const inY=iso=>iso&&iso.slice(0,10)>=from&&iso.slice(0,10)<=to;
+  const won=G.filter(g=>inY(g.achieved_at)).sort((a,b)=>a.achieved_at<b.achieved_at?-1:1);
+  const done=D.tasks.filter(t=>t.status==='done'&&inY(t.done_at));
+  const hd=await sb.from('habit_days').select('habit_id,day').gte('day',from).lte('day',to);
+  const hdays=hd.data||[];
+  const byHabit={};hdays.forEach(r=>{byHabit[r.habit_id]=(byHabit[r.habit_id]||0)+1;});
+  const habits=Object.entries(byHabit).map(([id,c])=>({name:(H.list.find(h=>h.id===id)||{}).name||'Привычка',c})).sort((a,b)=>b.c-a.c);
+  const months=[...Array(12)].map((_,i)=>done.filter(t=>+t.done_at.slice(5,7)===i+1).length);
+  const mMax=Math.max(1,...months);
+  const MN=['янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  const wk={};done.forEach(t=>{const d=new Date(t.done_at);d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7));const k=hYmd(d);wk[k]=(wk[k]||0)+1;});
+  const best=Object.entries(wk).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  const gifts=won.filter(g=>g.reward);
+  const act=G.filter(g=>!g.achieved_at);
+  el.innerHTML=`
+    <div class="y-stats"><div><b>${won.length}</b><span>${gPlural(won.length,'цель достигнута','цели достигнуто','целей достигнуто')}</span></div><div><b>${done.length}</b><span>${gPlural(done.length,'задача закрыта','задачи закрыто','задач закрыто')}</span></div><div><b>${hdays.length}</b><span>${gPlural(hdays.length,'отметка привычек','отметки привычек','отметок привычек')}</span></div></div>
+    <h4>🏆 Достигнутые цели</h4>
+    ${won.length?won.map(g=>`<div class="y-row"><span>${esc(g.title)}</span><small>${new Date(g.achieved_at).toLocaleDateString('ru',{day:'numeric',month:'long'})}</small></div>`).join(''):'<div class="g-hint">Пока нет. Первая победа впереди!</div>'}
+    ${gifts.length?`<h4>🎁 Награды</h4>${gifts.map(g=>`<div class="y-row"><span>${esc(g.reward)}</span><small>${g.reward_given?'подарено':'ещё ждёт тебя'}</small></div>`).join('')}`:''}
+    <h4>📈 Закрытые задачи по месяцам</h4>
+    <div class="y-bars">${months.map((c,i)=>`<div class="y-bar"><div style="height:${Math.round(c/mMax*100)}%" title="${c}"></div><small>${MN[i]}</small><b>${c||''}</b></div>`).join('')}</div>
+    ${best.length?`<h4>🔥 Лучшие недели</h4>${best.map(([k,c])=>`<div class="y-row"><span>Неделя с ${gFmtD(k,true)}</span><small>${c} ${gPlural(c,'задача','задачи','задач')}</small></div>`).join('')}`:''}
+    ${habits.length?`<h4>🌿 Привычки</h4>${habits.slice(0,8).map(h=>`<div class="y-row"><span>${esc(h.name)}</span><small>${h.c} ${gPlural(h.c,'день','дня','дней')}</small></div>`).join('')}`:''}
+    ${act.length?`<h4>🎯 В работе</h4>${act.map(g=>`<div class="y-row"><span>${esc(g.title)}</span><small>${gProgress(g).pct}%</small></div>`).join('')}`:''}`;
+}
+document.getElementById('yClose').onclick=closeYear;
+document.getElementById('yPrev').onclick=()=>{gYear--;renderYear();};
+document.getElementById('yNext').onclick=()=>{gYear++;renderYear();};
+document.getElementById('yOverlay').onclick=e=>{if(e.target.id==='yOverlay')closeYear();};
 
 /* ---------- projects / members management ---------- */
 async function addProject(){
@@ -1258,7 +1626,7 @@ async function loadHabits(){
   const [a,b]=await Promise.all([sb.from('habits').select('*').eq('archived',false).order('sort'),sb.from('habit_days').select('habit_id,day').gte('day',hYmd(from))]);
   if(a.error||b.error){console.error(a.error||b.error);return;}
   H.list=a.data;H.days=new Set(b.data.map(r=>r.habit_id+'|'+r.day));
-  if(view==='habits')renderHabits(); else if(view==='today')renderToday();
+  if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='goals')renderGoals();
 }
 let hRefreshT=null;function softHabits(){clearTimeout(hRefreshT);hRefreshT=setTimeout(loadHabits,400);}
 async function hToggle(id,key){
@@ -1320,7 +1688,7 @@ document.getElementById('fileBtn').onclick=()=>document.getElementById('fileInpu
 document.getElementById('fileInput').onchange=e=>{uploadFiles(e.target.files);e.target.value='';};
 document.getElementById('recBtn').onclick=toggleRecord;
 document.getElementById('meBtn').onclick=()=>{const n=prompt('Как тебя подписывать в комментариях?',meName);if(n!==null){meName=n.trim();localStorage.setItem('kanban.me',meName);document.getElementById('meName').textContent=meName||'аноним';}};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDialog();closeGoalDialog();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDialog();closeGoalDialog();closeNote();closeYear();}});
 
 /* ---------- theme ---------- */
 function applyTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('kanban.theme',t);}
@@ -1351,6 +1719,8 @@ function startApp(){
     .on('postgres_changes',{event:'*',schema:'public',table:'habits'},softHabits)
     .on('postgres_changes',{event:'*',schema:'public',table:'habit_days'},softHabits)
     .on('postgres_changes',{event:'*',schema:'public',table:'goals'},softGoals)
+    .on('postgres_changes',{event:'*',schema:'public',table:'goal_log'},softGoals)
+    .on('postgres_changes',{event:'*',schema:'public',table:'goal_notes'},softGoals)
     .subscribe();
   loadAll(); loadHabits(); loadGoals();
 }
