@@ -348,6 +348,14 @@
   [data-theme="dark"] .g-won-head{background:var(--primary-soft)}
   .g-won-head span{font-size:12px;color:var(--muted);font-weight:600}
   .g-won .g-grid{padding:12px}
+  .g-sphere{display:flex;flex-direction:column;gap:10px}
+  .g-sph-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-radius:14px;background:var(--sph,var(--card-2));font-weight:700;font-size:14px;box-shadow:0 4px 18px rgba(0,0,0,.2);color:#3a2e33}
+  [data-theme="dark"] .g-sph-head{background:var(--primary-soft);color:var(--text)}
+  .g-sph-head>span:first-child{display:inline-flex;align-items:center;gap:7px}
+  .g-sph-r{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;opacity:.8}
+  .g-sph-add{width:26px;height:26px;border-radius:8px;border:1px solid rgba(0,0,0,.15);background:rgba(255,255,255,.6);font-size:16px;line-height:1;cursor:pointer;color:inherit}
+  .g-sph-empty{font-size:12.5px;color:var(--muted);padding:0 14px;margin-top:-4px}
+  .g-sphere.empty .g-sph-empty{color:#fff;opacity:.85;text-shadow:0 1px 3px rgba(0,0,0,.5)}
   .g-chip{font-size:11.5px;color:var(--muted);margin-top:4px}
   .g-hint{font-size:11.5px;color:var(--muted);margin-top:5px}
   .td-goal .goal-txt span{white-space:normal}
@@ -539,13 +547,13 @@
     </div>
     <div class="dialog-body">
       <div class="field"><label>Цель</label><input id="gTitle" placeholder="Например: 1500 регистраций на МП"></div>
+      <div class="field"><label>Сфера</label><select id="gProject"></select></div>
       <div class="row2">
-        <div class="field"><label>Сфера</label><select id="gProject"></select></div>
         <div class="field"><label>Срок</label><input id="gDeadline" type="date"></div>
+        <div class="field"><label>Начало (от него считается темп)</label><input id="gStart" type="date"></div>
       </div>
       <div class="field"><label>Прогресс в числах (необязательно)</label><div class="goal-in"><input id="gCur" inputmode="decimal" placeholder="Сейчас"><span>из</span><input id="gTarget" inputmode="decimal" placeholder="Цель"><input id="gUnit" placeholder="чего"></div>
         <div class="g-hint">Без чисел прогресс считается по задачам, привязанным к цели.</div></div>
-      <div class="field"><label>Начало (от него считается темп)</label><input id="gStart" type="date"></div>
     </div>
     <div class="dialog-foot">
       <button class="btn-ghost btn-danger" id="gDelete" style="visibility:hidden">Убрать цель</button>
@@ -1029,7 +1037,7 @@ function renderToday(){
   const overdue=open.filter(t=>t.deadline&&t.deadline<today).sort((a,b)=>a.deadline<b.deadline?-1:1);
   const todays=open.filter(t=>t.deadline===today||(t.priority==='urgent'&&!(t.deadline&&t.deadline<today))).sort((a,b)=>(PRIO_ORDER[a.priority]??9)-(PRIO_ORDER[b.priority]??9));
   const doneToday=vis.filter(t=>t.status==='done'&&t.done_at&&hYmd(new Date(t.done_at))===today);
-  const tmr=open.filter(t=>t.deadline===tomorrow);
+  const tmr=open.filter(t=>t.deadline===tomorrow&&!todays.includes(t));
   const goals=open.filter(t=>Number(t.goal_target)>0);
   const bigGoals=G.filter(g=>!g.achieved_at);
   const daily=H.list.filter(h=>h.period_days===1);
@@ -1116,14 +1124,14 @@ function gPace(g,p){
 function gBar(p,pace){
   return `<div class="g-track"><div class="g-fill ${p.pct>=100?'full':pace&&pace.cls==='behind'?'behind':''}" style="width:${Math.min(p.pct,100)}%"></div>${pace&&pace.timePct!=null?`<div class="g-time" style="left:${pace.timePct}%" title="Сколько времени до срока уже прошло"></div>`:''}</div>`;
 }
-function gCard(g){
+function gCard(g,opts={}){
   const p=gProgress(g), pace=gPace(g,p), pn=projName(g.project_id);
   const dl=g.deadline?new Date(g.deadline+'T00:00:00').toLocaleDateString('ru',{day:'numeric',month:'long'}):'';
   const open=gTasks(g).filter(t=>t.status!=='done'&&!t.archived).sort((a,b)=>(PRIO_ORDER[a.priority]??9)-(PRIO_ORDER[b.priority]??9)||((a.deadline||'9')>(b.deadline||'9')?1:-1));
   const won=!!g.achieved_at;
   return `<section class="g-card ${won?'won':''}">
     <div class="g-head"><div class="g-title">${won?'🏆 ':''}${esc(g.title)}</div><button class="g-edit" data-gedit="${g.id}" title="Изменить цель">✎</button></div>
-    <div class="g-meta">${pn?`<span><span class="dot" style="background:${projColor(g.project_id)}"></span>${esc(pn)}</span>`:''}${dl?`<span>до ${dl}</span>`:''}${won?`<span>достигнута ${new Date(g.achieved_at).toLocaleDateString('ru',{day:'numeric',month:'long'})}</span>`:''}</div>
+    <div class="g-meta">${pn?`<span><span class="dot" style="background:${projColor(g.project_id)}"></span>${esc(pn)}</span>`:''}${!pn&&g.sphere&&opts.showSphere?`<span>${esc(g.sphere)}</span>`:''}${dl?`<span>до ${dl}</span>`:''}${won?`<span>достигнута ${new Date(g.achieved_at).toLocaleDateString('ru',{day:'numeric',month:'long'})}</span>`:''}</div>
     ${gBar(p,pace)}
     <div class="g-nums"><span>${gNumTxt(g,p)}</span><b>${p.pct}%</b></div>
     ${pace?`<div class="g-pace ${pace.cls}">${esc(pace.txt)}</div>`:''}
@@ -1137,15 +1145,36 @@ async function gPatch(id,upd){
   const {error}=await sb.from('goals').update({...upd,updated_at:new Date().toISOString()}).eq('id',id);
   if(error){toast('Не сохранилось: '+error.message);loadGoals();}
 }
+const SPHERES=[
+  {n:'Здоровье и красота',e:'💪',c:'#f6c9d4'},
+  {n:'Развитие и обучение',e:'📚',c:'#c9dcf2'},
+  {n:'Финансовое благополучие',e:'💰',c:'#cfe8d5'},
+  {n:'Семья и любовь',e:'❤️',c:'#f3d0c4'},
+  {n:'Яркость жизни и хобби',e:'🎨',c:'#e3d4f0'},
+];
+function gGroups(act,filtered){
+  if(filtered)return act.length?`<div class="g-grid">${act.map(g=>gCard(g)).join('')}</div>`:'<div class="g-empty">В этом проекте целей пока нет.</div>';
+  const out=[];
+  const work=D.projects.filter(p=>act.some(g=>g.project_id===p.id));
+  work.forEach(p=>out.push({key:'p:'+p.id,title:esc(p.name),dot:p.color,list:act.filter(g=>g.project_id===p.id)}));
+  SPHERES.forEach(sp=>out.push({key:'s:'+sp.n,title:`${sp.e} ${esc(sp.n)}`,bg:sp.c,list:act.filter(g=>!g.project_id&&g.sphere===sp.n)}));
+  const other=act.filter(g=>!g.project_id&&!SPHERES.some(sp=>sp.n===g.sphere));
+  if(other.length)out.push({key:'s:',title:'Другое',list:other});
+  return out.map(gr=>`<section class="g-sphere ${gr.list.length?'':'empty'}">
+    <div class="g-sph-head" ${gr.bg?`style="--sph:${gr.bg}"`:''}><span>${gr.dot?`<span class="dot" style="background:${gr.dot}"></span>`:''}${gr.title}</span><span class="g-sph-r">${gr.list.length?gr.list.length:''}<button class="g-sph-add" data-gnew="${esc(gr.key)}" title="Новая цель в этой сфере">+</button></span></div>
+    ${gr.list.length?`<div class="g-grid">${gr.list.map(g=>gCard(g)).join('')}</div>`:`<div class="g-sph-empty">Целей пока нет</div>`}
+  </section>`).join('');
+}
 function renderGoals(){
   const el=document.getElementById('gview');
   const fk=filters.project?[filters.project,...kidIds(filters.project)]:null;
   const list=G.filter(g=>!fk||fk.includes(g.project_id));
   const act=list.filter(g=>!g.achieved_at), won=list.filter(g=>g.achieved_at).sort((a,b)=>a.achieved_at<b.achieved_at?1:-1);
   el.innerHTML=`<div class="h-top"><div class="h-week" style="text-align:left;flex:1;padding-left:4px">Цели<small>${act.length?`в работе ${act.length}`:'целей пока нет'}${won.length?` · достигнуто ${won.length}`:''}</small></div><button class="btn-primary" id="gNew" style="height:36px">+ Цель</button></div>
-    ${act.length?`<div class="g-grid">${act.map(gCard).join('')}</div>`:'<div class="g-empty">Поставь первую цель, например «1500 регистраций на МП до 30 ноября» или «Запустить приложение для учеников». Привяжи к ней задачи, и прогресс будет считаться сам. Если у цели есть срок, доска покажет, успеваешь ли ты.</div>'}
+    ${gGroups(act,!!fk)}
     ${won.length?`<section class="h-sec g-won"><div class="h-sec-head g-won-head" id="gWonToggle">🏆 Копилка побед · ${won.length}<span>${gShowWon?'скрыть':'показать'}</span></div>${gShowWon?`<div class="g-grid">${won.map(gCard).join('')}</div>`:''}</section>`:''}`;
   document.getElementById('gNew').onclick=()=>openGoalDialog(null);
+  el.querySelectorAll('[data-gnew]').forEach(b=>b.onclick=()=>openGoalDialog(null,b.dataset.gnew));
   const wt=document.getElementById('gWonToggle'); if(wt)wt.onclick=()=>{gShowWon=!gShowWon;renderGoals();};
   el.querySelectorAll('[data-gedit]').forEach(b=>b.onclick=()=>openGoalDialog(b.dataset.gedit));
   const setCur=id=>{const inp=el.querySelector(`[data-gcur="${id}"]`),v=parseNum(inp.value);if(v==null)return inp.focus();gPatch(id,{current:v});toast('Прогресс обновлён');};
@@ -1155,12 +1184,14 @@ function renderGoals(){
   el.querySelectorAll('[data-gtask]').forEach(b=>b.onclick=()=>{const g=G.find(x=>x.id===b.dataset.gtask);openDialog(null);document.getElementById('fGoal').value=g.id;if(g.project_id)document.getElementById('fProject').value=g.project_id;document.getElementById('fDeadline').value='';});
   wireTRows(el);
 }
-function openGoalDialog(id){
+function openGoalDialog(id,preset){
   gEditing=id||null; const g=id?G.find(x=>x.id===id):null, $=x=>document.getElementById(x);
   const gnum=v=>v==null?'':String(v).replace('.',',');
   $('gDlgTitle').textContent=g?'Цель':'Новая цель';
   $('gTitle').value=g?g.title:'';
-  fillSelect($('gProject'),D.projects,g?g.project_id:(filters.project||''),'Без сферы');
+  const cur=g?(g.project_id?'p:'+g.project_id:(g.sphere?'s:'+g.sphere:'')):(preset||(filters.project?'p:'+filters.project:''));
+  $('gProject').innerHTML='<option value="">Без сферы</option><optgroup label="Сферы жизни">'+SPHERES.map(sp=>`<option value="s:${esc(sp.n)}">${sp.e} ${esc(sp.n)}</option>`).join('')+'</optgroup><optgroup label="Работа и проекты">'+projTree().map(({p,child})=>`<option value="p:${p.id}">${child?'— ':''}${esc(p.name)}</option>`).join('')+'</optgroup>';
+  $('gProject').value=cur;
   $('gDeadline').value=g?(g.deadline||''):'';
   $('gStart').value=g?(g.start_date||''):dayStr(0);
   $('gCur').value=g?gnum(g.current):''; $('gTarget').value=g?gnum(g.target):''; $('gUnit').value=g?(g.unit||''):'';
@@ -1172,7 +1203,8 @@ async function saveGoal(){
   const $=x=>document.getElementById(x), title=$('gTitle').value.trim();
   if(!title)return $('gTitle').focus();
   const target=parseNum($('gTarget').value);
-  const data={title,project_id:$('gProject').value||null,deadline:$('gDeadline').value||null,start_date:$('gStart').value||null,
+  const sv=$('gProject').value;
+  const data={title,project_id:sv.startsWith('p:')?sv.slice(2):null,sphere:sv.startsWith('s:')?sv.slice(2):null,deadline:$('gDeadline').value||null,start_date:$('gStart').value||null,
     target,current:target!=null?(parseNum($('gCur').value)??0):null,unit:$('gUnit').value.trim()||null,updated_at:new Date().toISOString()};
   const r=gEditing?await sb.from('goals').update(data).eq('id',gEditing):await sb.from('goals').insert({...data,sort:G.length});
   if(r.error)return toast('Ошибка: '+r.error.message);
