@@ -409,10 +409,27 @@
   .g-wh-ring{fill:none;stroke:var(--border);stroke-width:.6}
   .g-wh-t{font-size:15px}
   .g-wh-list{display:flex;flex-direction:column;gap:6px}
-  .g-wh-row{display:grid;grid-template-columns:12px 1fr 44px 74px;gap:8px;align-items:center;font-size:13px}
+  .g-wh-row{display:grid;grid-template-columns:12px 1fr 44px 120px;gap:8px;align-items:center;font-size:13px}
   .g-wh-row b{text-align:right} .g-wh-row small{color:var(--muted);font-size:11.5px}
   .g-wh-dot{width:10px;height:10px;border-radius:3px}
   .g-wh-hint{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.4}
+  .g-wh-g{fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round}
+  .g-wh-gu{fill:none;stroke-width:4.6;stroke-linecap:round}
+  .w-ch{font-weight:700} .w-ch.up{color:#3d9a5f} .w-ch.dn{color:#d0543c}
+  .y-whs{display:flex;gap:16px;justify-content:center} .y-whs>div{display:flex;flex-direction:column;align-items:center;gap:4px}
+  .y-wh{width:130px;height:130px}
+  .g-wh-a{fill:none;stroke:var(--text);stroke-width:1.6;stroke-dasharray:3 3;opacity:.7}
+  .g-wh-n{font-size:10px;font-weight:700;fill:#fff}
+  .g-wh-head>span:last-child{display:flex;align-items:center;gap:10px}
+  .g-wh-btn{height:28px;padding:0 10px;font-size:12px}
+  .g-wh-cta{display:flex;flex-direction:column;gap:8px;margin-top:8px;padding:12px;border-radius:12px;background:var(--primary-soft);font-size:13px;line-height:1.4}
+  .g-wh-cta b{font-size:14px} .g-wh-cta button{align-self:flex-start;height:38px}
+  .w-row{display:flex;flex-direction:column;gap:6px;padding:10px 0;border-bottom:1px solid var(--border)}
+  .w-lbl{font-weight:700;font-size:14px}
+  .w-sc{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+  .w-sc button{height:36px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text);font-weight:700;font-size:14px;cursor:pointer;padding:0}
+  .w-sc button.on{background:var(--wc);border-color:var(--wc);color:#fff}
+  .w-note{height:34px;font-size:13px;width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);outline:none}
   .y-dialog{max-width:640px}
   .y-dialog .dialog-head{gap:8px}
   .y-dialog h4{margin:16px 0 6px;font-size:14px}
@@ -656,6 +673,15 @@
       <label class="g-check"><input type="checkbox" id="nTask" checked> Поставить этот шаг задачей на понедельник</label>
     </div>
     <div class="dialog-foot"><div style="display:flex;gap:10px;margin-left:auto"><button class="btn-ghost" id="nCancel">Закрыть</button><button class="btn-primary" id="nSave" style="height:38px">Сохранить</button></div></div>
+  </div>
+</div>
+
+<!-- Balance wheel self-rating -->
+<div class="overlay" id="wOverlay">
+  <div class="dialog" style="max-width:520px">
+    <div class="dialog-head"><h3>📍 Колесо баланса: оцени себя</h3></div>
+    <div class="dialog-body" id="wBody"></div>
+    <div class="dialog-foot"><div style="display:flex;gap:10px;margin-left:auto"><button class="btn-ghost" id="wCancel">Закрыть</button><button class="btn-primary" id="wSave" style="height:38px">Сохранить</button></div></div>
   </div>
 </div>
 
@@ -1189,16 +1215,17 @@ function renderWeek(){
 document.querySelectorAll('.quick-dates button').forEach(b=>b.onclick=()=>{document.getElementById('fDeadline').value=b.dataset.qd===''?'':dayStr(+b.dataset.qd);});
 
 /* ---------- цели ---------- */
-let G=[], GL=[], GN=[], gImg={}, gShowWon=false, gEditing=null, gImgFile=null, gImgRemove=false, gHz=localStorage.getItem('kanban.ghz')||'', gWheelOpen=localStorage.getItem('kanban.wheel')!=='0', gYear=new Date().getFullYear(), gNoteFor=null;
+let G=[], GL=[], GN=[], gImg={}, gShowWon=false, gEditing=null, gImgFile=null, gImgRemove=false, gHz=localStorage.getItem('kanban.ghz')||'', gWheelOpen=localStorage.getItem('kanban.wheel')!=='0', gYear=new Date().getFullYear(), gNoteFor=null, W=[], wDraft={};
 const HORIZON={year:'Цель года',quarter:'Цель квартала',month:'Цель месяца'};
 function gName(id){const g=id&&G.find(x=>x.id===id);return g?g.title:null;}
 async function loadGoals(){
-  const [r,l,n]=await Promise.all([
+  const [r,l,n,w]=await Promise.all([
     sb.from('goals').select('*').eq('archived',false).order('sort').order('created_at'),
     sb.from('goal_log').select('goal_id,value,day').order('day'),
-    sb.from('goal_notes').select('*').order('created_at',{ascending:false}).limit(300)]);
+    sb.from('goal_notes').select('*').order('created_at',{ascending:false}).limit(300),
+    sb.from('wheel_scores').select('*').order('measured_on')]);
   if(r.error){console.error(r.error);return;}
-  G=r.data; GL=l.data||[]; GN=n.data||[];
+  G=r.data; GL=l.data||[]; GN=n.data||[]; W=w.data||[];
   const paths=[...new Set(G.filter(g=>g.image_path&&!gImg[g.image_path]).map(g=>g.image_path))];
   if(paths.length){const {data}=await sb.storage.from(BUCKET).createSignedUrls(paths,86400);(data||[]).forEach(x=>{if(x.signedUrl&&x.path)gImg[x.path]=x.signedUrl;});}
   if(view==='goals')renderGoals(); else if(view==='today')renderToday(); else if(view==='board')renderBoardInner();
@@ -1313,12 +1340,19 @@ async function gPatch(id,upd){
   else if('current' in upd)loadGoals();
 }
 const SPHERES=[
+  {n:'Работа и карьера',e:'💼',c:'#efd0da',s:'Работа',w:'#b0476a'},
   {n:'Здоровье и красота',e:'💪',c:'#f6c9d4',s:'Здоровье',w:'#e07a9a'},
   {n:'Развитие и обучение',e:'📚',c:'#c9dcf2',s:'Развитие',w:'#5b8fd0'},
   {n:'Финансовое благополучие',e:'💰',c:'#cfe8d5',s:'Финансы',w:'#4a9d6a'},
   {n:'Семья и любовь',e:'❤️',c:'#f3d0c4',s:'Семья',w:'#d9654a'},
   {n:'Яркость жизни и хобби',e:'🎨',c:'#e3d4f0',s:'Яркость',w:'#8a6db0'},
+  {n:'Дом и уют',e:'🏡',c:'#f1e3c4',s:'Дом',w:'#c9963a'},
+  {n:'Окружение и друзья',e:'👭',c:'#cfe9ea',s:'Окружение',w:'#3f9ca0'},
+  {n:'Душа и духовность',e:'🧘',c:'#dcdcef',s:'Душа',w:'#6d6fae'},
 ];
+const WORK='Работа и карьера';
+function projRoot(id){let p=D.projects.find(x=>x.id===id),i=0;while(p&&p.parent_id&&i++<9){const q=D.projects.find(x=>x.id===p.parent_id);if(!q)break;p=q;}return p;}
+function isWorkProj(id){const r=projRoot(id);return !!r&&r.name!=='Личное';}
 function gHzOk(g){return !gHz||g.horizon===gHz;}
 function gGroups(act,filtered){
   if(filtered)return act.length?`<div class="g-grid">${act.map(g=>gCard(g)).join('')}</div>`:'<div class="g-empty">Здесь целей пока нет.</div>';
@@ -1334,27 +1368,79 @@ function gGroups(act,filtered){
   </section>`).join('');
 }
 /* колесо баланса */
+function wSecs(){return SPHERES;}
+function wDate(d){const [y,m,dd]=d.split('-');return `${dd}.${m}.${y}`;}
 function gWheel(act){
-  const secs=[{s:'Работа',e:'💼',w:'#b0476a',list:act.filter(g=>g.project_id)},...SPHERES.map(sp=>({s:sp.s,e:sp.e,w:sp.w,list:act.filter(g=>!g.project_id&&g.sphere===sp.n)}))];
+  const last=W[W.length-1], first=W[0], hasW=!!last;
+  const secs=wSecs().map(sp=>{
+    const list=act.filter(g=>g.project_id?(sp.n===WORK&&isWorkProj(g.project_id)):g.sphere===sp.n);
+    const pct=list.length?Math.round(list.reduce((t,g)=>t+Math.min(100,gProgress(g).pct),0)/list.length):null;
+    return {n:sp.n,s:sp.s,e:sp.e,w:sp.w,list,pct,sc:hasW?last.scores[sp.n]:null,sa:W.length>1?first.scores[sp.n]:null};
+  });
   const n=secs.length, R=96, r0=16;
   const pt=(r,a)=>[(r*Math.cos(a)).toFixed(1),(r*Math.sin(a)).toFixed(1)];
   const wedge=(r,a0,a1)=>{const [x0,y0]=pt(r,a0),[x1,y1]=pt(r,a1);return `M0 0 L${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1} Z`;};
+  const arc=(r,a0,a1)=>{const [x0,y0]=pt(r,a0),[x1,y1]=pt(r,a1);return `M${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1}`;};
   let svg='';
   secs.forEach((s,i)=>{
     const a0=-Math.PI/2+i*2*Math.PI/n+0.02, a1=-Math.PI/2+(i+1)*2*Math.PI/n-0.02, am=(a0+a1)/2;
-    s.pct=s.list.length?Math.round(s.list.reduce((t,g)=>t+Math.min(100,gProgress(g).pct),0)/s.list.length):null;
+    const v=hasW?(s.sc?s.sc*10:null):s.pct;
     svg+=`<path d="${wedge(R,a0,a1)}" fill="${s.w}" opacity=".13"/>`;
-    if(s.pct!=null)svg+=`<path d="${wedge(r0+(R-r0)*Math.max(s.pct,4)/100,a0,a1)}" fill="${s.w}" opacity=".85"/>`;
+    if(v!=null)svg+=`<path d="${wedge(r0+(R-r0)*Math.max(v,4)/100,a0,a1)}" fill="${s.w}" opacity=".85"/>`;
+    if(hasW&&s.pct!=null){const d=arc(r0+(R-r0)*Math.max(s.pct,2)/100,a0+.06,a1-.06);svg+=`<path d="${d}" stroke="${s.w}" class="g-wh-gu"/><path d="${d}" class="g-wh-g"/>`;}
+    if(s.sa)svg+=`<path d="${arc(r0+(R-r0)*s.sa/10,a0,a1)}" class="g-wh-a"/>`;
+    if(hasW&&s.sc){const [tx,ty]=pt(r0+(R-r0)*s.sc/10-9,am);svg+=`<text x="${tx}" y="${ty}" text-anchor="middle" dominant-baseline="middle" class="g-wh-n">${s.sc}</text>`;}
     const [lx,ly]=pt(R+20,am);
     svg+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle" class="g-wh-t">${s.e}</text>`;
   });
   [.25,.5,.75,1].forEach(f=>svg+=`<circle r="${(r0+(R-r0)*f).toFixed(1)}" class="g-wh-ring"/>`);
-  const empty=secs.filter(s=>!s.list.length).map(s=>s.s);
-  return `<section class="g-wheel"><div class="g-wh-head" id="gWheelToggle"><span>☯ Колесо баланса</span><span>${gWheelOpen?'скрыть':'показать'}</span></div>
+  const goalTxt=s=>s.list.length?`${s.list.length} ${gPlural(s.list.length,'цель','цели','целей')}${hasW?` · ${s.pct}%`:''}`:'нет целей';
+  const rows=secs.map(s=>`<div class="g-wh-row"><span class="g-wh-dot" style="background:${s.w}"></span><span>${s.e} ${s.s}</span><b>${hasW?(s.sc?s.sc+'/10':'—'):(s.pct==null?'—':s.pct+'%')}</b><small>${hasW&&s.sa?`<span class="w-ch ${s.sc>s.sa?'up':s.sc<s.sa?'dn':''}">${s.sa} → ${s.sc}</span> · `:''}${goalTxt(s)}</small></div>`).join('');
+  let hint;
+  if(!hasW)hint=`<div class="g-wh-cta"><b>📍 Замерь точку А</b><span>Оцени каждую сферу жизни от 1 до 10: насколько ты сейчас довольна. Займёт минуту. Потом раз в месяц замеряешь снова и видишь, что изменилось.</span><button class="btn-primary" data-wrate>Оценить себя</button></div>`;
+  else{
+    const low=secs.filter(s=>s.sc).sort((a,b)=>a.sc-b.sc).slice(0,2);
+    const noGoal=low.filter(s=>!s.list.length);
+    hint=`<div class="g-wh-hint">Лепесток: твоя оценка${W.length>1?` от ${wDate(last.measured_on)}, пунктир: точка А от ${wDate(first.measured_on)}`:` (точка А, ${wDate(last.measured_on)})`}. Белая линия: прогресс по целям сферы.${low.length?` Ниже всего: ${low.map(s=>s.s+' '+s.sc).join(', ')}.`:''}${noGoal.length?` Без целей: ${noGoal.map(s=>s.s).join(', ')}, можно поставить.`:''}</div>`;
+  }
+  return `<section class="g-wheel"><div class="g-wh-head" id="gWheelToggle"><span>☯ Колесо баланса</span><span><button class="g-btn g-wh-btn" data-wrate>📍 ${!hasW?'Оценить себя':last.measured_on===hYmd(new Date())?'Изменить оценку':'Новый замер'}</button>${gWheelOpen?'скрыть':'показать'}</span></div>
     ${gWheelOpen?`<div class="g-wh-body"><svg viewBox="-125 -125 250 250" class="g-wh-svg">${svg}</svg>
-    <div class="g-wh-list">${secs.map(s=>`<div class="g-wh-row"><span class="g-wh-dot" style="background:${s.w}"></span><span>${s.e} ${s.s}</span><b>${s.pct==null?'—':s.pct+'%'}</b><small>${s.list.length?`${s.list.length} ${gPlural(s.list.length,'цель','цели','целей')}`:'нет целей'}</small></div>`).join('')}
-    ${empty.length?`<div class="g-wh-hint">Без целей: ${empty.join(', ')}. Здесь легко пропустить важное.</div>`:'<div class="g-wh-hint">Во всех сферах есть цели. Длина лепестка: средний прогресс сферы.</div>'}</div></div>`:''}
+    <div class="g-wh-list">${rows}${hint}</div></div>`:''}
   </section>`;
+}
+function wMini(sc){
+  const n=SPHERES.length,R=56,r0=8,pt=(r,a)=>[(r*Math.cos(a)).toFixed(1),(r*Math.sin(a)).toFixed(1)];
+  let svg='';SPHERES.forEach((sp,i)=>{const a0=-Math.PI/2+i*2*Math.PI/n+.03,a1=-Math.PI/2+(i+1)*2*Math.PI/n-.03,v=sc[sp.n];
+    const w=r=>{const [x0,y0]=pt(r,a0),[x1,y1]=pt(r,a1);return `M0 0 L${x0} ${y0} A${r} ${r} 0 0 1 ${x1} ${y1} Z`;};
+    svg+=`<path d="${w(R)}" fill="${sp.w}" opacity=".13"/>`;if(v)svg+=`<path d="${w(r0+(R-r0)*v/10)}" fill="${sp.w}" opacity=".85"/>`;});
+  return `<svg viewBox="-60 -60 120 120" class="y-wh">${svg}</svg>`;
+}
+function openWheel(){
+  const last=W[W.length-1];
+  wDraft={scores:{...(last?last.scores:{})},notes:{...(last?last.notes:{})}};
+  const el=document.getElementById('wBody');
+  el.innerHTML=`<div class="g-hint" style="margin-bottom:6px">1 — совсем плохо, 10 — лучше не бывает. Ставь честно, как есть сегодня, а не как хочется.</div>`+wSecs().map(sp=>`<div class="w-row" data-wk="${esc(sp.n)}">
+    <div class="w-lbl">${sp.e} ${esc(sp.n)}</div>
+    <div class="w-sc">${[1,2,3,4,5,6,7,8,9,10].map(v=>`<button type="button" data-wv="${v}" class="${wDraft.scores[sp.n]===v?'on':''}" style="--wc:${sp.w}">${v}</button>`).join('')}</div>
+    <input class="w-note" placeholder="Почему так (необязательно)" value="${esc(wDraft.notes[sp.n]||'')}">
+  </div>`).join('');
+  el.querySelectorAll('.w-row').forEach(r=>{
+    r.querySelectorAll('[data-wv]').forEach(b=>b.onclick=()=>{wDraft.scores[r.dataset.wk]=+b.dataset.wv;r.querySelectorAll('[data-wv]').forEach(x=>x.classList.toggle('on',x===b));});
+  });
+  document.getElementById('wOverlay').classList.add('show');
+}
+function closeWheel(){document.getElementById('wOverlay').classList.remove('show');}
+async function saveWheel(){
+  const el=document.getElementById('wBody');
+  el.querySelectorAll('.w-row').forEach(r=>{const v=r.querySelector('.w-note').value.trim();if(v)wDraft.notes[r.dataset.wk]=v;else delete wDraft.notes[r.dataset.wk];});
+  const miss=wSecs().filter(sp=>!wDraft.scores[sp.n]);
+  if(miss.length)return toast('Поставь оценку: '+miss.map(x=>x.s).join(', '));
+  const today=hYmd(new Date()), last=W[W.length-1];
+  const r=last&&last.measured_on===today
+    ?await sb.from('wheel_scores').update({scores:wDraft.scores,notes:wDraft.notes}).eq('id',last.id)
+    :await sb.from('wheel_scores').insert({measured_on:today,scores:wDraft.scores,notes:wDraft.notes});
+  if(r.error)return toast('Не сохранилось: '+r.error.message);
+  closeWheel(); toast(W.length?'Замер сохранён':'Точка А сохранена'); gWheelOpen=true; localStorage.setItem('kanban.wheel','1'); loadGoals();
 }
 function gFocusGoal(){return G.find(g=>g.month_focus&&!g.achieved_at);}
 function gFocusHTML(g,where){
@@ -1408,7 +1494,7 @@ function renderGoals(){
   const hzBtns=[['','Все'],['year','Год'],['quarter','Квартал'],['month','Месяц']].map(([v,l])=>`<button class="${gHz===v?'on':''}" data-ghz="${v}">${l}</button>`).join('');
   el.innerHTML=`<div class="h-top g-top"><div class="h-week" style="text-align:left;flex:1;padding-left:4px">Цели<small>${actAll.length?`в работе ${actAll.length}`:'целей пока нет'}${won.length?` · достигнуто ${won.length}`:''}</small></div><div class="view-toggle g-hzt">${hzBtns}</div><button class="g-btn" id="gYearBtn">🏆 Итоги года</button><button class="btn-primary" id="gNew" style="height:36px">+ Цель</button></div>
     ${fg&&!fk?gFocusHTML(fg):''}
-    ${!fk&&actAll.length?gWheel(actAll):''}
+    ${!fk?gWheel(actAll):''}
     ${gGroups(act,!!fk)}
     ${won.length?`<section class="h-sec g-won"><div class="h-sec-head g-won-head" id="gWonToggle">🏆 Копилка побед · ${won.length}<span>${gShowWon?'скрыть':'показать'}</span></div>${gShowWon?`<div class="g-grid">${won.map(g=>gCard(g,{showSphere:true})).join('')}</div>`:''}</section>`:''}`;
   document.getElementById('gNew').onclick=()=>openGoalDialog(null);
@@ -1416,6 +1502,7 @@ function renderGoals(){
   el.querySelectorAll('[data-ghz]').forEach(b=>b.onclick=()=>{gHz=b.dataset.ghz;localStorage.setItem('kanban.ghz',gHz);renderGoals();});
   el.querySelectorAll('[data-gnew]').forEach(b=>b.onclick=()=>openGoalDialog(null,b.dataset.gnew));
   const wt=document.getElementById('gWheelToggle'); if(wt)wt.onclick=()=>{gWheelOpen=!gWheelOpen;localStorage.setItem('kanban.wheel',gWheelOpen?'1':'0');renderGoals();};
+  el.querySelectorAll('[data-wrate]').forEach(b=>b.onclick=e=>{e.stopPropagation();openWheel();});
   el.querySelectorAll('[data-gfocus]').forEach(b=>b.onclick=()=>openGoalDialog(b.dataset.gfocus));
   gWireDrag(el);
   const wo=document.getElementById('gWonToggle'); if(wo)wo.onclick=()=>{gShowWon=!gShowWon;renderGoals();};
@@ -1454,7 +1541,7 @@ function openGoalDialog(id,preset){
   $('gTitle').value=g?g.title:'';
   $('gWhy').value=g?(g.why||''):'';
   const cur=g?(g.project_id?'p:'+g.project_id:(g.sphere?'s:'+g.sphere:'')):(preset||(filters.project?'p:'+filters.project:''));
-  $('gProject').innerHTML='<option value="">Без сферы</option><optgroup label="Сферы жизни">'+SPHERES.map(sp=>`<option value="s:${esc(sp.n)}">${sp.e} ${esc(sp.n)}</option>`).join('')+'</optgroup><optgroup label="Работа и проекты">'+projTree().map(({p,child})=>`<option value="p:${p.id}">${child?'— ':''}${esc(p.name)}</option>`).join('')+'</optgroup>';
+  $('gProject').innerHTML='<option value="">Без сферы</option><optgroup label="Сферы жизни">'+SPHERES.map(sp=>`<option value="s:${esc(sp.n)}">${sp.e} ${esc(sp.n)}</option>`).join('')+'</optgroup><optgroup label="Проекты на доске">'+projTree().map(({p,child})=>`<option value="p:${p.id}">${child?'— ':''}${esc(p.name)}</option>`).join('')+'</optgroup>';
   $('gProject').value=cur;
   $('gHorizon').value=g?(g.horizon||''):(gHz||'');
   const excl=g?gDescendants(g.id):new Set();
@@ -1547,6 +1634,9 @@ async function saveNote(){
   closeNote(); toast('Сверка сохранена'); loadAll(); loadGoals();
 }
 document.getElementById('nSave').onclick=saveNote;
+document.getElementById('wSave').onclick=saveWheel;
+document.getElementById('wCancel').onclick=closeWheel;
+document.getElementById('wOverlay').onclick=e=>{if(e.target.id==='wOverlay')closeWheel();};
 document.getElementById('nCancel').onclick=closeNote;
 document.getElementById('nOverlay').onclick=e=>{if(e.target.id==='nOverlay')closeNote();};
 
@@ -1583,6 +1673,9 @@ async function renderYear(){
     <div class="y-bars">${months.map((c,i)=>`<div class="y-bar"><div style="height:${Math.round(c/mMax*100)}%" title="${c}"></div><small>${MN[i]}</small><b>${c||''}</b></div>`).join('')}</div>
     ${best.length?`<h4>🔥 Лучшие недели</h4>${best.map(([k,c])=>`<div class="y-row"><span>Неделя с ${gFmtD(k,true)}</span><small>${c} ${gPlural(c,'задача','задачи','задач')}</small></div>`).join('')}`:''}
     ${habits.length?`<h4>🌿 Привычки</h4>${habits.slice(0,8).map(h=>`<div class="y-row"><span>${esc(h.name)}</span><small>${h.c} ${gPlural(h.c,'день','дня','дней')}</small></div>`).join('')}`:''}
+    ${(()=>{const yw=W.filter(m=>m.measured_on>=from&&m.measured_on<=to);if(!yw.length)return '';const a=yw[0],b=yw[yw.length-1];
+      const ch=yw.length>1?SPHERES.filter(sp=>a.scores[sp.n]&&b.scores[sp.n]&&a.scores[sp.n]!==b.scores[sp.n]).map(sp=>`${sp.s} ${a.scores[sp.n]} → ${b.scores[sp.n]}`).join(', '):'';
+      return `<h4>☯ Колесо баланса</h4><div class="y-whs"><div>${wMini(a.scores)}<small>${wDate(a.measured_on)}</small></div>${yw.length>1?`<div>${wMini(b.scores)}<small>${wDate(b.measured_on)}</small></div>`:''}</div>${ch?`<div class="g-hint">${ch}</div>`:yw.length>1?'<div class="g-hint">Оценки не изменились.</div>':'<div class="g-hint">Пока один замер. Следующий покажет, что изменилось.</div>'}`;})()}
     ${act.length?`<h4>🎯 В работе</h4>${act.map(g=>`<div class="y-row"><span>${esc(g.title)}</span><small>${gProgress(g).pct}%</small></div>`).join('')}`:''}`;
 }
 document.getElementById('yClose').onclick=closeYear;
@@ -1688,7 +1781,7 @@ document.getElementById('fileBtn').onclick=()=>document.getElementById('fileInpu
 document.getElementById('fileInput').onchange=e=>{uploadFiles(e.target.files);e.target.value='';};
 document.getElementById('recBtn').onclick=toggleRecord;
 document.getElementById('meBtn').onclick=()=>{const n=prompt('Как тебя подписывать в комментариях?',meName);if(n!==null){meName=n.trim();localStorage.setItem('kanban.me',meName);document.getElementById('meName').textContent=meName||'аноним';}};
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDialog();closeGoalDialog();closeNote();closeYear();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeDialog();closeGoalDialog();closeNote();closeYear();closeWheel();}});
 
 /* ---------- theme ---------- */
 function applyTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('kanban.theme',t);}
@@ -1721,6 +1814,7 @@ function startApp(){
     .on('postgres_changes',{event:'*',schema:'public',table:'goals'},softGoals)
     .on('postgres_changes',{event:'*',schema:'public',table:'goal_log'},softGoals)
     .on('postgres_changes',{event:'*',schema:'public',table:'goal_notes'},softGoals)
+    .on('postgres_changes',{event:'*',schema:'public',table:'wheel_scores'},softGoals)
     .subscribe();
   loadAll(); loadHabits(); loadGoals();
 }
