@@ -347,7 +347,7 @@
   .x-sub span{font-size:12px;color:var(--muted);font-weight:600}
   .x-item{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 14px;border-top:1px solid var(--border-soft)}
   .x-list>.x-item:first-child{border-top:none}
-  .x-dot{font-size:16px} .x-text{flex:1;font-size:15px;line-height:1.35;display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere}
+  .x-dot{font-size:16px} .x-dot.num{font-size:14px;font-weight:700;color:var(--primary);min-width:24px;text-align:right} .x-text{flex:1;font-size:15px;line-height:1.35;display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere}
   .x-text small{font-size:11.5px;color:var(--muted)}
   .x-item.done .x-text{opacity:.75}
   .x-acts{display:flex;gap:4px;flex-shrink:0} .x-acts .g-btn{height:30px;padding:0 8px;font-size:12.5px}
@@ -1291,15 +1291,15 @@ async function loadWishes(){
 function renderWishes(){
   const el=document.getElementById('xview');
   const dream=X.filter(w=>!w.goal_id&&!w.fulfilled_at), toGoal=X.filter(w=>w.goal_id&&!w.fulfilled_at), done=X.filter(w=>w.fulfilled_at).sort((a,b)=>a.fulfilled_at<b.fulfilled_at?1:-1);
-  const row=(w,kind)=>`<div class="x-item ${kind}" data-xid="${w.id}">
-    <span class="x-dot">${kind==='done'?'🎉':kind==='goal'?'🎯':'✨'}</span>
+  const row=(w,kind,n)=>`<div class="x-item ${kind}" data-xid="${w.id}">
+    <span class="x-dot ${n?'num':''}">${n?n+'.':kind==='done'?'🎉':kind==='goal'?'🎯':'✨'}</span>
     <span class="x-text">${esc(w.text)}${kind==='goal'&&gName(w.goal_id)?`<small>цель: ${esc(gName(w.goal_id))}</small>`:''}${kind==='done'?`<small>сбылось ${new Date(w.fulfilled_at).toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'})}</small>`:''}</span>
     <span class="x-acts">${kind==='dream'?`<button class="g-btn" data-xgoal="${w.id}" title="Сделать целью">🎯 В цель</button>`:''}${kind!=='done'?`<button class="g-btn" data-xdone="${w.id}" title="Сбылось">🎉</button>`:`<button class="g-btn" data-xundo="${w.id}" title="Вернуть">↩</button>`}<button class="g-btn" data-xedit="${w.id}" title="Изменить">✎</button><button class="g-btn" data-xdel="${w.id}" title="Удалить">✕</button></span>
   </div>`;
   el.innerHTML=`<div class="h-top"><div class="h-week" style="text-align:left;flex:1;padding-left:4px">Список моих желаний<small>${dream.length?`${dream.length} ${gPlural(dream.length,'желание','желания','желаний')}`:'пока пусто'}${toGoal.length?` · стали целями ${toGoal.length}`:''}${done.length?` · сбылось ${done.length}`:''}</small></div></div>
     <div class="x-add"><input id="xNew" placeholder="Я хочу… (Enter, чтобы добавить)" maxlength="300"><button class="btn-primary" id="xAdd" style="height:40px;padding:0 16px">+</button></div>
     <div class="x-hint">Записывай всё подряд, без оценки и разбора. Когда желание созреет, нажми «🎯 В цель»: дашь ему срок и цифры.</div>
-    ${dream.length?`<section class="x-list">${dream.map(w=>row(w,'dream')).join('')}</section>`:''}
+    ${dream.length?`<section class="x-list">${dream.map((w,i)=>row(w,'dream',i+1)).join('')}</section>`:''}
     ${toGoal.length?`<section class="x-list"><div class="x-sub">🎯 Стали целями</div>${toGoal.map(w=>row(w,'goal')).join('')}</section>`:''}
     ${done.length?`<section class="x-list"><div class="x-sub" id="xDoneT" style="cursor:pointer">🎉 Сбылось · ${done.length}<span>${xShowDone?'скрыть':'показать'}</span></div>${xShowDone?done.map(w=>row(w,'done')).join(''):''}</section>`:''}`;
   const inp=document.getElementById('xNew');
