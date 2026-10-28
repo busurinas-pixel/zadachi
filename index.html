@@ -259,6 +259,19 @@
   .tview>*,.wview>*{flex-shrink:0}
   .gr-top{margin-top:10px}
   .gr-carry{align-self:flex-start}
+  .i-add .filter{height:40px;max-width:170px}
+  .i-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
+  .i-col{background:var(--card-2);border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.25);overflow:hidden;padding-bottom:8px}
+  .i-card{background:var(--card);margin:8px 8px 0;border-radius:12px;padding:10px 12px;border:1px solid var(--border-soft)}
+  .i-card.task .i-text,.i-card.drop .i-text{opacity:.75}
+  .i-text{font-size:14.5px;line-height:1.4;overflow-wrap:anywhere;white-space:pre-wrap}
+  .i-note{font-size:12.5px;color:var(--muted);margin-top:4px;white-space:pre-wrap}
+  .i-foot{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .i-chip{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted)} .i-chip .dot{width:8px;height:8px;border-radius:50%}
+  .i-acts{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end} .i-acts .g-btn{height:28px;padding:0 8px;font-size:12px}
+  .i-empty{font-size:12.5px;color:var(--muted);padding:12px 14px 4px}
+  .i-droplist{padding-bottom:8px}
+  @media(max-width:900px){.i-cols{grid-template-columns:1fr}.i-add{flex-wrap:wrap}.i-add input{flex-basis:100%}.i-add .filter{flex:1;max-width:none}}
   .r-ico{width:14px;text-align:center;font-size:13px}
   .r-switch{display:flex;gap:6px;justify-content:center}
   .r-switch button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:999px;padding:6px 16px;font:inherit;font-size:13px;cursor:pointer}
@@ -528,6 +541,7 @@
   @media(max-width:600px){.g-grid{grid-template-columns:1fr}}
   /* Привычки */
   .hview{flex:1;overflow-y:auto;padding-bottom:24px;display:flex;flex-direction:column;gap:14px;max-width:760px;width:100%}
+  #iview{max-width:1150px}
   .hview>*{flex-shrink:0}
   .h-top{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card-2);border-radius:16px;padding:10px 12px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
   .h-week{font-weight:700;font-size:15px;text-align:center;display:flex;flex-direction:column;gap:2px}
@@ -612,7 +626,7 @@
           <option value="all">Все приоритеты</option>
           <option value="urgent">🔥 Горит</option><option value="high">🟠 Высокий</option><option value="medium">🟡 Средний</option><option value="low">🟢 Низкий</option>
         </select>
-        <div class="view-toggle" id="viewToggle"><button data-view="today">Сегодня</button><button data-view="board">Доска</button><button data-view="list">Список</button><button data-view="week">Неделя</button><button data-view="goals">Цели</button><button data-view="habits">Рутина</button><button data-view="wishes">Желания</button></div>
+        <div class="view-toggle" id="viewToggle"><button data-view="today">Сегодня</button><button data-view="board">Доска</button><button data-view="list">Список</button><button data-view="week">Неделя</button><button data-view="goals">Цели</button><button data-view="habits">Рутина</button><button data-view="wishes">Желания</button><button data-view="ideas">Идеи</button></div>
         <div class="archive-toggle"><span>Архив</span><div class="switch" id="archiveSwitch"></div></div>
         <button class="btn-primary" id="newTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -627,6 +641,7 @@
       <div class="hview gview" id="gview" style="display:none"></div>
       <div class="hview gview" id="xview" style="display:none"></div>
       <div class="hview gview" id="rview" style="display:none"></div>
+      <div class="hview gview" id="iview" style="display:none"></div>
     </main>
   </div>
 </div>
@@ -974,8 +989,9 @@ function renderView(){
   document.getElementById('gview').style.display=view==='goals'?'':'none';
   document.getElementById('xview').style.display=view==='wishes'?'':'none';
   document.getElementById('rview').style.display=view==='reflect'?'':'none';
+  document.getElementById('iview').style.display=view==='ideas'?'':'none';
   document.querySelectorAll('#reflList .row-item').forEach(it=>it.classList.toggle('active',view==='reflect'&&it.dataset.refl===rMode));
-  if(view==='reflect')renderReflect(); else if(view==='wishes')renderWishes(); else if(view==='goals')renderGoals(); else if(view==='list')renderList(); else if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='week')renderWeek(); else renderBoardInner();
+  if(view==='ideas')renderIdeas(); else if(view==='reflect')renderReflect(); else if(view==='wishes')renderWishes(); else if(view==='goals')renderGoals(); else if(view==='list')renderList(); else if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='week')renderWeek(); else renderBoardInner();
 }
 const PRIO_ORDER={urgent:0,high:1,medium:2,low:3};
 function renderList(){
@@ -1904,6 +1920,36 @@ function renderHabits(){
   el.querySelectorAll('[data-ropen]').forEach(b=>b.onclick=()=>openReflect(b.dataset.ropen));
 }
 setInterval(()=>{if(view==='habits'&&!hAddOpen)renderHabits();},5*60*1000);
+/* доска идей */
+let I=[], iShowDrop=false, iProj='';
+const I_COL=[{st:'new',t:'💡 Новые'},{st:'think',t:'🤔 Обдумываю'},{st:'task',t:'✅ Стали задачами'}];
+async function loadIdeas(){
+  const {data,error}=await sb.from('ideas').select('*').order('sort').order('created_at',{ascending:false});
+  if(error){console.error(error);return;} I=data||[]; if(view==='ideas'&&!document.querySelector('#iNew:focus'))renderIdeas();
+}
+function renderIdeas(){
+  const el=document.getElementById('iview'), drop=I.filter(i=>i.status==='drop');
+  const chip=i=>i.project_id&&projName(i.project_id)?`<span class="i-chip"><span class="dot" style="background:${projColor(i.project_id)}"></span>${esc(projName(i.project_id))}</span>`:'';
+  const card=i=>`<div class="i-card ${i.status}" data-iid="${i.id}"><div class="i-text">${esc(i.text)}</div>${i.note?`<div class="i-note">${esc(i.note)}</div>`:''}
+    <div class="i-foot">${chip(i)}<span class="i-acts">${i.status==='new'?`<button class="g-btn" data-imove="think" data-i="${i.id}" title="Обдумываю">🤔</button>`:''}${i.status==='new'||i.status==='think'?`<button class="g-btn" data-itask="${i.id}" title="Сделать задачей">✅ В задачу</button><button class="g-btn" data-imove="drop" data-i="${i.id}" title="Отложить">🗄</button>`:''}${i.status==='drop'||i.status==='think'?`<button class="g-btn" data-imove="new" data-i="${i.id}" title="Вернуть в новые">↩</button>`:''}${i.status==='task'&&i.task_id?`<button class="g-btn" data-iopen="${i.task_id}" title="Открыть задачу">Открыть</button>`:''}<button class="g-btn" data-iedit="${i.id}" title="Изменить">✎</button><button class="g-btn" data-idel="${i.id}" title="Удалить">✕</button></span></div></div>`;
+  el.innerHTML=`<div class="h-top"><div class="h-week" style="text-align:left;flex:1;padding-left:4px">Доска идей<small>${I.length?`новых ${I.filter(i=>i.status==='new').length} · обдумываю ${I.filter(i=>i.status==='think').length} · стали задачами ${I.filter(i=>i.status==='task').length}`:'записывай всё, что приходит в голову'}</small></div></div>
+    <div class="x-add i-add"><input id="iNew" placeholder="Идея… (Enter, чтобы добавить)" maxlength="500"><select id="iProj" class="filter"><option value="">Без проекта</option>${projTree().map(({p,child})=>`<option value="${p.id}" ${iProj===p.id?'selected':''}>${child?'— ':''}${esc(p.name)}</option>`).join('')}</select><button class="btn-primary" id="iAdd" style="height:40px;padding:0 16px">+</button></div>
+    <div class="i-cols">${I_COL.map(c=>{const list=I.filter(i=>i.status===c.st);return `<section class="i-col"><div class="x-sub">${c.t}<span>${list.length}</span></div>${list.map(card).join('')||'<div class="i-empty">Пока пусто</div>'}</section>`;}).join('')}</div>
+    ${drop.length?`<section class="x-list"><div class="x-sub" id="iDropT" style="cursor:pointer">🗄 Отложенные · ${drop.length}<span>${iShowDrop?'скрыть':'показать'}</span></div>${iShowDrop?`<div class="i-droplist">${drop.map(card).join('')}</div>`:''}</section>`:''}`;
+  const inp=document.getElementById('iNew'), ps=document.getElementById('iProj');
+  ps.onchange=()=>{iProj=ps.value;};
+  const add=async()=>{const t=inp.value.trim();if(!t)return inp.focus();inp.value='';const r=await sb.from('ideas').insert({text:t,project_id:ps.value||null,sort:0});if(r.error)return toast('Не сохранилось: '+r.error.message);toast('Идея записана 💡');await loadIdeas();renderIdeas();document.getElementById('iNew').focus();};
+  inp.onkeydown=e=>{if(e.key==='Enter')add();}; document.getElementById('iAdd').onclick=add;
+  const dt=document.getElementById('iDropT'); if(dt)dt.onclick=()=>{iShowDrop=!iShowDrop;renderIdeas();};
+  el.querySelectorAll('[data-imove]').forEach(b=>b.onclick=async()=>{await sb.from('ideas').update({status:b.dataset.imove}).eq('id',b.dataset.i);loadIdeas();});
+  el.querySelectorAll('[data-itask]').forEach(b=>b.onclick=async()=>{const i=I.find(x=>x.id===b.dataset.itask);
+    const t=await sb.from('tasks').insert({title:i.text.slice(0,300),description:[i.text.length>300?i.text:'',i.note||'','Из доски идей'].filter(Boolean).join('\n\n'),status:'backlog',priority:'medium',project_id:i.project_id||null,assignee_id:(D.members.find(m=>m.name===meName)||{}).id||null}).select('id').single();
+    if(t.error)return toast('Ошибка: '+t.error.message);
+    await sb.from('ideas').update({status:'task',task_id:t.data.id}).eq('id',i.id);toast('Идея стала задачей в «Бэклоге» ✅');loadIdeas();loadAll();});
+  el.querySelectorAll('[data-iopen]').forEach(b=>b.onclick=()=>{const t=D.tasks.find(x=>x.id===b.dataset.iopen);if(t)openDialog(t.id);else toast('Задача не найдена');});
+  el.querySelectorAll('[data-iedit]').forEach(b=>b.onclick=async()=>{const i=I.find(x=>x.id===b.dataset.iedit);const t=prompt('Идея:',i.text);if(t===null||!t.trim())return;const n=prompt('Заметка (необязательно):',i.note||'');await sb.from('ideas').update({text:t.trim(),note:n&&n.trim()||null}).eq('id',i.id);loadIdeas();});
+  el.querySelectorAll('[data-idel]').forEach(b=>b.onclick=async()=>{const i=I.find(x=>x.id===b.dataset.idel);if(!confirm(`Удалить идею «${i.text.slice(0,60)}»?`))return;await sb.from('ideas').delete().eq('id',i.id);loadIdeas();});
+}
 /* рефлексия недели и месяца */
 let RW=[], RM=[], rMode='week', rOff=0;
 const RQ={week:[
@@ -2094,8 +2140,9 @@ function startApp(){
     .on('postgres_changes',{event:'*',schema:'public',table:'book_log'},()=>loadGrowth())
     .on('postgres_changes',{event:'*',schema:'public',table:'weekly_reviews'},()=>loadReflect())
     .on('postgres_changes',{event:'*',schema:'public',table:'monthly_reviews'},()=>loadReflect())
+    .on('postgres_changes',{event:'*',schema:'public',table:'ideas'},()=>loadIdeas())
     .subscribe();
-  loadAll(); loadHabits(); loadGoals(); loadQuote(); loadWishes(); loadGrowth(); loadReflect();
+  loadAll(); loadHabits(); loadGoals(); loadQuote(); loadWishes(); loadGrowth(); loadReflect(); loadIdeas();
 }
 function showLogin(){
   document.getElementById('app').style.display='none';
