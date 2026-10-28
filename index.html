@@ -278,6 +278,7 @@
   .r-switch button.on{background:var(--primary);border-color:var(--primary);color:#fff}
   .r-card{background:var(--card-2);border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.25);padding:6px 14px 14px}
   .r-sub{font-weight:700;font-size:13.5px;padding:8px 0}
+  .r-h{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--primary);padding:16px 0 2px}
   .r-q{padding:12px 0;border-bottom:1px solid var(--border-soft)}
   .r-qt{font-size:14.5px;font-weight:600;line-height:1.4;margin-bottom:8px}
   .r-q textarea{width:100%;box-sizing:border-box;min-height:44px;resize:none;padding:9px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font:inherit;font-size:14.5px;line-height:1.45;outline:none}
@@ -1953,15 +1954,56 @@ function renderIdeas(){
 /* рефлексия недели и месяца */
 let RW=[], RM=[], rMode='week', rOff=0;
 const RQ={week:[
+  {h:'Что получилось'},
+  {k:'wins',q:'🏆 Три главные победы недели, большие или маленькие.'},
+  {k:'first',q:'Что я сделала такого, чего раньше не делала?'},
+  {k:'praise',q:'За что я себя хвалю на этой неделе?'},
+  {h:'Что не получилось'},
+  {k:'not_done',q:'Что я планировала, но не сделала, и почему на самом деле?'},
+  {k:'drain',q:'Что забрало больше всего сил и времени? Стоило ли оно того?'},
+  {k:'distract',q:'Где я отвлеклась от главного?'},
+  {h:'Цели и рутина'},
+  {k:'goal',q:'🎯 Насколько я приблизилась к цели месяца? Сколько процентов, что сдвинулось?'},
+  {k:'habits',q:'Какие привычки держались, а какие выпали? Что помешало?'},
+  {k:'quality',q:'💎 Как я проявила качество месяца на этой неделе? Один пример.'},
+  {h:'Состояние'},
   {k:'resource',q:'🔋 На сколько из 10 я ощущаю себя по ресурсу на этой неделе?',score:true},
   {k:'to_ten',q:'Что нужно сделать, чтобы следующую неделю ощущать себя на десяточку?'},
+  {k:'fill',q:'Что меня наполнило, а что опустошило?'},
+  {h:'Взгляд со стороны'},
   {k:'obstacles',q:'🧭 Какие ошибки, преграды и препятствия можно обойти уже сейчас, если посмотреть на ситуацию со стороны или узнать нужную информацию?'},
   {k:'joy',q:'✨ Что я могу добавить в свой план, чтобы реализовывать все цели и задачи легче и радостнее?'},
   {k:'hurt',q:'💛 Могла ли я на этой неделе своими словами, поступками или мыслями причинить кому-то боль, ранить кого-то? Как я могу это исправить?'},
-  {k:'missed',q:'🌱 Что хорошего я могла сделать на этой неделе, но не сделала? Как я могу это исправить?'}],
+  {k:'missed',q:'🌱 Что хорошего я могла сделать на этой неделе, но не сделала? Как я могу это исправить?'},
+  {h:'Следующая неделя'},
+  {k:'top3',q:'Три главных дела на следующую неделю.'},
+  {k:'stop',q:'Что я перестану делать или кому делегирую?'},
+  {k:'pleasure',q:'Что приятное я запланирую для себя?'}],
  month:[
+  {h:'Результаты'},
+  {k:'wins',q:'🏆 Главные достижения месяца: 5 пунктов.'},
+  {k:'goals',q:'🎯 Какие цели продвинулись, а какие застряли? Цифры: было → стало.'},
+  {k:'money',q:'💰 Деньги: сколько заработала, сколько потратила, что с кредитами? Выполнен ли финансовый план месяца?'},
+  {k:'wishes',q:'Что из «Списка желаний» сбылось или стало целью?'},
+  {h:'Рост'},
+  {k:'qualities',q:'💎 Качества месяца: как они изменились во мне? Оценка от 1 до 10 и пример.'},
+  {k:'skills',q:'🎓 Навыки месяца: что я освоила на практике, а что осталось теорией?'},
+  {k:'lesson',q:'Какой самый важный урок этого месяца?'},
+  {k:'decision',q:'Какое решение месяца было лучшим, а какое я бы сейчас приняла иначе?'},
   {k:'obstacles',q:'🧭 Какие ошибки, преграды и препятствия этого месяца можно обойти уже сейчас, если посмотреть на ситуацию со стороны или узнать нужную информацию?'},
-  {k:'joy',q:'✨ Что я могу добавить в свой план на следующий месяц, чтобы реализовывать все цели и задачи легче и радостнее?'}]};
+  {h:'Баланс'},
+  {k:'wheel',q:'☯ Новый замер колеса баланса: какие сферы выросли, какие просели и почему?'},
+  {k:'selfcare',q:'💗 Был ли день любви к себе? Как я о себе заботилась: сон, спорт, отдых?'},
+  {k:'people',q:'Отношения: кому я уделила время, кого не хватало?'},
+  {h:'Энергия и окружение'},
+  {k:'energy',q:'Какие люди, дела и привычки давали силы, а какие забирали?'},
+  {k:'refuse',q:'От чего я отказываюсь в следующем месяце?'},
+  {h:'Следующий месяц'},
+  {k:'focus',q:'⭐ Одна главная цель месяца.'},
+  {k:'growth',q:'Качества и навыки на следующий месяц.'},
+  {k:'joy',q:'✨ Что я могу добавить в свой план на следующий месяц, чтобы реализовывать все цели и задачи легче и радостнее?'},
+  {k:'reward',q:'🎁 Чем я себя награжу, если всё получится?'},
+  {k:'motto',q:'Одно слово или фраза, которая будет моим девизом месяца.'}]};
 function rWeek(off){const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-((d.getDay()+6)%7)+off*7);return d;}
 function rKey(){return rMode==='week'?hYmd(rWeek(rOff)):grMonthStart(rOff);}
 async function loadReflect(){
@@ -1977,14 +2019,14 @@ function renderReflect(){
   let title;
   if(isW){const a=rWeek(rOff),b=new Date(a);b.setDate(b.getDate()+6);title=`${a.toLocaleDateString('ru',{day:'numeric',month:'short'})} – ${b.toLocaleDateString('ru',{day:'numeric',month:'short'})}`;}
   else title=new Date(key+'T00:00').toLocaleDateString('ru',{month:'long',year:'numeric'});
-  const qs=RQ[rMode];
+  const all=RQ[rMode], qs=all.filter(q=>q.k);
   const filled=qs.filter(q=>String(rGet(rec,q.k)).trim()).length;
   let chart='';
   if(isW){const last=[];for(let i=-11;i<=0;i++){const k=hYmd(rWeek(rOff+i)),r=RW.find(x=>x.week===k);last.push({k,v:r&&r.resource,cur:i===0});}
     if(last.some(x=>x.v))chart=`<section class="r-card"><div class="r-sub">🔋 Ресурс по неделям</div><div class="r-bars">${last.map(x=>`<div class="r-bar ${x.cur?'cur':''}" title="${x.k}: ${x.v||'нет оценки'}"><b>${x.v||''}</b><i style="height:${(x.v||0)*10}%;background:${x.v>=8?'#3d9a5f':x.v>=6?'#c98a3d':x.v?'#c0564b':'transparent'}"></i><span>${+x.k.slice(8,10)}.${x.k.slice(5,7)}</span></div>`).join('')}</div></section>`;}
   el.innerHTML=`<div class="h-top"><button class="h-nav" id="rPrev" aria-label="Раньше">‹</button><div class="h-week">${isW?'🪞 Рефлексия недели':'🌙 Рефлексия месяца'}: ${title}<small>${filled?`отвечено ${filled} из ${qs.length}`:'пока без ответов'}</small></div><button class="h-nav" id="rNext" aria-label="Позже">›</button></div>
     <div class="r-switch"><button data-rmode="week" class="${isW?'on':''}">Неделя</button><button data-rmode="month" class="${isW?'':'on'}">Месяц</button></div>
-    <section class="r-card">${qs.map(q=>`<div class="r-q"><div class="r-qt">${esc(q.q)}</div>${q.score?`<div class="r-score">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-rscore="${n}" class="${+rGet(rec,q.k)===n?'on':''}">${n}</button>`).join('')}</div>`:`<textarea data-rk="${q.k}" rows="2" placeholder="Мой ответ…">${esc(String(rGet(rec,q.k)))}</textarea>`}</div>`).join('')}
+    <section class="r-card">${all.map(q=>q.h?`<div class="r-h">${esc(q.h)}</div>`:`<div class="r-q"><div class="r-qt">${esc(q.q)}</div>${q.score?`<div class="r-score">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-rscore="${n}" class="${+rGet(rec,q.k)===n?'on':''}">${n}</button>`).join('')}</div>`:`<textarea data-rk="${q.k}" rows="2" placeholder="Мой ответ…">${esc(String(rGet(rec,q.k)))}</textarea>`}</div>`).join('')}
       <div class="r-foot"><span class="r-hint">${isW?'Афина задаёт эти вопросы по воскресеньям в итогах недели; можно ответить и здесь.':'Афина задаёт эти вопросы в последний день месяца; можно ответить и здесь.'}</span><button class="btn-primary" id="rSave">Сохранить</button></div></section>${chart}`;
   document.getElementById('rPrev').onclick=()=>{rOff--;renderReflect();};
   document.getElementById('rNext').onclick=()=>{rOff++;renderReflect();};
