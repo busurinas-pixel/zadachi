@@ -1860,13 +1860,15 @@ function renderHabits(){
 }
 setInterval(()=>{if(view==='habits'&&!hAddOpen)renderHabits();},5*60*1000);
 /* качества и навыки месяца */
-let GR=[], grMonth=0;
+let GR=[], grMonth=0, grAuto=true;
 const GR_KIND={quality:{t:'💎 Качества, которые я развиваю',ph:'Например: спокойствие',sug:['Спокойствие','Уверенность','Дисциплина','Лёгкость','Терпение','Смелость','Женственность','Благодарность','Концентрация','Щедрость','Гибкость','Решительность']},
   skill:{t:'🎓 Навыки, которые я изучаю',ph:'Например: монтаж видео',sug:['Публичные выступления','Нейросети и ИИ','Монтаж видео','Английский','Продажи','Финансовый учёт','Делегирование','Тайм-менеджмент']}};
 function grMonthStart(off){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+off);return hYmd(d);}
 async function loadGrowth(){
   const {data,error}=await sb.from('growth').select('*').order('sort').order('created_at');
-  if(error){console.error(error);return;} GR=data||[]; if(view==='habits'&&!hAddOpen)renderHabits();
+  if(error){console.error(error);return;} GR=data||[];
+  if(grAuto){const cur=GR.some(x=>x.month===grMonthStart(0)), nxt=GR.some(x=>x.month===grMonthStart(1)), d=new Date(), left=new Date(d.getFullYear(),d.getMonth()+1,0).getDate()-d.getDate();grMonth=nxt&&(!cur||left<3)?1:0;}
+  if(view==='habits'&&!hAddOpen)renderHabits();
 }
 function growthHTML(){
   const m=grMonthStart(grMonth), mName=new Date(m+'T00:00').toLocaleDateString('ru',{month:'long',year:'numeric'});
@@ -1892,7 +1894,7 @@ function wireGrowth(el){
   el.querySelectorAll('[data-gredit]').forEach(b=>b.onclick=async()=>{const x=GR.find(y=>y.id===b.dataset.gredit);const t=prompt('Название:',x.text);if(t===null||!t.trim())return;const n=prompt('Как проявляю или как учусь (необязательно):',x.note||'');await sb.from('growth').update({text:t.trim(),note:n&&n.trim()||null}).eq('id',x.id);loadGrowth();});
   el.querySelectorAll('[data-grdel]').forEach(b=>b.onclick=async()=>{const x=GR.find(y=>y.id===b.dataset.grdel);if(!confirm(`Убрать «${x.text}»?`))return;await sb.from('growth').delete().eq('id',x.id);loadGrowth();});
   const pv=document.getElementById('grPrev'),nx=document.getElementById('grNext'),cr=document.getElementById('grCarry');
-  if(pv)pv.onclick=()=>{grMonth--;renderHabits();}; if(nx)nx.onclick=()=>{grMonth++;renderHabits();};
+  if(pv)pv.onclick=()=>{grAuto=false;grMonth--;renderHabits();}; if(nx)nx.onclick=()=>{grAuto=false;grMonth++;renderHabits();};
   if(cr)cr.onclick=async()=>{const prev=GR.filter(x=>x.month===grMonthStart(grMonth-1)&&!x.done_at);const r=await sb.from('growth').insert(prev.map((x,i)=>({month:m,kind:x.kind,text:x.text,note:x.note,sort:i})));if(r.error)return toast('Ошибка: '+r.error.message);loadGrowth();};
 }
 
