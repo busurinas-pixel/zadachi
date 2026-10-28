@@ -257,6 +257,37 @@
   .tview,.wview{flex:1;overflow-y:auto;padding-bottom:24px;display:flex;flex-direction:column;gap:14px}
   .tview{max-width:820px;width:100%}
   .tview>*,.wview>*{flex-shrink:0}
+  .gr-top{margin-top:10px}
+  .gr-carry{align-self:flex-start}
+  .gr-sec.quality .h-sec-head{background:#e3d4f0} .gr-sec.skill .h-sec-head{background:#c9dcf2}
+  [data-theme="dark"] .gr-sec .h-sec-head{background:var(--primary-soft)}
+  .gr-item{display:flex;align-items:center;gap:10px;padding:8px 12px 8px 14px;border-top:1px solid var(--border-soft)}
+  .gr-chk{width:26px;height:26px;flex-shrink:0;border-radius:8px;border:2px solid var(--border);background:var(--card);color:#fff;font-weight:800;cursor:pointer;padding:0}
+  .gr-item.done .gr-chk{background:#3d9a5f;border-color:#3d9a5f}
+  .gr-text{flex:1;min-width:0;font-size:15px;display:flex;flex-direction:column;gap:2px;overflow-wrap:anywhere}
+  .gr-text small{font-size:12px;color:var(--muted)}
+  .gr-item.done .gr-text{opacity:.7}
+  .gr-item .g-btn{height:30px;padding:0 8px;font-size:12.5px}
+  .gr-add{display:flex;gap:8px;padding:10px 12px 4px}
+  .gr-add input{flex:1;min-width:0;height:36px;padding:0 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font:inherit;font-size:14px;outline:none}
+  .gr-add .btn-primary{height:36px;padding:0 14px}
+  .gr-sug{display:flex;flex-wrap:wrap;gap:6px;padding:6px 12px 12px}
+  .gr-sug button{border:1px dashed var(--border);background:transparent;color:var(--muted);border-radius:999px;padding:4px 10px;font:inherit;font-size:12.5px;cursor:pointer}
+  .gr-sug button:hover{color:var(--text);border-style:solid}
+  .x-add{display:flex;gap:8px}
+  .x-add input{flex:1;min-width:0;height:40px;padding:0 14px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);font:inherit;font-size:15px;outline:none;box-shadow:0 4px 18px rgba(0,0,0,.15)}
+  .x-add input:focus{border-color:var(--primary)}
+  .x-hint{font-size:12.5px;color:var(--muted);background:var(--card-2);border-radius:12px;padding:8px 12px;line-height:1.45}
+  .x-list{background:var(--card-2);border-radius:16px;box-shadow:0 4px 18px rgba(0,0,0,.25);overflow:hidden}
+  .x-sub{display:flex;justify-content:space-between;padding:10px 16px;font-weight:700;font-size:13.5px;background:var(--primary-soft)}
+  .x-sub span{font-size:12px;color:var(--muted);font-weight:600}
+  .x-item{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 14px;border-top:1px solid var(--border-soft)}
+  .x-list>.x-item:first-child{border-top:none}
+  .x-dot{font-size:16px} .x-text{flex:1;font-size:15px;line-height:1.35;display:flex;flex-direction:column;gap:2px;min-width:0;overflow-wrap:anywhere}
+  .x-text small{font-size:11.5px;color:var(--muted)}
+  .x-item.done .x-text{opacity:.75}
+  .x-acts{display:flex;gap:4px;flex-shrink:0} .x-acts .g-btn{height:30px;padding:0 8px;font-size:12.5px}
+  @media(max-width:600px){.x-item{flex-wrap:wrap}.x-acts{width:100%;justify-content:flex-end}}
   .td-quote{position:relative;border-radius:16px;padding:16px 20px 16px 22px;background:linear-gradient(135deg,#fff4e6,#fde3ec);box-shadow:0 4px 18px rgba(0,0,0,.25);cursor:pointer;color:#4a3a40}
   .td-quote::before{content:'“';position:absolute;right:14px;top:-8px;font-size:84px;line-height:1;font-family:Georgia,serif;color:#b0476a;opacity:.18}
   .tq-lbl{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#b0476a}
@@ -323,7 +354,7 @@
   .w-day:hover .w-add{opacity:1}
   .w-hint{font-size:12px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)}
   @media(max-width:900px){.w-grid{grid-template-columns:1fr}.w-day{min-height:0}.w-add{opacity:.6}}
-  @media(max-width:600px){.view-toggle button{padding:6px 8px;font-size:12px}}
+  @media(max-width:600px){.view-toggle button{padding:6px 8px;font-size:12px}#viewToggle{flex-wrap:wrap;justify-content:center;max-width:100%}}
   /* Подпроекты */
   .row-item.child{margin-left:18px}
   .col.sub{background:color-mix(in srgb,var(--sub) 18%,var(--card-2))}
@@ -543,7 +574,7 @@
           <option value="all">Все приоритеты</option>
           <option value="urgent">🔥 Горит</option><option value="high">🟠 Высокий</option><option value="medium">🟡 Средний</option><option value="low">🟢 Низкий</option>
         </select>
-        <div class="view-toggle" id="viewToggle"><button data-view="today">Сегодня</button><button data-view="board">Доска</button><button data-view="list">Список</button><button data-view="week">Неделя</button><button data-view="goals">Цели</button><button data-view="habits">Привычки</button></div>
+        <div class="view-toggle" id="viewToggle"><button data-view="today">Сегодня</button><button data-view="board">Доска</button><button data-view="list">Список</button><button data-view="week">Неделя</button><button data-view="goals">Цели</button><button data-view="habits">Рутина</button><button data-view="wishes">Желания</button></div>
         <div class="archive-toggle"><span>Архив</span><div class="switch" id="archiveSwitch"></div></div>
         <button class="btn-primary" id="newTaskBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -556,6 +587,7 @@
       <div class="tview" id="tview" style="display:none"></div>
       <div class="wview" id="wview" style="display:none"></div>
       <div class="hview gview" id="gview" style="display:none"></div>
+      <div class="hview gview" id="xview" style="display:none"></div>
     </main>
   </div>
 </div>
@@ -899,7 +931,8 @@ function renderView(){
   document.getElementById('tview').style.display=view==='today'?'':'none';
   document.getElementById('wview').style.display=view==='week'?'':'none';
   document.getElementById('gview').style.display=view==='goals'?'':'none';
-  if(view==='goals')renderGoals(); else if(view==='list')renderList(); else if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='week')renderWeek(); else renderBoardInner();
+  document.getElementById('xview').style.display=view==='wishes'?'':'none';
+  if(view==='wishes')renderWishes(); else if(view==='goals')renderGoals(); else if(view==='list')renderList(); else if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='week')renderWeek(); else renderBoardInner();
 }
 const PRIO_ORDER={urgent:0,high:1,medium:2,low:3};
 function renderList(){
@@ -1171,6 +1204,36 @@ function wireTRows(el){
   el.querySelectorAll('[data-tchk]').forEach(c=>c.onclick=e=>{e.stopPropagation();toggleDone(c.dataset.tchk);});
   el.querySelectorAll('[data-mv]').forEach(b=>b.onclick=e=>{e.stopPropagation();patchTasks([b.dataset.mv],{deadline:dayStr(+b.dataset.to)});toast({'0':'Перенесла на сегодня','1':'Перенесла на завтра','7':'Перенесла на неделю'}[b.dataset.to]);});
   el.querySelectorAll('.td-row').forEach(r=>r.onclick=()=>openDialog(r.dataset.id));
+}
+/* желания */
+let X=[], xShowDone=false, gFromWish=null;
+async function loadWishes(){
+  const {data,error}=await sb.from('wishes').select('*').order('sort').order('created_at');
+  if(error){console.error(error);return;} X=data||[]; if(view==='wishes')renderWishes();
+}
+function renderWishes(){
+  const el=document.getElementById('xview');
+  const dream=X.filter(w=>!w.goal_id&&!w.fulfilled_at), toGoal=X.filter(w=>w.goal_id&&!w.fulfilled_at), done=X.filter(w=>w.fulfilled_at).sort((a,b)=>a.fulfilled_at<b.fulfilled_at?1:-1);
+  const row=(w,kind)=>`<div class="x-item ${kind}" data-xid="${w.id}">
+    <span class="x-dot">${kind==='done'?'🎉':kind==='goal'?'🎯':'✨'}</span>
+    <span class="x-text">${esc(w.text)}${kind==='goal'&&gName(w.goal_id)?`<small>цель: ${esc(gName(w.goal_id))}</small>`:''}${kind==='done'?`<small>сбылось ${new Date(w.fulfilled_at).toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'})}</small>`:''}</span>
+    <span class="x-acts">${kind==='dream'?`<button class="g-btn" data-xgoal="${w.id}" title="Сделать целью">🎯 В цель</button>`:''}${kind!=='done'?`<button class="g-btn" data-xdone="${w.id}" title="Сбылось">🎉</button>`:`<button class="g-btn" data-xundo="${w.id}" title="Вернуть">↩</button>`}<button class="g-btn" data-xedit="${w.id}" title="Изменить">✎</button><button class="g-btn" data-xdel="${w.id}" title="Удалить">✕</button></span>
+  </div>`;
+  el.innerHTML=`<div class="h-top"><div class="h-week" style="text-align:left;flex:1;padding-left:4px">Список моих желаний<small>${dream.length?`${dream.length} ${gPlural(dream.length,'желание','желания','желаний')}`:'пока пусто'}${toGoal.length?` · стали целями ${toGoal.length}`:''}${done.length?` · сбылось ${done.length}`:''}</small></div></div>
+    <div class="x-add"><input id="xNew" placeholder="Я хочу… (Enter, чтобы добавить)" maxlength="300"><button class="btn-primary" id="xAdd" style="height:40px;padding:0 16px">+</button></div>
+    <div class="x-hint">Записывай всё подряд, без оценки и разбора. Когда желание созреет, нажми «🎯 В цель»: дашь ему срок и цифры.</div>
+    ${dream.length?`<section class="x-list">${dream.map(w=>row(w,'dream')).join('')}</section>`:''}
+    ${toGoal.length?`<section class="x-list"><div class="x-sub">🎯 Стали целями</div>${toGoal.map(w=>row(w,'goal')).join('')}</section>`:''}
+    ${done.length?`<section class="x-list"><div class="x-sub" id="xDoneT" style="cursor:pointer">🎉 Сбылось · ${done.length}<span>${xShowDone?'скрыть':'показать'}</span></div>${xShowDone?done.map(w=>row(w,'done')).join(''):''}</section>`:''}`;
+  const inp=document.getElementById('xNew');
+  const add=async()=>{const t=inp.value.trim();if(!t)return inp.focus();inp.value='';const r=await sb.from('wishes').insert({text:t,sort:X.length});if(r.error)return toast('Не сохранилось: '+r.error.message);await loadWishes();document.getElementById('xNew').focus();};
+  inp.onkeydown=e=>{if(e.key==='Enter')add();}; document.getElementById('xAdd').onclick=add;
+  const dt=document.getElementById('xDoneT'); if(dt)dt.onclick=()=>{xShowDone=!xShowDone;renderWishes();};
+  el.querySelectorAll('[data-xgoal]').forEach(b=>b.onclick=()=>{const w=X.find(x=>x.id===b.dataset.xgoal);openGoalDialog(null);gFromWish=w.id;document.getElementById('gTitle').value=w.text;document.getElementById('gDlgTitle').textContent='Желание → цель';});
+  el.querySelectorAll('[data-xdone]').forEach(b=>b.onclick=async()=>{await sb.from('wishes').update({fulfilled_at:new Date().toISOString()}).eq('id',b.dataset.xdone);toast('Ура, сбылось! 🎉');loadWishes();});
+  el.querySelectorAll('[data-xundo]').forEach(b=>b.onclick=async()=>{await sb.from('wishes').update({fulfilled_at:null}).eq('id',b.dataset.xundo);loadWishes();});
+  el.querySelectorAll('[data-xedit]').forEach(b=>b.onclick=async()=>{const w=X.find(x=>x.id===b.dataset.xedit);const t=prompt('Желание:',w.text);if(t===null||!t.trim())return;await sb.from('wishes').update({text:t.trim()}).eq('id',w.id);loadWishes();});
+  el.querySelectorAll('[data-xdel]').forEach(b=>b.onclick=async()=>{const w=X.find(x=>x.id===b.dataset.xdel);if(!confirm(`Удалить желание «${w.text}»?`))return;await sb.from('wishes').delete().eq('id',w.id);loadWishes();});
 }
 /* цитата недели */
 let Q=null;
@@ -1594,7 +1657,7 @@ function openGoalDialog(id,preset){
   $('gDelete').style.visibility=g?'visible':'hidden';
   $('gOverlay').classList.add('show'); $('gTitle').focus();
 }
-function closeGoalDialog(){document.getElementById('gOverlay').classList.remove('show');gEditing=null;gImgFile=null;}
+function closeGoalDialog(){document.getElementById('gOverlay').classList.remove('show');gEditing=null;gImgFile=null;gFromWish=null;}
 async function saveGoal(){
   const $=x=>document.getElementById(x), title=$('gTitle').value.trim();
   if(!title)return $('gTitle').focus();
@@ -1612,7 +1675,8 @@ async function saveGoal(){
   try{
     let id=gEditing;
     if(id){const r=await sb.from('goals').update(data).eq('id',id);if(r.error)throw r.error;}
-    else{const r=await sb.from('goals').insert({...data,sort:G.length}).select('id').single();if(r.error)throw r.error;id=r.data.id;}
+    else{const r=await sb.from('goals').insert({...data,sort:G.length}).select('id').single();if(r.error)throw r.error;id=r.data.id;
+      if(gFromWish){const w=await sb.from('wishes').update({goal_id:id}).eq('id',gFromWish);if(w.error)throw w.error;}}
     if(focus){const r=await sb.from('goals').update({month_focus:false}).eq('month_focus',true).neq('id',id);if(r.error)throw r.error;}
     if(gImgFile){
       const ext=(gImgFile.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';
@@ -1628,7 +1692,8 @@ async function saveGoal(){
     }
   }catch(e){$('gSave').disabled=false;return toast('Ошибка: '+(e.message||e));}
   $('gSave').disabled=false;
-  closeGoalDialog(); loadGoals();
+  const fromWish=!!gFromWish;
+  closeGoalDialog(); loadGoals(); if(fromWish){loadWishes();toast('Желание стало целью 🎯');}
 }
 async function deleteGoal(){
   const g=G.find(x=>x.id===gEditing); if(!g)return;
@@ -1791,8 +1856,45 @@ function renderHabits(){
     document.getElementById('hNewOk').onclick=ok;inp.onkeydown=e=>{if(e.key==='Enter')ok();if(e.key==='Escape'){hAddOpen=false;renderHabits();}};
     document.getElementById('hNewNo').onclick=()=>{hAddOpen=false;renderHabits();};
   }else document.getElementById('hAddBtn').onclick=()=>{hAddOpen=true;renderHabits();};
+  el.insertAdjacentHTML('beforeend',growthHTML()); wireGrowth(el);
 }
 setInterval(()=>{if(view==='habits'&&!hAddOpen)renderHabits();},5*60*1000);
+/* качества и навыки месяца */
+let GR=[], grMonth=0;
+const GR_KIND={quality:{t:'💎 Качества, которые я развиваю',ph:'Например: спокойствие',sug:['Спокойствие','Уверенность','Дисциплина','Лёгкость','Терпение','Смелость','Женственность','Благодарность','Концентрация','Щедрость','Гибкость','Решительность']},
+  skill:{t:'🎓 Навыки, которые я изучаю',ph:'Например: монтаж видео',sug:['Публичные выступления','Нейросети и ИИ','Монтаж видео','Английский','Продажи','Финансовый учёт','Делегирование','Тайм-менеджмент']}};
+function grMonthStart(off){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+off);return hYmd(d);}
+async function loadGrowth(){
+  const {data,error}=await sb.from('growth').select('*').order('sort').order('created_at');
+  if(error){console.error(error);return;} GR=data||[]; if(view==='habits'&&!hAddOpen)renderHabits();
+}
+function growthHTML(){
+  const m=grMonthStart(grMonth), mName=new Date(m+'T00:00').toLocaleDateString('ru',{month:'long',year:'numeric'});
+  const inM=GR.filter(x=>x.month===m);
+  const block=k=>{const K=GR_KIND[k], list=inM.filter(x=>x.kind===k), have=list.map(x=>x.text.toLowerCase());
+    return `<section class="h-sec gr-sec ${k}"><div class="h-sec-head">${K.t}</div>
+      ${list.map(x=>`<div class="gr-item ${x.done_at?'done':''}"><button class="gr-chk" data-grdone="${x.id}" title="${x.done_at?'Вернуть':'Получилось'}">${x.done_at?'✓':''}</button><span class="gr-text">${esc(x.text)}${x.note?`<small>${esc(x.note)}</small>`:''}</span><button class="g-btn" data-gredit="${x.id}" title="Изменить">✎</button><button class="g-btn" data-grdel="${x.id}" title="Убрать">✕</button></div>`).join('')}
+      <div class="gr-add"><input data-grnew="${k}" placeholder="${K.ph}" maxlength="120"><button class="btn-primary" data-gradd="${k}">+</button></div>
+      <div class="gr-sug">${K.sug.filter(t=>!have.includes(t.toLowerCase())).map(t=>`<button data-grsug="${k}">${esc(t)}</button>`).join('')}</div>
+    </section>`;};
+  const prev=GR.filter(x=>x.month===grMonthStart(grMonth-1)&&!x.done_at);
+  return `<div class="h-top gr-top"><button class="h-nav" id="grPrev" aria-label="Прошлый месяц">‹</button><div class="h-week">Мой рост: ${mName}<small>${inM.length?`качеств ${inM.filter(x=>x.kind==='quality').length} · навыков ${inM.filter(x=>x.kind==='skill').length}`:'выбери качества и навыки на месяц'}</small></div><button class="h-nav" id="grNext" aria-label="Следующий месяц">›</button></div>
+    ${!inM.length&&prev.length?`<button class="g-btn gr-carry" id="grCarry">Перенести незавершённое из прошлого месяца (${prev.length})</button>`:''}
+    ${block('quality')}${block('skill')}`;
+}
+function wireGrowth(el){
+  const m=grMonthStart(grMonth);
+  const add=async(k,t)=>{t=(t||'').trim();if(!t)return;const r=await sb.from('growth').insert({month:m,kind:k,text:t,sort:GR.length});if(r.error)return toast('Не сохранилось: '+r.error.message);loadGrowth();};
+  el.querySelectorAll('[data-gradd]').forEach(b=>b.onclick=()=>{const i=el.querySelector(`[data-grnew="${b.dataset.gradd}"]`);add(b.dataset.gradd,i.value);});
+  el.querySelectorAll('[data-grnew]').forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')add(i.dataset.grnew,i.value);});
+  el.querySelectorAll('[data-grsug]').forEach(b=>b.onclick=()=>add(b.dataset.grsug,b.textContent));
+  el.querySelectorAll('[data-grdone]').forEach(b=>b.onclick=async()=>{const x=GR.find(y=>y.id===b.dataset.grdone);await sb.from('growth').update({done_at:x.done_at?null:new Date().toISOString()}).eq('id',x.id);if(!x.done_at)toast('Получилось! 💪');loadGrowth();});
+  el.querySelectorAll('[data-gredit]').forEach(b=>b.onclick=async()=>{const x=GR.find(y=>y.id===b.dataset.gredit);const t=prompt('Название:',x.text);if(t===null||!t.trim())return;const n=prompt('Как проявляю или как учусь (необязательно):',x.note||'');await sb.from('growth').update({text:t.trim(),note:n&&n.trim()||null}).eq('id',x.id);loadGrowth();});
+  el.querySelectorAll('[data-grdel]').forEach(b=>b.onclick=async()=>{const x=GR.find(y=>y.id===b.dataset.grdel);if(!confirm(`Убрать «${x.text}»?`))return;await sb.from('growth').delete().eq('id',x.id);loadGrowth();});
+  const pv=document.getElementById('grPrev'),nx=document.getElementById('grNext'),cr=document.getElementById('grCarry');
+  if(pv)pv.onclick=()=>{grMonth--;renderHabits();}; if(nx)nx.onclick=()=>{grMonth++;renderHabits();};
+  if(cr)cr.onclick=async()=>{const prev=GR.filter(x=>x.month===grMonthStart(grMonth-1)&&!x.done_at);const r=await sb.from('growth').insert(prev.map((x,i)=>({month:m,kind:x.kind,text:x.text,note:x.note,sort:i})));if(r.error)return toast('Ошибка: '+r.error.message);loadGrowth();};
+}
 
 /* ---------- wiring ---------- */
 document.getElementById('searchInput').oninput=e=>{filters.q=e.target.value;renderBoard();};
@@ -1852,8 +1954,10 @@ function startApp(){
     .on('postgres_changes',{event:'*',schema:'public',table:'goal_notes'},softGoals)
     .on('postgres_changes',{event:'*',schema:'public',table:'wheel_scores'},softGoals)
     .on('postgres_changes',{event:'*',schema:'public',table:'quotes'},()=>loadQuote())
+    .on('postgres_changes',{event:'*',schema:'public',table:'wishes'},()=>loadWishes())
+    .on('postgres_changes',{event:'*',schema:'public',table:'growth'},()=>loadGrowth())
     .subscribe();
-  loadAll(); loadHabits(); loadGoals(); loadQuote();
+  loadAll(); loadHabits(); loadGoals(); loadQuote(); loadWishes(); loadGrowth();
 }
 function showLogin(){
   document.getElementById('app').style.display='none';
