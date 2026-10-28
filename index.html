@@ -159,6 +159,10 @@
   .cmt .h{display:flex;justify-content:space-between;font-size:11.5px;color:var(--muted)}
   .cmt .h b{color:var(--text)}
   .cmt .b{font-size:13.5px;white-space:pre-wrap;word-break:break-word}
+  .btn-done{height:38px;padding:0 14px;border-radius:10px;border:none;background:#3d9a5f;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+  .btn-done:hover{filter:brightness(1.08)}
+  .btn-done{white-space:nowrap}
+  @media(max-width:600px){#dlgDelete{padding:0 8px}.btn-done{padding:0 10px}#dlgCancel{display:none}}
   .dialog-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px 20px;border-top:1px solid var(--border-soft);position:sticky;bottom:0;background:var(--card)}
   .btn-ghost{height:38px;padding:0 14px;border-radius:10px;border:1px solid var(--border);color:var(--muted)}
   .btn-ghost:hover{background:var(--bg);color:var(--text)}
@@ -618,6 +622,7 @@
     <div class="dialog-foot">
       <button class="btn-ghost btn-danger" id="dlgDelete" style="visibility:hidden">Удалить</button>
       <div style="display:flex;gap:10px;margin-left:auto">
+        <button class="btn-done" id="dlgDone" style="display:none">✓ Выполнено</button>
         <button class="btn-ghost" id="dlgCancel">Закрыть</button>
         <button class="btn-primary" id="dlgSave" style="height:38px">Сохранить</button>
       </div>
@@ -990,6 +995,7 @@ function openDialog(id){
   fillSelect(document.getElementById('subAssignee'),D.members,'','Кому');
   fillSelect(document.getElementById('fGoal'),G.filter(g=>!g.achieved_at||(t&&t.goal_id===g.id)).map(g=>({id:g.id,name:g.title})),t?t.goal_id:'','Без цели');
   document.getElementById('dlgDelete').style.visibility=t?'visible':'hidden';
+  document.getElementById('dlgDone').style.display=t&&t.status!=='done'?'':'none';
   ['sectSub','sectAtt','sectCmt'].forEach(s=>document.getElementById(s).style.display=t?'block':'none');
   if(t)renderDetail(t.id);
   document.getElementById('overlay').classList.add('show');
@@ -1769,6 +1775,7 @@ document.querySelectorAll('#viewToggle button').forEach(b=>b.onclick=()=>{view=b
 document.getElementById('addProj').onclick=addProject;
 document.getElementById('addMember').onclick=addMember;
 document.getElementById('dlgSave').onclick=saveDialog;
+document.getElementById('dlgDone').onclick=()=>{document.getElementById('fStatus').value='done';saveDialog();};
 document.getElementById('dlgCancel').onclick=closeDialog;
 document.getElementById('dlgClose').onclick=closeDialog;
 document.getElementById('dlgDelete').onclick=deleteTask;
