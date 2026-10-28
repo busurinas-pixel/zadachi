@@ -883,6 +883,7 @@ function kids(id){return D.projects.filter(p=>p.parent_id===id);}
 function kidIds(id){return kids(id).map(p=>p.id);}
 function projTree(){const out=[];D.projects.filter(p=>!p.parent_id||!D.projects.some(x=>x.id===p.parent_id)).forEach(p=>{out.push({p,child:false});kids(p.id).forEach(k=>out.push({p:k,child:true}));});return out;}
 function activeKids(){return filters.project?kids(filters.project):[];}
+const sNorm=x=>String(x||'').toLowerCase().replace(/ё/g,'е').trim();
 function visible(){
   const fk=filters.project?kidIds(filters.project):[];
   return D.tasks.filter(t=>{
@@ -890,7 +891,7 @@ function visible(){
     if(filters.project&&t.project_id!==filters.project&&!fk.includes(t.project_id))return false;
     if(filters.source!=='all'&&t.source!==filters.source)return false;
     if(filters.prio!=='all'&&t.priority!==filters.prio)return false;
-    if(filters.q&&!t.title.toLowerCase().includes(filters.q.toLowerCase()))return false;
+    if(filters.q&&!sNorm(t.title+' '+(t.description||'')).includes(sNorm(filters.q)))return false;
     return true;
   });
 }
@@ -1899,12 +1900,16 @@ function wireGrowth(el){
 }
 
 /* ---------- wiring ---------- */
-document.getElementById('searchInput').oninput=e=>{filters.q=e.target.value;renderBoard();};
+let sPrevView=null;
+document.getElementById('searchInput').oninput=e=>{filters.q=e.target.value.trim();
+  if(filters.q&&view!=='board'&&view!=='list'){sPrevView=view;view='list';}
+  else if(!filters.q&&sPrevView){view=sPrevView;sPrevView=null;}
+  renderBoard();};
 document.getElementById('sourceFilter').onchange=e=>{filters.source=e.target.value;renderBoard();};
 document.getElementById('prioFilter').onchange=e=>{filters.prio=e.target.value;renderBoard();};
 document.getElementById('archiveSwitch').onclick=function(){filters.archived=!filters.archived;this.classList.toggle('on',filters.archived);renderBoard();};
 document.getElementById('newTaskBtn').onclick=()=>openDialog(null);
-document.querySelectorAll('#viewToggle button').forEach(b=>b.onclick=()=>{view=b.dataset.view;localStorage.setItem('kanban.view2',view);renderView();});
+document.querySelectorAll('#viewToggle button').forEach(b=>b.onclick=()=>{view=b.dataset.view;sPrevView=null;localStorage.setItem('kanban.view2',view);renderView();});
 document.getElementById('addProj').onclick=addProject;
 document.getElementById('addMember').onclick=addMember;
 document.getElementById('dlgSave').onclick=saveDialog;
