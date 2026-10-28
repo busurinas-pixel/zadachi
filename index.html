@@ -257,6 +257,14 @@
   .tview,.wview{flex:1;overflow-y:auto;padding-bottom:24px;display:flex;flex-direction:column;gap:14px}
   .tview{max-width:820px;width:100%}
   .tview>*,.wview>*{flex-shrink:0}
+  .td-quote{position:relative;border-radius:16px;padding:16px 20px 16px 22px;background:linear-gradient(135deg,#fff4e6,#fde3ec);box-shadow:0 4px 18px rgba(0,0,0,.25);cursor:pointer;color:#4a3a40}
+  .td-quote::before{content:'“';position:absolute;right:14px;top:-8px;font-size:84px;line-height:1;font-family:Georgia,serif;color:#b0476a;opacity:.18}
+  .tq-lbl{font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#b0476a}
+  .tq-text{font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:19px;line-height:1.35;margin-top:6px}
+  .tq-author{font-size:12.5px;margin-top:6px;opacity:.7}
+  .td-quote.empty{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:13.5px}
+  .td-quote.empty small{opacity:.6}
+  [data-theme="dark"] .td-quote{background:linear-gradient(135deg,#2a2440,#3a2436);color:var(--text)}
   .td-top{background:var(--card-2);border-radius:16px;padding:14px 18px;box-shadow:0 4px 18px rgba(0,0,0,.25)}
   .td-date{font-size:20px;font-weight:700}
   .td-sum{font-size:13px;color:var(--muted);margin-top:3px}
@@ -1164,6 +1172,26 @@ function wireTRows(el){
   el.querySelectorAll('[data-mv]').forEach(b=>b.onclick=e=>{e.stopPropagation();patchTasks([b.dataset.mv],{deadline:dayStr(+b.dataset.to)});toast({'0':'Перенесла на сегодня','1':'Перенесла на завтра','7':'Перенесла на неделю'}[b.dataset.to]);});
   el.querySelectorAll('.td-row').forEach(r=>r.onclick=()=>openDialog(r.dataset.id));
 }
+/* цитата недели */
+let Q=null;
+function weekMonday(){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return hYmd(d);}
+async function loadQuote(){
+  const {data}=await sb.from('quotes').select('*').lte('week',hYmd(new Date())).order('week',{ascending:false}).limit(1);
+  Q=data&&data[0]||null; if(view==='today')renderToday();
+}
+function quoteHTML(){
+  const cur=Q&&Q.week===weekMonday();
+  if(!Q)return `<section class="td-quote empty" data-qedit><span>💬 Цитата недели</span><small>Нажми, чтобы написать</small></section>`;
+  return `<section class="td-quote" data-qedit><div class="tq-lbl">💬 Цитата ${cur?'недели':'прошлой недели, пора новая'}</div><div class="tq-text">${esc(Q.text)}</div>${Q.author?`<div class="tq-author">${esc(Q.author)}</div>`:''}</section>`;
+}
+async function editQuote(){
+  const cur=Q&&Q.week===weekMonday();
+  const t=prompt('Цитата недели:',cur?Q.text:''); if(t===null)return;
+  const text=t.trim(); if(!text)return;
+  const r=await sb.from('quotes').upsert({week:weekMonday(),text,author:cur?Q.author:null},{onConflict:'week'});
+  if(r.error)return toast('Не сохранилось: '+r.error.message);
+  toast('Цитата недели сохранена'); loadQuote();
+}
 function renderToday(){
   const el=document.getElementById('tview'), today=dayStr(0), tomorrow=dayStr(1);
   const vis=visible().filter(t=>!t.archived);
@@ -1178,7 +1206,7 @@ function renderToday(){
   const dLabel=new Date().toLocaleDateString('ru',{weekday:'long',day:'numeric',month:'long'});
   const sec=(cls,title,rows,extra='')=>`<section class="td-sec ${cls}"><div class="td-head"><span>${title}</span>${extra}</div>${rows}</section>`;
   const fgoal=gFocusGoal();
-  el.innerHTML=`${fgoal?gFocusHTML(fgoal):''}<div class="td-top"><div class="td-date">${dLabel.charAt(0).toUpperCase()+dLabel.slice(1)}</div><div class="td-sum">${todays.length?`на сегодня ${todays.length}`:'на сегодня задач нет'}${doneToday.length?` · сделано ${doneToday.length}`:''}${overdue.length?` · просрочено ${overdue.length}`:''}</div></div>
+  el.innerHTML=`${quoteHTML()}${fgoal?gFocusHTML(fgoal):''}<div class="td-top"><div class="td-date">${dLabel.charAt(0).toUpperCase()+dLabel.slice(1)}</div><div class="td-sum">${todays.length?`на сегодня ${todays.length}`:'на сегодня задач нет'}${doneToday.length?` · сделано ${doneToday.length}`:''}${overdue.length?` · просрочено ${overdue.length}`:''}</div></div>
     ${overdue.length?sec('late',`Просрочено <b>${overdue.length}</b>`,overdue.map(t=>trow(t,{showDate:true})).join(''),`<div class="td-bulk"><button data-bulk="0">Все на сегодня</button><button data-bulk="1">Все на завтра</button></div>`):''}
     ${sec('now','Сегодня',todays.length||doneToday.length?todays.map(t=>trow(t)).join('')+doneToday.map(t=>trow(t)).join(''):'<div class="tl-empty">Свободный день. Добавь задачу или перетащи на сегодня из списка</div>',`<button class="td-add" id="tdAdd">+ Задача на сегодня</button>`)}
     ${daily.length?sec('habits','Привычки дня',`<div class="td-habits">${daily.map(h=>{const on=hOn(h.id,today);return `<button class="td-hab ${on?'on':''}" data-hab="${h.id}">${on?ICON.check:''}<span>${esc(h.name)}</span></button>`;}).join('')}</div>`):''}
@@ -1187,6 +1215,7 @@ function renderToday(){
   wireTRows(el);
   el.querySelectorAll('[data-bulk]').forEach(b=>b.onclick=()=>{patchTasks(overdue.map(t=>t.id),{deadline:dayStr(+b.dataset.bulk)});toast(`Перенесла ${overdue.length} ${b.dataset.bulk==='0'?'на сегодня':'на завтра'}`);});
   el.querySelectorAll('[data-hab]').forEach(b=>b.onclick=()=>hToggle(b.dataset.hab,today).then(()=>{if(view==='today')renderToday();}));
+  el.querySelectorAll('[data-qedit]').forEach(b=>b.onclick=editQuote);
   el.querySelectorAll('[data-gfocus]').forEach(b=>b.onclick=()=>{view='goals';localStorage.setItem('kanban.view2',view);renderView();});
   el.querySelectorAll('.td-goal').forEach(g=>g.onclick=()=>{if(g.dataset.goal){view='goals';localStorage.setItem('kanban.view2',view);renderView();}else openDialog(g.dataset.id);});
   const add=document.getElementById('tdAdd'); if(add)add.onclick=()=>openDialog(null);
@@ -1822,8 +1851,9 @@ function startApp(){
     .on('postgres_changes',{event:'*',schema:'public',table:'goal_log'},softGoals)
     .on('postgres_changes',{event:'*',schema:'public',table:'goal_notes'},softGoals)
     .on('postgres_changes',{event:'*',schema:'public',table:'wheel_scores'},softGoals)
+    .on('postgres_changes',{event:'*',schema:'public',table:'quotes'},()=>loadQuote())
     .subscribe();
-  loadAll(); loadHabits(); loadGoals();
+  loadAll(); loadHabits(); loadGoals(); loadQuote();
 }
 function showLogin(){
   document.getElementById('app').style.display='none';
