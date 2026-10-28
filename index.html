@@ -272,6 +272,19 @@
   .i-empty{font-size:12.5px;color:var(--muted);padding:12px 14px 4px}
   .i-droplist{padding-bottom:8px}
   @media(max-width:900px){.i-cols{grid-template-columns:1fr}.i-add{flex-wrap:wrap}.i-add input{flex-basis:100%}.i-add .filter{flex:1;max-width:none}}
+  .td-quote.month{background:linear-gradient(135deg,#efe6fb,#fde3ec)}
+  [data-theme="dark"] .td-quote.month{background:linear-gradient(135deg,#2c2648,#3a2436)}
+  .tq-lbl{display:flex;align-items:center;gap:8px}
+  .tq-all{margin-left:auto;border:none;background:rgba(255,255,255,.55);color:#b0476a;border-radius:999px;padding:3px 10px;font:inherit;font-size:11px;font-weight:600;text-transform:none;letter-spacing:0;cursor:pointer}
+  [data-theme="dark"] .tq-all{background:rgba(255,255,255,.1);color:var(--text)}
+  #qview .r-h{align-self:flex-start;background:var(--card);padding:5px 12px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.2);margin-top:6px}
+  .q-add{display:flex;gap:8px;flex-wrap:wrap} .q-add .btn-primary{height:38px;padding:0 16px} .q-add .g-btn{height:38px;padding:0 14px}
+  .q-card{position:relative;border-radius:16px;padding:14px 18px;background:linear-gradient(135deg,#fff4e6,#fde3ec);box-shadow:0 4px 18px rgba(0,0,0,.25);color:#4a3a40}
+  .q-card.month{background:linear-gradient(135deg,#efe6fb,#fde3ec)}
+  [data-theme="dark"] .q-card{background:linear-gradient(135deg,#2a2440,#3a2436);color:var(--text)}
+  .q-when{font-size:11.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#b0476a}
+  .q-acts{position:absolute;right:10px;top:10px;display:flex;gap:4px;opacity:.55} .q-card:hover .q-acts{opacity:1}
+  .q-acts .g-btn{height:26px;padding:0 7px;font-size:11.5px}
   .r-ico{width:14px;text-align:center;font-size:13px}
   .r-switch{display:flex;gap:6px;justify-content:center}
   .r-switch button{border:1px solid var(--border);background:var(--card);color:var(--text);border-radius:999px;padding:6px 16px;font:inherit;font-size:13px;cursor:pointer}
@@ -614,7 +627,7 @@
       <div class="lbl">Команда <span class="add-mini" id="addMember">＋</span></div>
       <div id="memberList"></div>
       <div class="lbl">Рефлексия</div>
-      <div id="reflList"><div class="row-item" data-refl="week"><span class="r-ico">🪞</span><span class="name">Рефлексия недели</span></div><div class="row-item" data-refl="month"><span class="r-ico">🌙</span><span class="name">Рефлексия месяца</span></div></div>
+      <div id="reflList"><div class="row-item" data-refl="week"><span class="r-ico">🪞</span><span class="name">Рефлексия недели</span></div><div class="row-item" data-refl="month"><span class="r-ico">🌙</span><span class="name">Рефлексия месяца</span></div><div class="row-item" data-quotes><span class="r-ico">✨</span><span class="name">Мои цитаты</span></div></div>
     </aside>
     <main class="board">
       <div class="toolbar">
@@ -644,6 +657,7 @@
       <div class="hview gview" id="xview" style="display:none"></div>
       <div class="hview gview" id="rview" style="display:none"></div>
       <div class="hview gview" id="iview" style="display:none"></div>
+      <div class="hview gview" id="qview" style="display:none"></div>
     </main>
   </div>
 </div>
@@ -922,7 +936,7 @@ function renderSide(){
   pm.innerHTML='<option value="">Все проекты</option>'+projTree().map(({p,child})=>`<option value="${p.id}" ${active===p.id?'selected':''}>${child?'— ':''}${esc(p.name)}</option>`).join('');
   pm.onchange=()=>{filters.project=pm.value||null;render();};
   document.querySelectorAll('#projList .row-item').forEach(it=>it.onclick=()=>{filters.project=it.dataset.proj||null;if(view==='reflect'){view='list';localStorage.setItem('kanban.view2',view);}render();});
-  document.querySelectorAll('#reflList .row-item').forEach(it=>it.onclick=()=>openReflect(it.dataset.refl));
+  document.querySelectorAll('#reflList .row-item').forEach(it=>it.onclick=()=>it.hasAttribute('data-quotes')?openQuotes():openReflect(it.dataset.refl));
 
   document.getElementById('memberList').innerHTML=D.members.map(m=>{
     const c=D.tasks.filter(t=>t.assignee_id===m.id&&!t.archived&&t.status!=='done').length;
@@ -992,8 +1006,10 @@ function renderView(){
   document.getElementById('xview').style.display=view==='wishes'?'':'none';
   document.getElementById('rview').style.display=view==='reflect'?'':'none';
   document.getElementById('iview').style.display=view==='ideas'?'':'none';
-  document.querySelectorAll('#reflList .row-item').forEach(it=>it.classList.toggle('active',view==='reflect'&&it.dataset.refl===rMode));
-  if(view==='ideas')renderIdeas(); else if(view==='reflect')renderReflect(); else if(view==='wishes')renderWishes(); else if(view==='goals')renderGoals(); else if(view==='list')renderList(); else if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='week')renderWeek(); else renderBoardInner();
+  document.getElementById('qview').style.display=view==='quotes'?'':'none';
+  const qi=document.querySelector('#reflList [data-quotes]'); if(qi)qi.classList.toggle('active',view==='quotes');
+  document.querySelectorAll('#reflList [data-refl]').forEach(it=>it.classList.toggle('active',view==='reflect'&&it.dataset.refl===rMode));
+  if(view==='quotes')renderQuotes(); else if(view==='ideas')renderIdeas(); else if(view==='reflect')renderReflect(); else if(view==='wishes')renderWishes(); else if(view==='goals')renderGoals(); else if(view==='list')renderList(); else if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='week')renderWeek(); else renderBoardInner();
 }
 const PRIO_ORDER={urgent:0,high:1,medium:2,low:3};
 function renderList(){
@@ -1297,22 +1313,30 @@ function renderWishes(){
   el.querySelectorAll('[data-xdel]').forEach(b=>b.onclick=async()=>{const w=X.find(x=>x.id===b.dataset.xdel);if(!confirm(`Удалить желание «${w.text}»?`))return;await sb.from('wishes').delete().eq('id',w.id);loadWishes();});
 }
 /* цитата недели */
-let Q=null;
+let Q=null, QM=null, QA=[];
 function weekMonday(){const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return hYmd(d);}
 async function loadQuote(){
-  const {data}=await sb.from('quotes').select('*').lte('week',hYmd(new Date())).order('week',{ascending:false}).limit(1);
-  Q=data&&data[0]||null; if(view==='today')renderToday();
+  const {data,error}=await sb.from('quotes').select('*').order('week',{ascending:false});
+  if(error){console.error(error);return;} QA=data||[];
+  const today=hYmd(new Date()), m0=grMonthStart(0), m1=grMonthStart(1), d=new Date(), left=new Date(d.getFullYear(),d.getMonth()+1,0).getDate()-d.getDate();
+  Q=QA.find(x=>x.kind!=='month'&&x.week<=today)||null;
+  QM=QA.find(x=>x.kind==='month'&&x.week===m0)||(left<3?QA.find(x=>x.kind==='month'&&x.week===m1):null)||null;
+  if(view==='today')renderToday(); if(view==='quotes')renderQuotes();
 }
 function quoteHTML(){
+  const mq=QM?`<section class="td-quote month" data-qmedit><div class="tq-lbl">🌙 Цитата ${MON_GEN[new Date(QM.week+'T00:00').getMonth()]}<button class="tq-all" data-qall title="Все цитаты">все цитаты</button></div><div class="tq-text">${esc(QM.text)}</div>${QM.author?`<div class="tq-author">${esc(QM.author)}</div>`:''}</section>`:'';
+  return mq+quoteWeekHTML();
+}
+function quoteWeekHTML(){
   const cur=Q&&Q.week===weekMonday();
   if(!Q)return `<section class="td-quote empty" data-qedit><span>💬 Цитата недели</span><small>Нажми, чтобы написать</small></section>`;
-  return `<section class="td-quote" data-qedit><div class="tq-lbl">💬 Цитата ${cur?'недели':'прошлой недели, пора новая'}</div><div class="tq-text">${esc(Q.text)}</div>${Q.author?`<div class="tq-author">${esc(Q.author)}</div>`:''}</section>`;
+  return `<section class="td-quote" data-qedit><div class="tq-lbl">💬 Цитата ${cur?'недели':'прошлой недели, пора новая'}${QM?'':'<button class="tq-all" data-qall title="Все цитаты">все цитаты</button>'}</div><div class="tq-text">${esc(Q.text)}</div>${Q.author?`<div class="tq-author">${esc(Q.author)}</div>`:''}</section>`;
 }
 async function editQuote(){
   const cur=Q&&Q.week===weekMonday();
   const t=prompt('Цитата недели:',cur?Q.text:''); if(t===null)return;
   const text=t.trim(); if(!text)return;
-  const r=await sb.from('quotes').upsert({week:weekMonday(),text,author:cur?Q.author:null},{onConflict:'week'});
+  const r=await sb.from('quotes').upsert({week:weekMonday(),kind:'week',text,author:cur?Q.author:null},{onConflict:'week,kind'});
   if(r.error)return toast('Не сохранилось: '+r.error.message);
   toast('Цитата недели сохранена'); loadQuote();
 }
@@ -1340,6 +1364,8 @@ function renderToday(){
   el.querySelectorAll('[data-bulk]').forEach(b=>b.onclick=()=>{patchTasks(overdue.map(t=>t.id),{deadline:dayStr(+b.dataset.bulk)});toast(`Перенесла ${overdue.length} ${b.dataset.bulk==='0'?'на сегодня':'на завтра'}`);});
   el.querySelectorAll('[data-hab]').forEach(b=>b.onclick=()=>hToggle(b.dataset.hab,today).then(()=>{if(view==='today')renderToday();}));
   el.querySelectorAll('[data-qedit]').forEach(b=>b.onclick=editQuote);
+  el.querySelectorAll('[data-qmedit]').forEach(b=>b.onclick=()=>editQuoteOf(QM));
+  el.querySelectorAll('[data-qall]').forEach(b=>b.onclick=e=>{e.stopPropagation();openQuotes();});
   el.querySelectorAll('[data-gfocus]').forEach(b=>b.onclick=()=>{view='goals';localStorage.setItem('kanban.view2',view);renderView();});
   el.querySelectorAll('.td-goal').forEach(g=>g.onclick=()=>{if(g.dataset.goal){view='goals';localStorage.setItem('kanban.view2',view);renderView();}else openDialog(g.dataset.id);});
   const add=document.getElementById('tdAdd'); if(add)add.onclick=()=>openDialog(null);
@@ -1918,10 +1944,34 @@ function renderHabits(){
     document.getElementById('hNewNo').onclick=()=>{hAddOpen=false;renderHabits();};
   }else document.getElementById('hAddBtn').onclick=()=>{hAddOpen=true;renderHabits();};
   el.insertAdjacentHTML('beforeend',growthHTML()); wireGrowth(el);
-  el.insertAdjacentHTML('beforeend',`<div class="r-mob"><button class="g-btn" data-ropen="week">🪞 Рефлексия недели</button><button class="g-btn" data-ropen="month">🌙 Рефлексия месяца</button></div>`);
+  el.insertAdjacentHTML('beforeend',`<div class="r-mob"><button class="g-btn" data-ropen="week">🪞 Рефлексия недели</button><button class="g-btn" data-ropen="month">🌙 Рефлексия месяца</button><button class="g-btn" data-qall>✨ Мои цитаты</button></div>`);
+  el.querySelectorAll('.r-mob [data-qall]').forEach(b=>b.onclick=openQuotes);
   el.querySelectorAll('[data-ropen]').forEach(b=>b.onclick=()=>openReflect(b.dataset.ropen));
 }
 setInterval(()=>{if(view==='habits'&&!hAddOpen)renderHabits();},5*60*1000);
+/* все цитаты */
+function openQuotes(){view='quotes';renderView();window.scrollTo(0,0);}
+const MON_GEN=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+function qWhen(x){const d=new Date(x.week+'T00:00');if(x.kind==='month')return d.toLocaleDateString('ru',{month:'long',year:'numeric'});const e=new Date(d);e.setDate(e.getDate()+6);return `неделя ${d.getDate()} ${MON_GEN[d.getMonth()]} – ${e.getDate()} ${MON_GEN[e.getMonth()]}`;}
+async function editQuoteOf(x){const t=prompt(x.kind==='month'?'Цитата месяца:':'Цитата недели:',x.text);if(t===null||!t.trim())return;const a=prompt('Автор (необязательно):',x.author||'');
+  const r=await sb.from('quotes').update({text:t.trim(),author:a&&a.trim()||null}).eq('id',x.id);if(r.error)return toast('Не сохранилось: '+r.error.message);toast('Сохранила');loadQuote();}
+function renderQuotes(){
+  const el=document.getElementById('qview'), months=QA.filter(x=>x.kind==='month'), weeks=QA.filter(x=>x.kind!=='month');
+  const card=x=>`<div class="q-card ${x.kind==='month'?'month':''}"><div class="q-when">${x.kind==='month'?'🌙 ':'💬 '}${esc(qWhen(x))}</div><div class="tq-text">${esc(x.text)}</div>${x.author?`<div class="tq-author">${esc(x.author)}</div>`:''}<div class="q-acts"><button class="g-btn" data-qe="${x.id}" title="Изменить">✎</button><button class="g-btn" data-qd="${x.id}" title="Удалить">✕</button></div></div>`;
+  el.innerHTML=`<div class="h-top"><div class="h-week" style="text-align:left;flex:1;padding-left:4px">✨ Мои цитаты<small>${QA.length?`месяца ${months.length} · недели ${weeks.length}`:'пока пусто'}</small></div></div>
+    <div class="q-add"><button class="btn-primary" data-qnew="month">+ Цитата месяца</button><button class="g-btn" data-qnew="week">+ Цитата недели</button></div>
+    ${months.length?`<div class="r-h">Цитаты месяца</div>${months.map(card).join('')}`:''}
+    ${weeks.length?`<div class="r-h">Цитаты недели</div>${weeks.map(card).join('')}`:''}`;
+  el.querySelectorAll('[data-qe]').forEach(b=>b.onclick=()=>editQuoteOf(QA.find(x=>x.id===b.dataset.qe)));
+  el.querySelectorAll('[data-qd]').forEach(b=>b.onclick=async()=>{const x=QA.find(y=>y.id===b.dataset.qd);if(!confirm('Удалить эту цитату?'))return;await sb.from('quotes').delete().eq('id',x.id);loadQuote();});
+  el.querySelectorAll('[data-qnew]').forEach(b=>b.onclick=async()=>{const k=b.dataset.qnew;
+    let key=k==='week'?weekMonday():grMonthStart(0);
+    if(k==='month'){const nx=grMonthStart(1);if(QA.some(x=>x.kind==='month'&&x.week===key)&&!QA.some(x=>x.kind==='month'&&x.week===nx)){if(confirm(`На этот месяц цитата уже есть. Записать на следующий (${new Date(nx+'T00:00').toLocaleDateString('ru',{month:'long'})})?`))key=nx;}}
+    else{const nx=new Date(key+'T00:00');nx.setDate(nx.getDate()+7);const nk=hYmd(nx);if(QA.some(x=>x.kind==='week'&&x.week===key)&&!QA.some(x=>x.kind==='week'&&x.week===nk)){if(confirm('На эту неделю цитата уже есть. Записать на следующую?'))key=nk;}}
+    const ex=QA.find(x=>x.kind===k&&x.week===key);
+    const t=prompt(k==='month'?'Цитата месяца:':'Цитата недели:',ex?ex.text:'');if(t===null||!t.trim())return;
+    const r=await sb.from('quotes').upsert({week:key,kind:k,text:t.trim()},{onConflict:'week,kind'});if(r.error)return toast('Не сохранилось: '+r.error.message);toast('Цитата сохранена ✨');loadQuote();});
+}
 /* доска идей */
 let I=[], iShowDrop=false, iProj='';
 const I_COL=[{st:'new',t:'💡 Новые'},{st:'think',t:'🤔 Обдумываю'},{st:'task',t:'✅ Стали задачами'}];
