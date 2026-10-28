@@ -278,6 +278,26 @@
   .tq-all{margin-left:auto;border:none;background:rgba(255,255,255,.55);color:#b0476a;border-radius:999px;padding:3px 10px;font:inherit;font-size:11px;font-weight:600;text-transform:none;letter-spacing:0;cursor:pointer}
   [data-theme="dark"] .tq-all{background:rgba(255,255,255,.1);color:var(--text)}
   #qview .r-h{align-self:flex-start;background:var(--card);padding:5px 12px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.2);margin-top:6px}
+  .td-ach{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:14px;padding:8px 10px 8px 14px;box-shadow:0 4px 18px rgba(0,0,0,.2)}
+  .td-ach-open{flex:1;text-align:left;border:none;background:none;color:var(--text);font:inherit;font-size:14px;cursor:pointer;padding:4px 0}
+  .td-ach-open b{color:#c98a3d;font-size:16px}
+  .td-ach .g-btn{height:32px;padding:0 12px;font-size:13px}
+  .a-item{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 14px;border-top:1px solid var(--border-soft)}
+  .a-list>.a-item:first-child{border-top:none}
+  .a-day{font-size:12px;color:var(--muted);min-width:70px;flex-shrink:0}
+  .a-text{flex:1;min-width:0;font-size:15px;line-height:1.4;overflow-wrap:anywhere}
+  .a-acts{display:flex;gap:4px;flex-shrink:0;opacity:.6} .a-item:hover .a-acts{opacity:1} .a-acts .g-btn{height:28px;padding:0 7px;font-size:12px}
+  #aDay{height:40px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);padding:0 8px;font:inherit}
+  @media(max-width:600px){.a-item{flex-wrap:wrap}.a-day{min-width:0;width:100%}.a-acts{margin-left:auto}}
+  .m-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;padding-bottom:6px}
+  .m-stats>div{background:var(--card);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+  .m-stats b{font-size:22px;color:#c98a3d;line-height:1.1} .m-stats span{font-size:12px;color:var(--muted)}
+  .m-link{cursor:pointer} .m-stats .m-link:hover{outline:2px solid var(--primary-soft)}
+  .m-won{font-size:13px;padding:6px 2px 4px}
+  .m-evadd{padding-top:8px} .m-evadd #evDay{height:40px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--text);padding:0 8px;font:inherit}
+  @media(max-width:600px){.m-evadd{flex-wrap:wrap}.m-evadd #evNew{flex-basis:100%}.m-evadd #evDay{flex:1}}
+  .r-card .a-item{padding-left:2px;padding-right:2px}
+  #rview .r-h-out{align-self:flex-start;background:var(--card);padding:5px 12px;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,.2)}
   .q-add{display:flex;gap:8px;flex-wrap:wrap} .q-add .btn-primary{height:38px;padding:0 16px} .q-add .g-btn{height:38px;padding:0 14px}
   .q-card{position:relative;border-radius:16px;padding:14px 18px;background:linear-gradient(135deg,#fff4e6,#fde3ec);box-shadow:0 4px 18px rgba(0,0,0,.25);color:#4a3a40}
   .q-card.month{background:linear-gradient(135deg,#efe6fb,#fde3ec)}
@@ -627,7 +647,7 @@
       <div class="lbl">Команда <span class="add-mini" id="addMember">＋</span></div>
       <div id="memberList"></div>
       <div class="lbl">Рефлексия</div>
-      <div id="reflList"><div class="row-item" data-refl="week"><span class="r-ico">🪞</span><span class="name">Рефлексия недели</span></div><div class="row-item" data-refl="month"><span class="r-ico">🌙</span><span class="name">Рефлексия месяца</span></div><div class="row-item" data-quotes><span class="r-ico">✨</span><span class="name">Мои цитаты</span></div></div>
+      <div id="reflList"><div class="row-item" data-refl="week"><span class="r-ico">🪞</span><span class="name">Рефлексия недели</span></div><div class="row-item" data-refl="month"><span class="r-ico">🌙</span><span class="name">Итоги и события месяца</span></div><div class="row-item" data-quotes><span class="r-ico">✨</span><span class="name">Мои цитаты</span></div><div class="row-item" data-ach><span class="r-ico">🏆</span><span class="name">Мои достижения</span></div></div>
     </aside>
     <main class="board">
       <div class="toolbar">
@@ -658,6 +678,7 @@
       <div class="hview gview" id="rview" style="display:none"></div>
       <div class="hview gview" id="iview" style="display:none"></div>
       <div class="hview gview" id="qview" style="display:none"></div>
+      <div class="hview gview" id="aview" style="display:none"></div>
     </main>
   </div>
 </div>
@@ -936,7 +957,7 @@ function renderSide(){
   pm.innerHTML='<option value="">Все проекты</option>'+projTree().map(({p,child})=>`<option value="${p.id}" ${active===p.id?'selected':''}>${child?'— ':''}${esc(p.name)}</option>`).join('');
   pm.onchange=()=>{filters.project=pm.value||null;render();};
   document.querySelectorAll('#projList .row-item').forEach(it=>it.onclick=()=>{filters.project=it.dataset.proj||null;if(view==='reflect'){view='list';localStorage.setItem('kanban.view2',view);}render();});
-  document.querySelectorAll('#reflList .row-item').forEach(it=>it.onclick=()=>it.hasAttribute('data-quotes')?openQuotes():openReflect(it.dataset.refl));
+  document.querySelectorAll('#reflList .row-item').forEach(it=>it.onclick=()=>it.hasAttribute('data-ach')?openAch('month'):it.hasAttribute('data-quotes')?openQuotes():openReflect(it.dataset.refl));
 
   document.getElementById('memberList').innerHTML=D.members.map(m=>{
     const c=D.tasks.filter(t=>t.assignee_id===m.id&&!t.archived&&t.status!=='done').length;
@@ -1007,9 +1028,11 @@ function renderView(){
   document.getElementById('rview').style.display=view==='reflect'?'':'none';
   document.getElementById('iview').style.display=view==='ideas'?'':'none';
   document.getElementById('qview').style.display=view==='quotes'?'':'none';
+  document.getElementById('aview').style.display=view==='achieve'?'':'none';
+  const ai=document.querySelector('#reflList [data-ach]'); if(ai)ai.classList.toggle('active',view==='achieve');
   const qi=document.querySelector('#reflList [data-quotes]'); if(qi)qi.classList.toggle('active',view==='quotes');
   document.querySelectorAll('#reflList [data-refl]').forEach(it=>it.classList.toggle('active',view==='reflect'&&it.dataset.refl===rMode));
-  if(view==='quotes')renderQuotes(); else if(view==='ideas')renderIdeas(); else if(view==='reflect')renderReflect(); else if(view==='wishes')renderWishes(); else if(view==='goals')renderGoals(); else if(view==='list')renderList(); else if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='week')renderWeek(); else renderBoardInner();
+  if(view==='achieve')renderAch(); else if(view==='quotes')renderQuotes(); else if(view==='ideas')renderIdeas(); else if(view==='reflect')renderReflect(); else if(view==='wishes')renderWishes(); else if(view==='goals')renderGoals(); else if(view==='list')renderList(); else if(view==='habits')renderHabits(); else if(view==='today')renderToday(); else if(view==='week')renderWeek(); else renderBoardInner();
 }
 const PRIO_ORDER={urgent:0,high:1,medium:2,low:3};
 function renderList(){
@@ -1325,7 +1348,7 @@ async function loadQuote(){
 }
 function quoteHTML(){
   const mq=QM?`<section class="td-quote month" data-qmedit><div class="tq-lbl">🌙 Цитата ${MON_GEN[new Date(QM.week+'T00:00').getMonth()]}<button class="tq-all" data-qall title="Все цитаты">все цитаты</button></div><div class="tq-text">${esc(QM.text)}</div>${QM.author?`<div class="tq-author">${esc(QM.author)}</div>`:''}</section>`:'';
-  return mq+quoteWeekHTML();
+  return mq+quoteWeekHTML()+achTodayHTML();
 }
 function quoteWeekHTML(){
   const cur=Q&&Q.week===weekMonday();
@@ -1366,6 +1389,8 @@ function renderToday(){
   el.querySelectorAll('[data-qedit]').forEach(b=>b.onclick=editQuote);
   el.querySelectorAll('[data-qmedit]').forEach(b=>b.onclick=()=>editQuoteOf(QM));
   el.querySelectorAll('[data-qall]').forEach(b=>b.onclick=e=>{e.stopPropagation();openQuotes();});
+  el.querySelectorAll('[data-aopen]').forEach(b=>b.onclick=()=>openAch('month'));
+  el.querySelectorAll('[data-aquick]').forEach(b=>b.onclick=async()=>{const t=prompt('🏆 Достижение сегодня:','');if(t&&t.trim())addAch(t);});
   el.querySelectorAll('[data-gfocus]').forEach(b=>b.onclick=()=>{view='goals';localStorage.setItem('kanban.view2',view);renderView();});
   el.querySelectorAll('.td-goal').forEach(g=>g.onclick=()=>{if(g.dataset.goal){view='goals';localStorage.setItem('kanban.view2',view);renderView();}else openDialog(g.dataset.id);});
   const add=document.getElementById('tdAdd'); if(add)add.onclick=()=>openDialog(null);
@@ -1944,14 +1969,58 @@ function renderHabits(){
     document.getElementById('hNewNo').onclick=()=>{hAddOpen=false;renderHabits();};
   }else document.getElementById('hAddBtn').onclick=()=>{hAddOpen=true;renderHabits();};
   el.insertAdjacentHTML('beforeend',growthHTML()); wireGrowth(el);
-  el.insertAdjacentHTML('beforeend',`<div class="r-mob"><button class="g-btn" data-ropen="week">🪞 Рефлексия недели</button><button class="g-btn" data-ropen="month">🌙 Рефлексия месяца</button><button class="g-btn" data-qall>✨ Мои цитаты</button></div>`);
+  el.insertAdjacentHTML('beforeend',`<div class="r-mob"><button class="g-btn" data-ropen="week">🪞 Рефлексия недели</button><button class="g-btn" data-ropen="month">🌙 Итоги и события месяца</button><button class="g-btn" data-qall>✨ Мои цитаты</button><button class="g-btn" data-aopen>🏆 Мои достижения</button></div>`);
+  el.querySelectorAll('.r-mob [data-aopen]').forEach(b=>b.onclick=()=>openAch('month'));
   el.querySelectorAll('.r-mob [data-qall]').forEach(b=>b.onclick=openQuotes);
   el.querySelectorAll('[data-ropen]').forEach(b=>b.onclick=()=>openReflect(b.dataset.ropen));
 }
 setInterval(()=>{if(view==='habits'&&!hAddOpen)renderHabits();},5*60*1000);
+/* достижения */
+const MON_GEN=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+let A=[], AE=[], aMode='month', aOff=0;
+const MON_NOM=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+async function loadAch(){
+  const {data,error}=await sb.from('achievements').select('*').order('day',{ascending:false}).order('created_at',{ascending:false});
+  if(error){console.error(error);return;} A=(data||[]).filter(a=>a.kind!=='event'); AE=(data||[]).filter(a=>a.kind==='event');
+  if(view==='reflect'&&rMode==='month'&&!document.querySelector('#rview textarea:focus,#rview input:focus'))renderReflect();
+  if(view==='achieve'&&!document.querySelector('#aNew:focus'))renderAch(); if(view==='today')renderToday();
+}
+function openAch(mode){aMode=mode||'month';aOff=0;view='achieve';renderView();window.scrollTo(0,0);}
+function achTodayHTML(){const m=hYmd(new Date()).slice(0,7), n=A.filter(a=>a.day.slice(0,7)===m).length, mi=new Date().getMonth();
+  return `<section class="td-ach"><button class="td-ach-open" data-aopen>🏆 Достижения ${MON_GEN[mi]}: <b>${n}</b></button><button class="g-btn" data-aquick>＋ записать</button></section>`;}
+async function addAch(text,day,kind){text=(text||'').trim();if(!text)return false;const r=await sb.from('achievements').insert({text,day:day||hYmd(new Date()),kind:kind||'achievement'});if(r.error){toast('Не сохранилось: '+r.error.message);return false;}toast(kind==='event'?'Событие записано 📅':'Записала 🏆');await loadAch();return true;}
+function renderAch(){
+  const el=document.getElementById('aview'), now=new Date();
+  const fmtDay=d=>{const x=new Date(d+'T00:00');return `${x.getDate()} ${MON_GEN[x.getMonth()]}`;};
+  const item=a=>`<div class="a-item"><span class="a-day">${fmtDay(a.day)}</span><span class="a-text">${esc(a.text)}</span><span class="a-acts"><button class="g-btn" data-ae="${a.id}" title="Изменить">✎</button><button class="g-btn" data-ad="${a.id}" title="Удалить">✕</button></span></div>`;
+  let body, title, sub;
+  if(aMode==='month'){
+    const d=new Date(now.getFullYear(),now.getMonth()+aOff,1), key=hYmd(d).slice(0,7), list=A.filter(a=>a.day.slice(0,7)===key);
+    title=`🏆 Достижения: ${MON_NOM[d.getMonth()].toLowerCase()} ${d.getFullYear()}`; sub=list.length?`${list.length} ${gPlural(list.length,'достижение','достижения','достижений')}`:'пока пусто, начни с маленького';
+    const isCur=aOff===0;
+    body=`<div class="x-add"><input id="aNew" placeholder="Что у меня получилось? (Enter)" maxlength="400">${isCur?'':`<input id="aDay" type="date" value="${hYmd(new Date(d.getFullYear(),d.getMonth()+1,0))}" min="${key}-01" max="${hYmd(new Date(d.getFullYear(),d.getMonth()+1,0))}">`}<button class="btn-primary" id="aAdd" style="height:40px;padding:0 16px">+</button></div>
+      <div class="x-hint">Записывай всё, чем гордишься, даже маленькое: позвонила, решилась, закончила, отдохнула. В конце месяца перечитай и порадуйся.</div>
+      ${list.length?`<section class="x-list a-list">${list.map((a,i)=>item(a)).join('')}</section>`:''}`;
+  }else{
+    const y=now.getFullYear()+aOff, list=A.filter(a=>+a.day.slice(0,4)===y), per=MON_NOM.map((_,i)=>list.filter(a=>+a.day.slice(5,7)===i+1));
+    const mx=Math.max(1,...per.map(x=>x.length));
+    title=`🏆 Достижения ${y} года`; sub=list.length?`всего ${list.length} ${gPlural(list.length,'достижение','достижения','достижений')}`:'пока пусто';
+    body=`${list.length?`<section class="r-card"><div class="r-sub">По месяцам</div><div class="r-bars a-bars">${per.map((x,i)=>`<div class="r-bar ${y===now.getFullYear()&&i===now.getMonth()?'cur':''}" title="${MON_NOM[i]}: ${x.length}"><b>${x.length||''}</b><i style="height:${x.length/mx*100}%;background:#c98a3d"></i><span>${MON_NOM[i].slice(0,3).toLowerCase()}</span></div>`).join('')}</div></section>`:''}
+      ${per.map((x,i)=>x.length?`<section class="x-list a-list"><div class="x-sub">${MON_NOM[i]}<span>${x.length}</span></div>${x.map(item).join('')}</section>`:'').reverse().join('')}`;
+  }
+  el.innerHTML=`<div class="h-top"><button class="h-nav" id="aPrev" aria-label="Раньше">‹</button><div class="h-week">${title}<small>${sub}</small></div><button class="h-nav" id="aNext" aria-label="Позже" ${aOff>=0?'disabled':''}>›</button></div>
+    <div class="r-switch"><button data-amode="month" class="${aMode==='month'?'on':''}">Месяц</button><button data-amode="year" class="${aMode==='year'?'on':''}">Год</button></div>${body}`;
+  document.getElementById('aPrev').onclick=()=>{aOff--;renderAch();};
+  document.getElementById('aNext').onclick=()=>{if(aOff<0){aOff++;renderAch();}};
+  el.querySelectorAll('[data-amode]').forEach(b=>b.onclick=()=>openAch(b.dataset.amode));
+  const inp=document.getElementById('aNew');
+  if(inp){const go=async()=>{const dd=document.getElementById('aDay');if(await addAch(inp.value,dd?dd.value:null)){renderAch();const n=document.getElementById('aNew');if(n)n.focus();}};
+    inp.onkeydown=e=>{if(e.key==='Enter')go();}; document.getElementById('aAdd').onclick=go;}
+  el.querySelectorAll('[data-ae]').forEach(b=>b.onclick=async()=>{const a=A.find(x=>x.id===b.dataset.ae);const t=prompt('Достижение:',a.text);if(t===null||!t.trim())return;await sb.from('achievements').update({text:t.trim()}).eq('id',a.id);loadAch();});
+  el.querySelectorAll('[data-ad]').forEach(b=>b.onclick=async()=>{const a=A.find(x=>x.id===b.dataset.ad);if(!confirm(`Удалить «${a.text.slice(0,60)}»?`))return;await sb.from('achievements').delete().eq('id',a.id);loadAch();});
+}
 /* все цитаты */
 function openQuotes(){view='quotes';renderView();window.scrollTo(0,0);}
-const MON_GEN=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
 function qWhen(x){const d=new Date(x.week+'T00:00');if(x.kind==='month')return d.toLocaleDateString('ru',{month:'long',year:'numeric'});const e=new Date(d);e.setDate(e.getDate()+6);return `неделя ${d.getDate()} ${MON_GEN[d.getMonth()]} – ${e.getDate()} ${MON_GEN[e.getMonth()]}`;}
 async function editQuoteOf(x){const t=prompt(x.kind==='month'?'Цитата месяца:':'Цитата недели:',x.text);if(t===null||!t.trim())return;const a=prompt('Автор (необязательно):',x.author||'');
   const r=await sb.from('quotes').update({text:t.trim(),author:a&&a.trim()||null}).eq('id',x.id);if(r.error)return toast('Не сохранилось: '+r.error.message);toast('Сохранила');loadQuote();}
@@ -2033,12 +2102,14 @@ const RQ={week:[
  month:[
   {h:'Результаты'},
   {k:'wins',q:'🏆 Главные достижения месяца: 5 пунктов.'},
+  {k:'joyful',q:'😊 Что меня радовало в этом месяце? Не только покупки: люди, моменты, впечатления, мелочи.'},
   {k:'goals',q:'🎯 Какие цели продвинулись, а какие застряли? Цифры: было → стало.'},
   {k:'money',q:'💰 Деньги: сколько заработала, сколько потратила, что с кредитами? Выполнен ли финансовый план месяца?'},
   {k:'wishes',q:'Что из «Списка желаний» сбылось или стало целью?'},
   {h:'Рост'},
-  {k:'qualities',q:'💎 Качества месяца: как они изменились во мне? Оценка от 1 до 10 и пример.'},
-  {k:'skills',q:'🎓 Навыки месяца: что я освоила на практике, а что осталось теорией?'},
+  {k:'qualities',q:'💎 Какие качества мне удалось развить? Как они изменились во мне? Оценка от 1 до 10 и пример.'},
+  {k:'skills',q:'🎓 Какие навыки мне удалось развить? Что я освоила на практике, а что осталось теорией?'},
+  {k:'habits',q:'🌿 Какие привычки у меня прижились, а какие нет?'},
   {k:'lesson',q:'Какой самый важный урок этого месяца?'},
   {k:'decision',q:'Какое решение месяца было лучшим, а какое я бы сейчас приняла иначе?'},
   {k:'obstacles',q:'🧭 Какие ошибки, преграды и препятствия этого месяца можно обойти уже сейчас, если посмотреть на ситуацию со стороны или узнать нужную информацию?'},
@@ -2050,7 +2121,7 @@ const RQ={week:[
   {k:'energy',q:'Какие люди, дела и привычки давали силы, а какие забирали?'},
   {k:'refuse',q:'От чего я отказываюсь в следующем месяце?'},
   {h:'Следующий месяц'},
-  {k:'focus',q:'⭐ Одна главная цель месяца.'},
+  {k:'focus',q:'⭐ Какой фокус месяца выберем следующим? Одна главная цель.'},
   {k:'growth',q:'Качества и навыки на следующий месяц.'},
   {k:'joy',q:'✨ Что я могу добавить в свой план на следующий месяц, чтобы реализовывать все цели и задачи легче и радостнее?'},
   {k:'reward',q:'🎁 Чем я себя награжу, если всё получится?'},
@@ -2072,13 +2143,35 @@ function renderReflect(){
   else title=new Date(key+'T00:00').toLocaleDateString('ru',{month:'long',year:'numeric'});
   const all=RQ[rMode], qs=all.filter(q=>q.k);
   const filled=qs.filter(q=>String(rGet(rec,q.k)).trim()).length;
-  let chart='';
+  let chart='', monthTop='';
+  if(!isW){const mk=key.slice(0,7), mEnd=hYmd(new Date(+mk.slice(0,4),+mk.slice(5,7),0)), isCurM=key===grMonthStart(0);
+    const tDone=D.tasks.filter(t=>t.done_at&&t.done_at.slice(0,7)===mk).length, gWon=G.filter(g=>g.achieved_at&&g.achieved_at.slice(0,7)===mk);
+    const ach=A.filter(a=>a.day.slice(0,7)===mk), ev=AE.filter(a=>a.day.slice(0,7)===mk).sort((a,b)=>a.day<b.day?-1:1);
+    const book=GR.find(x=>x.kind==='book'&&x.month===key);
+    const fmtD=d=>{const x=new Date(d+'T00:00');return `${x.getDate()} ${MON_GEN[x.getMonth()]}`;};
+    monthTop=`<section class="r-card"><div class="r-sub">📊 Итоги месяца в цифрах</div><div class="m-stats">
+        <div><b>${tDone}</b><span>${gPlural(tDone,'задача закрыта','задачи закрыты','задач закрыто')}</span></div>
+        <div class="m-link" data-mach><b>${ach.length}</b><span>${gPlural(ach.length,'достижение','достижения','достижений')}</span></div>
+        <div><b>${ev.length}</b><span>${gPlural(ev.length,'событие','события','событий')}</span></div>
+        ${gWon.length?`<div><b>${gWon.length}</b><span>${gPlural(gWon.length,'цель достигнута','цели достигнуты','целей достигнуто')}</span></div>`:''}
+        ${book?`<div><b>${book.pages_read||0}${book.pages_total?'/'+book.pages_total:''}</b><span>стр. «${esc(book.text)}»</span></div>`:''}
+      </div>${gWon.length?`<div class="m-won">🎯 ${gWon.map(g=>esc(g.title)).join(' · ')}</div>`:''}</section>
+      <section class="r-card"><div class="r-sub">📅 События месяца</div>
+        ${ev.length?ev.map(a=>`<div class="a-item"><span class="a-day">${fmtD(a.day)}</span><span class="a-text">${esc(a.text)}</span><span class="a-acts"><button class="g-btn" data-ee="${a.id}" title="Изменить">✎</button><button class="g-btn" data-ed="${a.id}" title="Удалить">✕</button></span></div>`).join(''):'<div class="i-empty" style="padding:2px 0 8px">Записывай, что происходило: встречи, поездки, праздники, важные разговоры, первые разы.</div>'}
+        <div class="x-add m-evadd"><input id="evNew" placeholder="Событие… (Enter)" maxlength="400"><input id="evDay" type="date" value="${isCurM?hYmd(new Date()):mEnd}" min="${mk}-01" max="${mEnd}"><button class="btn-primary" id="evAdd" style="height:40px;padding:0 16px">+</button></div></section>
+      ${ach.length?`<section class="r-card"><div class="r-sub m-link" data-mach>🏆 Достижения месяца · ${ach.length}</div>${ach.slice(0,8).map(a=>`<div class="a-item"><span class="a-day">${fmtD(a.day)}</span><span class="a-text">${esc(a.text)}</span></div>`).join('')}${ach.length>8?`<div class="i-empty m-link" data-mach style="padding:8px 0 4px">ещё ${ach.length-8} → все достижения</div>`:''}</section>`:''}`;}
   if(isW){const last=[];for(let i=-11;i<=0;i++){const k=hYmd(rWeek(rOff+i)),r=RW.find(x=>x.week===k);last.push({k,v:r&&r.resource,cur:i===0});}
     if(last.some(x=>x.v))chart=`<section class="r-card"><div class="r-sub">🔋 Ресурс по неделям</div><div class="r-bars">${last.map(x=>`<div class="r-bar ${x.cur?'cur':''}" title="${x.k}: ${x.v||'нет оценки'}"><b>${x.v||''}</b><i style="height:${(x.v||0)*10}%;background:${x.v>=8?'#3d9a5f':x.v>=6?'#c98a3d':x.v?'#c0564b':'transparent'}"></i><span>${+x.k.slice(8,10)}.${x.k.slice(5,7)}</span></div>`).join('')}</div></section>`;}
-  el.innerHTML=`<div class="h-top"><button class="h-nav" id="rPrev" aria-label="Раньше">‹</button><div class="h-week">${isW?'🪞 Рефлексия недели':'🌙 Рефлексия месяца'}: ${title}<small>${filled?`отвечено ${filled} из ${qs.length}`:'пока без ответов'}</small></div><button class="h-nav" id="rNext" aria-label="Позже">›</button></div>
+  el.innerHTML=`<div class="h-top"><button class="h-nav" id="rPrev" aria-label="Раньше">‹</button><div class="h-week">${isW?'🪞 Рефлексия недели':'🌙 Итоги и события месяца'}: ${title}<small>${filled?`отвечено ${filled} из ${qs.length}`:'пока без ответов'}</small></div><button class="h-nav" id="rNext" aria-label="Позже">›</button></div>
     <div class="r-switch"><button data-rmode="week" class="${isW?'on':''}">Неделя</button><button data-rmode="month" class="${isW?'':'on'}">Месяц</button></div>
-    <section class="r-card">${all.map(q=>q.h?`<div class="r-h">${esc(q.h)}</div>`:`<div class="r-q"><div class="r-qt">${esc(q.q)}</div>${q.score?`<div class="r-score">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-rscore="${n}" class="${+rGet(rec,q.k)===n?'on':''}">${n}</button>`).join('')}</div>`:`<textarea data-rk="${q.k}" rows="2" placeholder="Мой ответ…">${esc(String(rGet(rec,q.k)))}</textarea>`}</div>`).join('')}
+    ${monthTop}${isW?'':'<div class="r-h r-h-out">🌙 Рефлексия месяца</div>'}<section class="r-card">${all.map(q=>q.h?`<div class="r-h">${esc(q.h)}</div>`:`<div class="r-q"><div class="r-qt">${esc(q.q)}</div>${q.score?`<div class="r-score">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-rscore="${n}" class="${+rGet(rec,q.k)===n?'on':''}">${n}</button>`).join('')}</div>`:`<textarea data-rk="${q.k}" rows="2" placeholder="Мой ответ…">${esc(String(rGet(rec,q.k)))}</textarea>`}</div>`).join('')}
       <div class="r-foot"><span class="r-hint">${isW?'Афина задаёт эти вопросы по воскресеньям в итогах недели; можно ответить и здесь.':'Афина задаёт эти вопросы в последний день месяца; можно ответить и здесь.'}</span><button class="btn-primary" id="rSave">Сохранить</button></div></section>${chart}`;
+  el.querySelectorAll('[data-mach]').forEach(b=>b.onclick=()=>{aMode='month';aOff=rOff;view='achieve';renderView();window.scrollTo(0,0);});
+  const evIn=document.getElementById('evNew');
+  if(evIn){const go=async()=>{if(await addAch(evIn.value,document.getElementById('evDay').value,'event')){renderReflect();const n=document.getElementById('evNew');if(n)n.focus();}};
+    evIn.onkeydown=e=>{if(e.key==='Enter')go();}; document.getElementById('evAdd').onclick=go;}
+  el.querySelectorAll('[data-ee]').forEach(b=>b.onclick=async()=>{const a=AE.find(x=>x.id===b.dataset.ee);const t=prompt('Событие:',a.text);if(t===null||!t.trim())return;await sb.from('achievements').update({text:t.trim()}).eq('id',a.id);loadAch();});
+  el.querySelectorAll('[data-ed]').forEach(b=>b.onclick=async()=>{const a=AE.find(x=>x.id===b.dataset.ed);if(!confirm(`Удалить событие «${a.text.slice(0,60)}»?`))return;await sb.from('achievements').delete().eq('id',a.id);loadAch();});
   document.getElementById('rPrev').onclick=()=>{rOff--;renderReflect();};
   document.getElementById('rNext').onclick=()=>{rOff++;renderReflect();};
   el.querySelectorAll('[data-rmode]').forEach(b=>b.onclick=()=>openReflect(b.dataset.rmode));
@@ -2234,8 +2327,9 @@ function startApp(){
     .on('postgres_changes',{event:'*',schema:'public',table:'weekly_reviews'},()=>loadReflect())
     .on('postgres_changes',{event:'*',schema:'public',table:'monthly_reviews'},()=>loadReflect())
     .on('postgres_changes',{event:'*',schema:'public',table:'ideas'},()=>loadIdeas())
+    .on('postgres_changes',{event:'*',schema:'public',table:'achievements'},()=>loadAch())
     .subscribe();
-  loadAll(); loadHabits(); loadGoals(); loadQuote(); loadWishes(); loadGrowth(); loadReflect(); loadIdeas();
+  loadAll(); loadHabits(); loadGoals(); loadQuote(); loadWishes(); loadGrowth(); loadReflect(); loadIdeas(); loadAch();
 }
 function showLogin(){
   document.getElementById('app').style.display='none';
