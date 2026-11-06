@@ -646,6 +646,7 @@
       <div id="projList"></div>
       <div class="lbl">Команда <span class="add-mini" id="addMember">＋</span></div>
       <div id="memberList"></div>
+      <div class="row-item" id="ideasNav" role="button" tabindex="0"><span class="r-ico">💡</span><span class="name">Банк идей</span></div>
       <div class="lbl">Рефлексия</div>
       <div id="reflList"><div class="row-item" data-refl="week"><span class="r-ico">🪞</span><span class="name">Рефлексия недели</span></div><div class="row-item" data-refl="month"><span class="r-ico">🌙</span><span class="name">Итоги и события месяца</span></div><div class="row-item" data-quotes><span class="r-ico">✨</span><span class="name">Мои цитаты</span></div><div class="row-item" data-ach><span class="r-ico">🏆</span><span class="name">Мои достижения</span></div></div>
     </aside>
@@ -957,6 +958,10 @@ function renderSide(){
   pm.innerHTML='<option value="">Все проекты</option>'+projTree().map(({p,child})=>`<option value="${p.id}" ${active===p.id?'selected':''}>${child?'— ':''}${esc(p.name)}</option>`).join('');
   pm.onchange=()=>{filters.project=pm.value||null;render();};
   document.querySelectorAll('#projList .row-item').forEach(it=>it.onclick=()=>{filters.project=it.dataset.proj||null;if(view==='reflect'){view='list';localStorage.setItem('kanban.view2',view);}render();});
+  const ideasNav=document.getElementById('ideasNav');
+  const openIdeas=()=>{view='ideas';localStorage.setItem('kanban.view2',view);renderView();};
+  ideasNav.onclick=openIdeas;
+  ideasNav.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openIdeas();}};
   document.querySelectorAll('#reflList .row-item').forEach(it=>it.onclick=()=>it.hasAttribute('data-ach')?openAch('month'):it.hasAttribute('data-quotes')?openQuotes():openReflect(it.dataset.refl));
 
   document.getElementById('memberList').innerHTML=D.members.map(m=>{
@@ -1029,6 +1034,8 @@ function renderView(){
   document.getElementById('iview').style.display=view==='ideas'?'':'none';
   document.getElementById('qview').style.display=view==='quotes'?'':'none';
   document.getElementById('aview').style.display=view==='achieve'?'':'none';
+  const ideasNav=document.getElementById('ideasNav');
+  if(ideasNav){ideasNav.classList.toggle('active',view==='ideas');if(view==='ideas')ideasNav.setAttribute('aria-current','page');else ideasNav.removeAttribute('aria-current');}
   const ai=document.querySelector('#reflList [data-ach]'); if(ai)ai.classList.toggle('active',view==='achieve');
   const qi=document.querySelector('#reflList [data-quotes]'); if(qi)qi.classList.toggle('active',view==='quotes');
   document.querySelectorAll('#reflList [data-refl]').forEach(it=>it.classList.toggle('active',view==='reflect'&&it.dataset.refl===rMode));
