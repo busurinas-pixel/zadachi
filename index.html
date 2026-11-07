@@ -610,6 +610,46 @@
   .h-add-btn,.h-cancel{border:none;background:none;color:var(--primary);font:inherit;font-weight:600;font-size:14px;cursor:pointer;padding:6px 4px}
   .h-cancel{color:var(--muted)}
   @media(max-width:520px){.h-days,.h-row{grid-template-columns:minmax(0,1fr) repeat(7,30px);gap:4px;padding:6px 10px}.h-dot{width:30px;height:30px}}
+/* Daily use: compact navigation, deliberate planning, readable habits. */
+button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+.app{height:100dvh}
+.mobile-nav,.mobile-filter-btn{display:none}
+.more-sheet{margin:auto;max-width:440px;width:calc(100% - 24px);max-height:85dvh;overflow:auto;border:1px solid var(--border);border-radius:20px;background:var(--card);color:var(--text);padding:20px;box-shadow:var(--shadow-lg)}
+.more-sheet::backdrop{background:rgba(8,12,24,.55);backdrop-filter:blur(3px)}
+.more-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}.more-head h2{font-size:18px}
+.more-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.more-grid button,.more-wide{min-height:48px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;text-align:left;background:var(--card-2);font-size:14px}.more-wide{width:100%;margin-top:10px}
+.more-grid button:hover,.more-wide:hover{background:var(--primary-soft)}
+.mobile-nav button[aria-current=page],.more-grid button.on{background:var(--primary-soft);color:var(--primary);font-weight:700}
+.td-top{order:0}.td-sec.now{order:1}.td-focus{order:2}.td-sec.habits{order:3}.td-overdue{order:4}.td-ach{order:5}.td-sec.next{order:6}.td-quotes{order:7}.td-sec.goals{order:8}
+.td-focus .g-focus-banner{padding:12px 16px}.td-focus .g-fb-title{font-size:16px}.td-focus .g-track{margin:2px 0}
+.td-overdue,.td-quotes{border-radius:16px;background:var(--card-2);box-shadow:var(--shadow);overflow:hidden}
+.td-overdue>summary,.td-quotes>summary{padding:14px 16px;cursor:pointer;font-weight:700;list-style:none;display:flex;align-items:center;gap:10px}
+.td-overdue>summary::before,.td-quotes>summary::before{content:'›';font-size:22px;line-height:1}.td-overdue[open]>summary::before,.td-quotes[open]>summary::before{transform:rotate(90deg)}
+.td-overdue summary span{flex:1}.td-overdue summary small{font-weight:500;color:var(--muted);font-size:12px}
+.td-quotes .td-quote{margin:0 10px 12px;box-shadow:none}
+.triage-hint{padding:0 16px 12px;font-size:13px;color:var(--muted)}
+.triage-row{padding:12px 16px;border-top:1px solid var(--border-soft)}.triage-title{font-size:14px;font-weight:600;text-align:left;line-height:1.4;overflow-wrap:anywhere}.triage-title:hover{color:var(--primary)}
+.triage-meta{font-size:12px;color:var(--muted);margin:3px 0 10px}.triage-actions{display:flex;flex-wrap:wrap;gap:6px}.triage-actions button{min-height:40px;border:1px solid var(--border);border-radius:10px;padding:7px 10px;background:var(--card);font-size:12px}.triage-actions button:hover{border-color:var(--primary);color:var(--primary)}
+.triage-date{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}.triage-date input{padding:8px;min-height:44px;color:var(--text);background:var(--card);border:1px solid var(--border);border-radius:10px}.triage-date[hidden]{display:none}
+.triage-undo{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:45;display:flex;align-items:center;gap:12px;max-width:calc(100% - 24px);padding:12px 16px;border-radius:14px;background:var(--text);color:var(--card);box-shadow:var(--shadow-lg);font-size:13px}.triage-undo button{font-weight:700;text-decoration:underline;min-height:40px;white-space:nowrap}.triage-undo[hidden]{display:none}
+.h-display-switch{display:none}.h-day-list{display:none}.h-week-table{overflow:auto}.h-week-table .h-days,.h-week-table .h-row{grid-template-columns:minmax(180px,1fr) repeat(7,40px);min-width:540px;gap:6px}.h-week-table .h-dot{width:40px;height:40px}.h-week-table .h-name{overflow-wrap:normal;word-break:normal}
+.h-day-top{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:8px}.h-day-top strong{text-align:center;font-size:14px}.h-day-group{background:var(--card-2);border-radius:16px;overflow:hidden}.h-day-group h3{font-size:15px;padding:12px 14px;background:var(--primary-soft)}
+.h-day-row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid var(--border-soft)}.h-day-toggle{width:46px;height:46px;border:2px solid var(--border);border-radius:14px;background:var(--card);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff}.h-day-toggle.on{background:var(--primary);border-color:var(--primary)}.h-day-toggle svg{width:22px;height:22px}.h-day-copy{flex:1;min-width:0;font-size:15px;font-weight:600;overflow-wrap:break-word}.h-day-copy small{display:block;font-size:12px;font-weight:400;color:var(--muted);margin-top:3px}.h-day-remove{width:40px;height:44px;color:var(--muted);font-size:20px}
+.r-savebar{position:sticky;top:0;z-index:4;display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)}
+.r-save-state{font-size:12px;color:var(--muted);flex:1;min-width:130px}.r-save-state.error{color:var(--red)}.r-savebar .btn-primary{height:38px;padding:0 12px}.r-length{display:flex;gap:4px}.r-length button{padding:8px 10px;border-radius:9px;font-size:12px;min-height:38px}.r-length button.on{background:var(--primary-soft);color:var(--primary);font-weight:700}.r-q[hidden],.r-h[hidden]{display:none}
+html[data-background=calm] body,html[data-background=calm]:not([data-theme=dark]) body{background:var(--bg)}
+@media(max-width:900px){
+ header.topbar{gap:8px;padding:10px 12px;min-height:66px}header.topbar h1{font-size:17px;white-space:nowrap}header.topbar .sub{font-size:11px}.me-btn{display:none}.topbar .spacer{min-width:0}.topbar .icon-btn{width:36px;height:38px;flex-shrink:0}
+ .mobile-filter-btn{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 9px;border:1px solid var(--border);border-radius:10px;background:var(--card);font-size:12px}
+ .mobile-nav{display:grid;grid-template-columns:repeat(4,1fr);flex-shrink:0;gap:4px;border-top:1px solid var(--border);background:var(--card);padding:6px 8px max(6px,env(safe-area-inset-bottom));z-index:10}.mobile-nav button{min-height:50px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-size:12px}.mobile-nav .mn-icon{font-size:18px;line-height:20px}
+ main.board{padding:10px 12px 0}.toolbar{display:none;margin-bottom:10px;gap:8px}.toolbar.filters-open{display:flex}.toolbar .search{max-width:none;width:100%;flex-basis:100%}.toolbar .filter{flex:1;min-width:0;max-width:100%}#viewToggle{display:none}.toolbar .archive-toggle{flex:1}#newTaskBtn{flex:1;justify-content:center}
+ .hview,.tview,.wview,.tlist{padding-bottom:20px}.td-top{padding:12px 14px}.td-date{font-size:18px}.td-head{flex-wrap:wrap;gap:8px}.td-sec.now .td-row{padding:12px}.td-sec.now .td-move button{min-height:38px}.td-sec.now .tl-chk{min-width:24px;min-height:24px}
+ .td-overdue>summary{flex-wrap:wrap}.triage-undo{bottom:80px}.toast{bottom:80px}.td-quotes .tq-text{font-size:17px}
+ .h-display-switch{display:flex;gap:6px;background:var(--card);border-radius:14px;padding:5px}.h-display-switch button{min-height:40px;flex:1;border-radius:10px;font-size:14px;font-weight:600}.h-display-switch button.on{background:var(--primary);color:#fff}
+ #hview[data-hdisplay=day]>.h-top:not(.gr-top),#hview[data-hdisplay=day]>.h-sec.daily,#hview[data-hdisplay=day]>.h-sec.regular{display:none}#hview[data-hdisplay=day] .h-day-list{display:flex;flex-direction:column;gap:12px}#hview[data-hdisplay=week] .h-day-list{display:none}#hview .h-days,#hview .h-row{padding:8px 12px}
+ .r-savebar{gap:6px}.r-length{flex:1}.r-save-state{flex-basis:100%;order:2}.r-score button{width:40px;height:44px}.r-mob{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -632,6 +672,7 @@
       <div class="sub">Общая доска · <span id="statusHint">подключение…</span></div>
     </div>
     <div class="spacer"></div>
+    <button class="mobile-filter-btn" id="mobileFilters" aria-expanded="false" aria-controls="mainToolbar">Фильтры</button>
     <button class="me-btn" id="meBtn">Вы: <b id="meName">—</b></button>
     <button class="icon-btn" id="themeBtn" title="Тема">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
@@ -651,7 +692,7 @@
       <div id="reflList"><div class="row-item" data-refl="week"><span class="r-ico">🪞</span><span class="name">Рефлексия недели</span></div><div class="row-item" data-refl="month"><span class="r-ico">🌙</span><span class="name">Итоги и события месяца</span></div><div class="row-item" data-quotes><span class="r-ico">✨</span><span class="name">Мои цитаты</span></div><div class="row-item" data-ach><span class="r-ico">🏆</span><span class="name">Мои достижения</span></div></div>
     </aside>
     <main class="board">
-      <div class="toolbar">
+      <div class="toolbar" id="mainToolbar">
         <div class="search">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
           <input id="searchInput" placeholder="Поиск задач…">
@@ -682,7 +723,27 @@
       <div class="hview gview" id="aview" style="display:none"></div>
     </main>
   </div>
+  <nav class="mobile-nav" aria-label="Основные разделы">
+    <button data-mobile-view="today"><span class="mn-icon" aria-hidden="true">☀</span>Сегодня</button>
+    <button data-mobile-view="goals"><span class="mn-icon" aria-hidden="true">◎</span>Цели</button>
+    <button data-mobile-view="habits"><span class="mn-icon" aria-hidden="true">✓</span>Рутина</button>
+    <button id="mobileMore" aria-haspopup="dialog"><span class="mn-icon" aria-hidden="true">•••</span>Ещё</button>
+  </nav>
 </div>
+<dialog class="more-sheet" id="moreSheet" aria-labelledby="moreTitle">
+  <div class="more-head"><h2 id="moreTitle">Все разделы</h2><button class="icon-btn" id="moreClose" aria-label="Закрыть меню">✕</button></div>
+  <div class="more-grid">
+    <button data-mobile-view="board">Доска задач</button><button data-mobile-view="list">Список задач</button>
+    <button data-mobile-view="week">Неделя</button><button data-mobile-view="wishes">Желания</button>
+    <button data-mobile-view="ideas">Банк идей</button><button data-mobile-view="achieve">Мои достижения</button>
+    <button data-more-reflect="week">Рефлексия недели</button><button data-more-reflect="month">Итоги месяца</button>
+    <button data-mobile-view="quotes">Мои цитаты</button><button id="moreFilters">Поиск и фильтры</button>
+  </div>
+  <button class="more-wide" id="moreAddTask">＋ Новая задача</button>
+  <button class="more-wide" id="moreName">Имя для комментариев</button>
+  <button class="more-wide" id="calmBackground" aria-pressed="false">Фон: лес · включить спокойный</button>
+</dialog>
+<div class="triage-undo" id="triageUndo" role="status" hidden><span id="triageUndoText"></span><button id="triageUndoBtn">Отменить</button></div>
 
 <!-- Detail / create dialog -->
 <div class="overlay" id="overlay">
@@ -1022,6 +1083,7 @@ function cardHTML(t){
 let view=localStorage.getItem('kanban.view2')||'today';
 let closedSecs=JSON.parse(localStorage.getItem('kanban.closed')||'["done"]');
 function renderView(){
+  syncUsabilityNav();
   document.querySelectorAll('#viewToggle button').forEach(b=>b.classList.toggle('on',b.dataset.view===view));
   document.getElementById('columns').style.display=view==='board'?'':'none';
   document.getElementById('tlist').style.display=view==='list'?'':'none';
@@ -1355,7 +1417,7 @@ async function loadQuote(){
 }
 function quoteHTML(){
   const mq=QM?`<section class="td-quote month" data-qmedit><div class="tq-lbl">🌙 Цитата ${MON_GEN[new Date(QM.week+'T00:00').getMonth()]}<button class="tq-all" data-qall title="Все цитаты">все цитаты</button></div><div class="tq-text">${esc(QM.text)}</div>${QM.author?`<div class="tq-author">${esc(QM.author)}</div>`:''}</section>`:'';
-  return mq+quoteWeekHTML()+achTodayHTML();
+  return mq+quoteWeekHTML();
 }
 function quoteWeekHTML(){
   const cur=Q&&Q.week===weekMonday();
@@ -1384,14 +1446,15 @@ function renderToday(){
   const dLabel=new Date().toLocaleDateString('ru',{weekday:'long',day:'numeric',month:'long'});
   const sec=(cls,title,rows,extra='')=>`<section class="td-sec ${cls}"><div class="td-head"><span>${title}</span>${extra}</div>${rows}</section>`;
   const fgoal=gFocusGoal();
-  el.innerHTML=`${quoteHTML()}${fgoal?gFocusHTML(fgoal):''}<div class="td-top"><div class="td-date">${dLabel.charAt(0).toUpperCase()+dLabel.slice(1)}</div><div class="td-sum">${todays.length?`на сегодня ${todays.length}`:'на сегодня задач нет'}${doneToday.length?` · сделано ${doneToday.length}`:''}${overdue.length?` · просрочено ${overdue.length}`:''}</div></div>
-    ${overdue.length?sec('late',`Просрочено <b>${overdue.length}</b>`,overdue.map(t=>trow(t,{showDate:true})).join(''),`<div class="td-bulk"><button data-bulk="0">Все на сегодня</button><button data-bulk="1">Все на завтра</button></div>`):''}
+  el.innerHTML=`<div class="td-top"><div class="td-date">${dLabel.charAt(0).toUpperCase()+dLabel.slice(1)}</div><div class="td-sum">${todays.length?`на сегодня ${todays.length}`:'на сегодня задач нет'}${doneToday.length?` · сделано ${doneToday.length}`:''}${overdue.length?` · просрочено ${overdue.length}`:''}</div></div>
+    ${overdue.length?triageHTML(overdue):''}
     ${sec('now','Сегодня',todays.length||doneToday.length?todays.map(t=>trow(t)).join('')+doneToday.map(t=>trow(t)).join(''):'<div class="tl-empty">Свободный день. Добавь задачу или перетащи на сегодня из списка</div>',`<button class="td-add" id="tdAdd">+ Задача на сегодня</button>`)}
+    ${fgoal?`<div class="td-focus">${gFocusHTML(fgoal)}</div>`:''}${achTodayHTML()}<details class="td-quotes"><summary>Цитаты для вдохновения</summary>${quoteHTML()}</details>
     ${daily.length?sec('habits','Привычки дня',`<div class="td-habits">${daily.map(h=>{const on=hOn(h.id,today);return `<button class="td-hab ${on?'on':''}" data-hab="${h.id}">${on?ICON.check:''}<span>${esc(h.name)}</span></button>`;}).join('')}</div>`):''}
     ${tmr.length?sec('next',`Завтра <b>${tmr.length}</b>`,tmr.map(t=>trow(t)).join('')):''}
     ${goals.length||bigGoals.length?sec('goals','Цели',bigGoals.map(g=>{const p=gProgress(g),pace=gPace(g,p);return `<div class="td-goal" data-goal="${g.id}"><div class="tl-title">🎯 ${esc(g.title)}</div>${gBar(g,p,pace)}<div class="goal-txt"><span>${pace?esc(pace.txt):gNumTxt(g,p)}</span><b>${p.pct}%</b></div></div>`;}).join('')+goals.map(t=>`<div class="td-goal" data-id="${t.id}"><div class="tl-title">${fire(t)}${esc(t.title)}</div>${goalHTML(t)}</div>`).join('')):''}`;
   wireTRows(el);
-  el.querySelectorAll('[data-bulk]').forEach(b=>b.onclick=()=>{patchTasks(overdue.map(t=>t.id),{deadline:dayStr(+b.dataset.bulk)});toast(`Перенесла ${overdue.length} ${b.dataset.bulk==='0'?'на сегодня':'на завтра'}`);});
+  wireTriage(el,overdue);
   el.querySelectorAll('[data-hab]').forEach(b=>b.onclick=()=>hToggle(b.dataset.hab,today).then(()=>{if(view==='today')renderToday();}));
   el.querySelectorAll('[data-qedit]').forEach(b=>b.onclick=editQuote);
   el.querySelectorAll('[data-qmedit]').forEach(b=>b.onclick=()=>editQuoteOf(QM));
@@ -1400,7 +1463,7 @@ function renderToday(){
   el.querySelectorAll('[data-aquick]').forEach(b=>b.onclick=async()=>{const t=prompt('🏆 Достижение сегодня:','');if(t&&t.trim())addAch(t);});
   el.querySelectorAll('[data-gfocus]').forEach(b=>b.onclick=()=>{view='goals';localStorage.setItem('kanban.view2',view);renderView();});
   el.querySelectorAll('.td-goal').forEach(g=>g.onclick=()=>{if(g.dataset.goal){view='goals';localStorage.setItem('kanban.view2',view);renderView();}else openDialog(g.dataset.id);});
-  const add=document.getElementById('tdAdd'); if(add)add.onclick=()=>openDialog(null);
+  const add=document.getElementById('tdAdd'); if(add)add.onclick=()=>{openDialog(null);document.getElementById('fDeadline').value=dayStr(0);};
 }
 let wWeek=0;
 function renderWeek(){
@@ -1943,6 +2006,7 @@ async function loadHabits(){
 let hRefreshT=null;function softHabits(){clearTimeout(hRefreshT);hRefreshT=setTimeout(loadHabits,400);}
 async function hToggle(id,key){
   const k=id+'|'+key,on=H.days.has(k);
+  if(key>dayStr(0))return;
   on?H.days.delete(k):H.days.add(k);renderHabits();
   const r=on?await sb.from('habit_days').delete().eq('habit_id',id).eq('day',key):await sb.from('habit_days').insert({habit_id:id,day:key});
   if(r.error){on?H.days.add(k):H.days.delete(k);renderHabits();toast('Не сохранилось: '+r.error.message);}
@@ -1957,16 +2021,19 @@ function renderHabits(){
     if(h.period_days!==1){const c=hCount(h);sub=`<small><span class="h-prog ${c>=h.target?'ok':''}">${c}/${h.target}</span> ${esc(hFreqLabel(h))}</small>`;}
     return `<div class="h-row"><div class="h-name"><span>${esc(h.name)}</span>${sub}<button class="h-del" data-hdel="${h.id}" title="Убрать привычку">×</button></div>${days.map(d=>{const k=hYmd(d),on=hOn(h.id,k);return `<button class="h-dot ${on?'on':''} ${k===tk?'today':''} ${d>now?'future':''}" data-h="${h.id}" data-d="${k}" aria-pressed="${on}" aria-label="${esc(h.name)}, ${d.toLocaleDateString('ru',{weekday:'long',day:'numeric',month:'long'})}">${on?ICON.check:''}</button>`;}).join('')}</div>`;
   };
-  const grp=(t,cls,l)=>l.length?`<section class="h-sec ${cls}"><div class="h-sec-head">${t}</div>${head}${l.map(row).join('')}</section>`:'';
+  const grp=(t,cls,l)=>l.length?`<section class="h-sec ${cls}"><div class="h-sec-head">${t}</div><div class="h-week-table">${head}${l.map(row).join('')}</div></section>`:'';
   const wl=hWeek===0?'Эта неделя':`${days[0].toLocaleDateString('ru',{day:'numeric',month:'short'})} – ${days[6].toLocaleDateString('ru',{day:'numeric',month:'short'})}`;
-  el.innerHTML=`<div class="h-top"><button class="h-nav" id="hPrev" aria-label="Прошлая неделя">‹</button><div class="h-week">${wl}${daily.length?`<small>сегодня ${doneToday} из ${daily.length}</small>`:''}</div><button class="h-nav" id="hNext" aria-label="Следующая неделя" ${hWeek>=0?'disabled':''}>›</button></div>
+  el.dataset.hdisplay=hDisplay;
+  el.innerHTML=`<div class="h-display-switch" aria-label="Вид привычек"><button data-hdisplay="day" class="${hDisplay==='day'?'on':''}" aria-pressed="${hDisplay==='day'}">По дням</button><button data-hdisplay="week" class="${hDisplay==='week'?'on':''}" aria-pressed="${hDisplay==='week'}">Неделя</button></div>${habitDayHTML()}<div class="h-top"><button class="h-nav" id="hPrev" aria-label="Прошлая неделя">‹</button><div class="h-week">${wl}${daily.length?`<small>сегодня ${doneToday} из ${daily.length}</small>`:''}</div><button class="h-nav" id="hNext" aria-label="Следующая неделя" ${hWeek>=0?'disabled':''}>›</button></div>
     ${H.list.length?'':'<div class="tl-empty">Привычек пока нет</div>'}
     ${grp('Каждый день','daily',daily)}${grp('Регулярно','regular',reg)}
     <div class="h-add">${hAddOpen?`<input id="hNewName" placeholder="Новая привычка"><select id="hNewFreq">${H_FREQ.map(f=>`<option value="${f.v}">${f.l}</option>`).join('')}</select><button class="btn-primary" id="hNewOk">Добавить</button><button class="h-cancel" id="hNewNo">Отмена</button>`:'<button class="h-add-btn" id="hAddBtn">+ Добавить привычку</button>'}</div>`;
   document.getElementById('hPrev').onclick=()=>{hWeek--;renderHabits();};
   document.getElementById('hNext').onclick=()=>{if(hWeek<0){hWeek++;renderHabits();}};
-  el.querySelectorAll('.h-dot').forEach(b=>b.onclick=()=>hToggle(b.dataset.h,b.dataset.d));
-  el.querySelectorAll('.h-del').forEach(b=>b.onclick=async()=>{const h=H.list.find(x=>x.id===b.dataset.hdel);if(!h||!confirm(`Убрать привычку «${h.name}»?`))return;const {error}=await sb.from('habits').update({archived:true}).eq('id',h.id);if(error)return toast('Ошибка: '+error.message);H.list=H.list.filter(x=>x.id!==h.id);renderHabits();});
+  el.querySelectorAll('[data-hdisplay]').forEach(b=>b.onclick=()=>{hDisplay=b.dataset.hdisplay;localStorage.setItem('kanban.hdisplay',hDisplay);renderHabits();});
+  document.getElementById('hDayPrev').onclick=()=>{hDayOffset--;renderHabits();};document.getElementById('hDayNext').onclick=()=>{if(hDayOffset<0){hDayOffset++;renderHabits();}};
+  el.querySelectorAll('.h-dot,.h-day-toggle').forEach(b=>b.onclick=()=>hToggle(b.dataset.h,b.dataset.d));
+  el.querySelectorAll('.h-del,.h-del-day').forEach(b=>b.onclick=async()=>{const h=H.list.find(x=>x.id===b.dataset.hdel);if(!h||!confirm(`Убрать привычку «${h.name}»?`))return;const {error}=await sb.from('habits').update({archived:true}).eq('id',h.id);if(error)return toast('Ошибка: '+error.message);H.list=H.list.filter(x=>x.id!==h.id);renderHabits();});
   if(hAddOpen){
     const inp=document.getElementById('hNewName');inp.focus();
     const ok=async()=>{const n=inp.value.trim();if(!n)return inp.focus();const [t,p]=document.getElementById('hNewFreq').value.split('/').map(Number);
@@ -2142,7 +2209,7 @@ async function loadReflect(){
   if(view==='reflect'&&!document.querySelector('#rview textarea:focus'))renderReflect();
 }
 function openReflect(mode){rMode=mode;rOff=0;view='reflect';renderView();window.scrollTo(0,0);}
-function rGet(rec,k){if(!rec)return '';if(rMode==='week'&&(k==='resource'||k==='to_ten'))return rec[k]??'';return (rec.answers||{})[k]??'';}
+function rGet(rec,k){const d=rDraft(rMode,rKey());if(Object.hasOwn(d.changes,k))return d.changes[k];if(!rec)return '';if(rMode==='week'&&(k==='resource'||k==='to_ten'))return rec[k]??'';return (rec.answers||{})[k]??'';}
 function renderReflect(){
   const el=document.getElementById('rview'), key=rKey(), isW=rMode==='week';
   const rec=isW?RW.find(r=>r.week===key):RM.find(r=>r.month===key);
@@ -2172,7 +2239,8 @@ function renderReflect(){
     if(last.some(x=>x.v))chart=`<section class="r-card"><div class="r-sub">🔋 Ресурс по неделям</div><div class="r-bars">${last.map(x=>`<div class="r-bar ${x.cur?'cur':''}" title="${x.k}: ${x.v||'нет оценки'}"><b>${x.v||''}</b><i style="height:${(x.v||0)*10}%;background:${x.v>=8?'#3d9a5f':x.v>=6?'#c98a3d':x.v?'#c0564b':'transparent'}"></i><span>${+x.k.slice(8,10)}.${x.k.slice(5,7)}</span></div>`).join('')}</div></section>`;}
   el.innerHTML=`<div class="h-top"><button class="h-nav" id="rPrev" aria-label="Раньше">‹</button><div class="h-week">${isW?'🪞 Рефлексия недели':'🌙 Итоги и события месяца'}: ${title}<small>${filled?`отвечено ${filled} из ${qs.length}`:'пока без ответов'}</small></div><button class="h-nav" id="rNext" aria-label="Позже">›</button></div>
     <div class="r-switch"><button data-rmode="week" class="${isW?'on':''}">Неделя</button><button data-rmode="month" class="${isW?'':'on'}">Месяц</button></div>
-    ${monthTop}${isW?'':'<div class="r-h r-h-out">🌙 Рефлексия месяца</div>'}<section class="r-card">${all.map(q=>q.h?`<div class="r-h">${esc(q.h)}</div>`:`<div class="r-q"><div class="r-qt">${esc(q.q)}</div>${q.score?`<div class="r-score">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-rscore="${n}" class="${+rGet(rec,q.k)===n?'on':''}">${n}</button>`).join('')}</div>`:`<textarea data-rk="${q.k}" rows="2" placeholder="Мой ответ…">${esc(String(rGet(rec,q.k)))}</textarea>`}</div>`).join('')}
+    <div class="r-savebar"><div class="r-length"><button data-rlength="short">Коротко</button><button data-rlength="full">Все вопросы</button></div><span class="r-save-state" id="rSaveState" role="status" aria-live="polite"></span><button class="btn-primary" id="rSaveNow">Сохранить</button></div>
+    ${monthTop}${isW?'':'<div class="r-h r-h-out">🌙 Рефлексия месяца</div>'}<section class="r-card">${all.map(q=>q.h?`<div class="r-h">${esc(q.h)}</div>`:`<div class="r-q"><div class="r-qt">${esc(q.q)}</div>${q.score?`<div class="r-score">${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-rscore="${n}" class="${+rGet(rec,q.k)===n?'on':''}">${n}</button>`).join('')}</div>`:`<textarea data-rk="${q.k}" rows="2" aria-label="${esc(q.q)}" placeholder="Мой ответ…">${esc(String(rGet(rec,q.k)))}</textarea>`}</div>`).join('')}
       <div class="r-foot"><span class="r-hint">${isW?'Афина задаёт эти вопросы по воскресеньям в итогах недели; можно ответить и здесь.':'Афина задаёт эти вопросы в последний день месяца; можно ответить и здесь.'}</span><button class="btn-primary" id="rSave">Сохранить</button></div></section>${chart}`;
   el.querySelectorAll('[data-mach]').forEach(b=>b.onclick=()=>{aMode='month';aOff=rOff;view='achieve';renderView();window.scrollTo(0,0);});
   const evIn=document.getElementById('evNew');
@@ -2183,16 +2251,15 @@ function renderReflect(){
   document.getElementById('rPrev').onclick=()=>{rOff--;renderReflect();};
   document.getElementById('rNext').onclick=()=>{rOff++;renderReflect();};
   el.querySelectorAll('[data-rmode]').forEach(b=>b.onclick=()=>openReflect(b.dataset.rmode));
-  el.querySelectorAll('[data-rscore]').forEach(b=>b.onclick=()=>{el.querySelectorAll('[data-rscore]').forEach(x=>x.classList.toggle('on',x===b));});
-  el.querySelectorAll('textarea').forEach(t=>{const fit=()=>{t.style.height='auto';t.style.height=t.scrollHeight+2+'px';};fit();t.oninput=fit;});
-  document.getElementById('rSave').onclick=async()=>{
-    const ans={...((rec&&rec.answers)||{})};el.querySelectorAll('textarea[data-rk]').forEach(t=>{const v=t.value.trim();if(v)ans[t.dataset.rk]=v;else delete ans[t.dataset.rk];});
-    let r;
-    if(isW){const sc=el.querySelector('[data-rscore].on'),to=ans.to_ten||null;delete ans.to_ten;
-      r=await sb.from('weekly_reviews').upsert({week:key,resource:sc?+sc.dataset.rscore:null,to_ten:to,answers:ans},{onConflict:'week'});}
-    else r=await sb.from('monthly_reviews').upsert({month:key,answers:ans,updated_at:new Date().toISOString()},{onConflict:'month'});
-    if(r.error)return toast('Не сохранилось: '+r.error.message);
-    toast('Сохранила 🪞');loadReflect();};
+  const draft=rDraft(rMode,key);
+  el.querySelectorAll('[data-rscore]').forEach(b=>b.onclick=()=>{el.querySelectorAll('[data-rscore]').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',String(x===b));});rRemember('resource',+b.dataset.rscore);});
+  el.querySelectorAll('textarea').forEach(t=>{const fit=()=>{t.style.height='auto';t.style.height=t.scrollHeight+2+'px';};fit();t.oninput=()=>{fit();rRemember(t.dataset.rk,t.value);};});
+  el.querySelectorAll('[data-rlength]').forEach(b=>b.onclick=()=>{rLength=b.dataset.rlength;localStorage.setItem('kanban.rlength',rLength);rApplyLength();});
+  const save=async()=>{const ok=await rSaveDraft(draft);if(ok)toast('Все ответы сохранены');};
+  document.getElementById('rSave').onclick=save;document.getElementById('rSaveNow').onclick=save;
+  rApplyLength();rSaveStatus(draft);
+  if(Object.keys(draft.changes).length&&!draft.saving){clearTimeout(draft.timer);draft.timer=setTimeout(()=>rSaveDraft(draft),900);}
+
 }
 /* качества и навыки месяца */
 let GR=[], BL=[], grMonth=0, grAuto=true;
@@ -2267,6 +2334,102 @@ const t=prompt('Название:',x.text);if(t===null||!t.trim())return;const n
   if(cr)cr.onclick=async()=>{const prev=GR.filter(x=>x.month===grMonthStart(grMonth-1)&&!x.done_at);const r=await sb.from('growth').insert(prev.map((x,i)=>({month:m,kind:x.kind,text:x.text,note:x.note,sort:i,author:x.author,pages_total:x.pages_total,pages_read:x.pages_read||0})));if(r.error)return toast('Ошибка: '+r.error.message);loadGrowth();};
 }
 
+/* Navigation and device preferences. No change to the board's data model. */
+function goView(next){view=next;sPrevView=null;localStorage.setItem('kanban.view2',view);document.getElementById('moreSheet').close();renderView();}
+function syncUsabilityNav(){
+  document.getElementById('app').dataset.view=view;
+  document.querySelectorAll('[data-mobile-view]').forEach(b=>{const on=b.dataset.mobileView===view;b.classList.toggle('on',on);if(on)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  const more=document.getElementById('mobileMore');if(['today','goals','habits'].includes(view))more.removeAttribute('aria-current');else more.setAttribute('aria-current','page');
+}
+function setupUsability(){
+  document.querySelectorAll('[data-mobile-view]').forEach(b=>b.onclick=()=>goView(b.dataset.mobileView));
+  const sheet=document.getElementById('moreSheet');document.getElementById('mobileMore').onclick=()=>sheet.showModal();document.getElementById('moreClose').onclick=()=>sheet.close();
+  sheet.onclick=e=>{if(e.target===sheet){const r=sheet.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)sheet.close();}};
+  document.querySelectorAll('[data-more-reflect]').forEach(b=>b.onclick=()=>{sheet.close();openReflect(b.dataset.moreReflect);});
+  document.getElementById('moreAddTask').onclick=()=>{sheet.close();openDialog(null);};
+  document.getElementById('moreName').onclick=()=>{sheet.close();document.getElementById('meBtn').click();};
+  const filter=()=>{sheet.close();const bar=document.querySelector('.toolbar'),on=bar.classList.toggle('filters-open');document.getElementById('mobileFilters').setAttribute('aria-expanded',String(on));if(on)document.getElementById('searchInput').focus();};
+  document.getElementById('mobileFilters').onclick=filter;document.getElementById('moreFilters').onclick=filter;
+  const bg=document.getElementById('calmBackground');const apply=()=>{const calm=localStorage.getItem('kanban.background')==='calm';document.documentElement.dataset.background=calm?'calm':'forest';bg.setAttribute('aria-pressed',String(calm));bg.textContent=calm?'Фон: спокойный · включить лес':'Фон: лес · включить спокойный';};bg.onclick=()=>{localStorage.setItem('kanban.background',localStorage.getItem('kanban.background')==='calm'?'forest':'calm');apply();};apply();
+  document.getElementById('triageUndoBtn').onclick=undoTriage;
+}
+
+/* Reschedule and archive deliberately; never delete a task in this review. */
+let triageLast=null;
+function triageHTML(tasks){return `<details class="td-overdue" id="overdueReview"><summary><span>Разобрать просроченное · ${tasks.length}</span><small>без спешки, по одному</small></summary><p class="triage-hint">Выбери новый срок, отложи без даты или убери неактуальное в архив.</p><div class="td-bulk"><button data-bulk="0">Все на сегодня</button><button data-bulk="1">Все на завтра</button></div>${tasks.map(t=>`<div class="triage-row" data-triage-row="${t.id}"><button class="triage-title" data-triage-open="${t.id}">${fire(t)}${esc(t.title)}</button><div class="triage-meta">${esc(projName(t.project_id)||'Без проекта')} · срок ${fmtDeadline(t.deadline).label}</div><div class="triage-actions"><button data-triage="today" data-id="${t.id}">Сегодня</button><button data-triage="tomorrow" data-id="${t.id}">Завтра</button><button data-triage="date" data-id="${t.id}">Выбрать дату</button><button data-triage="later" data-id="${t.id}">Без срока</button><button data-triage="archive" data-id="${t.id}">Неактуально</button></div><div class="triage-date" hidden><input type="date" aria-label="Новая дата задачи" value="${dayStr(1)}"><button class="g-btn" data-triage-date="${t.id}">Перенести</button></div></div>`).join('')}</details>`;}
+async function changeTriage(ids,upd,label){
+  const snapshots=ids.map(id=>{const t=D.tasks.find(x=>x.id===id);return t?{id,before:Object.fromEntries(Object.keys(upd).map(k=>[k,t[k]??null]))}:null;}).filter(Boolean);
+  const result=await sb.from('tasks').update({...upd,updated_at:new Date().toISOString()}).in('id',ids);
+  if(result.error){toast('Не сохранилось: '+result.error.message);return false;}
+  snapshots.forEach(s=>Object.assign(D.tasks.find(t=>t.id===s.id)||{},upd));triageLast=snapshots;
+  document.getElementById('triageUndoText').textContent=label;document.getElementById('triageUndo').hidden=false;
+  renderView();renderSide();const review=document.getElementById('overdueReview');if(review)review.open=true;return true;
+}
+async function undoTriage(){
+  if(!triageLast)return;const pending=triageLast;document.getElementById('triageUndoBtn').disabled=true;const failed=[];
+  for(const s of pending){const r=await sb.from('tasks').update({...s.before,updated_at:new Date().toISOString()}).eq('id',s.id);if(r.error)failed.push(s);else Object.assign(D.tasks.find(t=>t.id===s.id)||{},s.before);}
+  triageLast=failed.length?failed:null;document.getElementById('triageUndo').hidden=!failed.length;document.getElementById('triageUndoBtn').disabled=false;renderView();renderSide();toast(failed.length?'Не всё восстановлено. Можно повторить отмену.':'Изменение отменено');
+}
+function wireTriage(el,overdue){
+  el.querySelectorAll('[data-triage-open]').forEach(b=>b.onclick=()=>openDialog(b.dataset.triageOpen));
+  el.querySelectorAll('[data-triage]').forEach(b=>b.onclick=async()=>{const id=b.dataset.id,a=b.dataset.triage;
+    if(a==='date'){const box=b.closest('.triage-row').querySelector('.triage-date');box.hidden=!box.hidden;if(!box.hidden)box.querySelector('input').focus();return;}
+    if(a==='archive'){const t=D.tasks.find(x=>x.id===id);if(!confirm(`Убрать «${t.title}» в архив? Задачу можно будет вернуть.`))return;}
+    const upd=a==='archive'?{archived:true}:a==='later'?{deadline:null,status:'backlog',priority:(D.tasks.find(t=>t.id===id)||{}).priority==='urgent'?'high':(D.tasks.find(t=>t.id===id)||{}).priority||'medium'}:{deadline:dayStr(a==='today'?0:1)};
+    b.disabled=true;await changeTriage([id],upd,a==='archive'?'Задача в архиве':a==='later'?'Задача отложена без срока':'Срок задачи изменён');if(b.isConnected)b.disabled=false;
+  });
+  el.querySelectorAll('[data-triage-date]').forEach(b=>b.onclick=async()=>{const i=b.parentElement.querySelector('input');if(!i.value||!i.checkValidity())return i.reportValidity();b.disabled=true;await changeTriage([b.dataset.triageDate],{deadline:i.value},'Дата задачи изменена');if(b.isConnected)b.disabled=false;});
+  el.querySelectorAll('[data-bulk]').forEach(b=>b.onclick=()=>{if(confirm(`Перенести все просроченные задачи (${overdue.length}) ${b.dataset.bulk==='0'?'на сегодня':'на завтра'}?`))changeTriage(overdue.map(t=>t.id),{deadline:dayStr(+b.dataset.bulk)},'Сроки просроченных задач изменены');});
+}
+
+/* Large mobile checkboxes; full weekly history remains available. */
+let hDisplay=localStorage.getItem('kanban.hdisplay')||'day', hDayOffset=0;
+function habitDayHTML(){
+  const date=dayStr(hDayOffset), d=new Date(date+'T00:00:00'), future=hDayOffset>0;
+  const group=(title,items)=>items.length?`<section class="h-day-group"><h3>${title}</h3>${items.map(h=>{const on=hOn(h.id,date);return `<div class="h-day-row"><button class="h-day-toggle ${on?'on':''}" data-h="${h.id}" data-d="${date}" aria-pressed="${on}" aria-label="${esc(h.name)}: ${on?'снять отметку':'отметить выполнение'}" ${future?'disabled':''}>${on?ICON.check:''}</button><div class="h-day-copy">${esc(h.name)}<small>${h.period_days===1?(on?'Сделано':'На этот день'):esc(hFreqLabel(h))+' · '+hCount(h)+' из '+h.target}</small></div><button class="h-day-remove h-del-day" data-hdel="${h.id}" aria-label="Убрать привычку ${esc(h.name)}">×</button></div>`;}).join('')}</section>`:'';
+  return `<div class="h-day-list"><div class="h-top h-day-top"><button class="h-nav" id="hDayPrev" aria-label="Предыдущий день">‹</button><strong>${hDayOffset===0?'Сегодня':d.toLocaleDateString('ru',{weekday:'long'})}<br><small>${d.toLocaleDateString('ru',{day:'numeric',month:'long'})}</small></strong><button class="h-nav" id="hDayNext" aria-label="Следующий день" ${hDayOffset>=0?'disabled':''}>›</button></div>${group('Каждый день',H.list.filter(h=>h.period_days===1))}${group('Регулярно',H.list.filter(h=>h.period_days!==1))}</div>`;
+}
+
+/* Reflection drafts are scoped to the signed-in account and the period.
+ * Save only changed fields, merging the latest server record before writing.
+ * A newer edit is never cleared by an older response. */
+let rUser='anonymous',rLength=localStorage.getItem('kanban.rlength')||'short';
+const rDrafts=new Map();
+function rSetUser(id){rDrafts.forEach(d=>clearTimeout(d.timer));rUser=id||'anonymous';rDrafts.clear();}
+function rDraftKey(mode,key){return 'kanban.reflection.v1:'+rUser+':'+mode+':'+key;}
+function rDraft(mode,key){const id=mode+':'+key;if(rDrafts.has(id))return rDrafts.get(id);let saved=null;try{saved=JSON.parse(localStorage.getItem(rDraftKey(mode,key))||'null');}catch(e){}const d={user:rUser,mode,key,changes:saved&&saved.changes||{},version:0,status:saved&&Object.keys(saved.changes||{}).length?'local':'idle',timer:null,saving:false,storageOK:true};rDrafts.set(id,d);return d;}
+function rPersist(d){try{const key='kanban.reflection.v1:'+d.user+':'+d.mode+':'+d.key;if(Object.keys(d.changes).length)localStorage.setItem(key,JSON.stringify({changes:d.changes}));else localStorage.removeItem(key);d.storageOK=true;}catch(e){d.storageOK=false;}}
+function rSaveStatus(d){if(view!=='reflect'||rMode!==d.mode||rKey()!==d.key)return;const e=document.getElementById('rSaveState');if(!e)return;const dirty=Object.keys(d.changes).length>0;e.textContent=d.status==='saving'?'Сохраняю…':d.status==='error'?(d.storageOK?'Не удалось сохранить в базе. Черновик на устройстве — нажми «Сохранить» для повтора.':'Не удалось сохранить. Оставь страницу открытой и нажми «Сохранить».'):dirty?(d.storageOK?'Черновик на устройстве · сохраняю автоматически':'Ожидает сохранения. Не закрывай страницу.') : d.status==='saved'?'Все ответы сохранены':'Ответы сохраняются автоматически';e.classList.toggle('error',d.status==='error'||!d.storageOK);}
+function rRemember(k,value){const d=rDraft(rMode,rKey());d.changes[k]=value;d.version++;d.status='local';rPersist(d);rSaveStatus(d);clearTimeout(d.timer);d.timer=setTimeout(()=>rSaveDraft(d),900);}
+async function rSaveDraft(d){
+  clearTimeout(d.timer);if(d.user!==rUser)return false;if(d.saving)return d.promise;if(!Object.keys(d.changes).length)return true;
+  const changes={...d.changes},revision=d.version;d.saving=true;d.status='saving';rSaveStatus(d);
+  d.promise=(async()=>{try{
+    const table=d.mode==='week'?'weekly_reviews':'monthly_reviews',col=d.mode==='week'?'week':'month';
+    const latest=await sb.from(table).select('*').eq(col,d.key).maybeSingle();if(latest.error)throw latest.error;
+    const old=latest.data||{},answers={...(old.answers||{})};const row={[col]:d.key,answers};
+    for(const [k,v] of Object.entries(changes)){if(d.mode==='week'&&(k==='resource'||k==='to_ten'))continue;const t=String(v).trim();if(t)answers[k]=t;else delete answers[k];}
+    if(d.mode==='week'){row.resource=Object.hasOwn(changes,'resource')?changes.resource:old.resource??null;row.to_ten=Object.hasOwn(changes,'to_ten')?String(changes.to_ten).trim()||null:old.to_ten??null;}
+    else row.updated_at=new Date().toISOString();
+    if(d.user!==rUser)throw new Error('Account changed');
+    const result=await sb.from(table).upsert(row,{onConflict:col});if(result.error)throw result.error;
+    let records=d.mode==='week'?RW:RM;const idx=records.findIndex(x=>x[col]===d.key);if(idx>=0)records[idx]={...old,...row};else records.push({...old,...row});
+    if(d.version===revision)d.changes={};else for(const [k,v] of Object.entries(changes)){if(d.changes[k]===v)delete d.changes[k];}
+    d.status='saved';rPersist(d);return true;
+  }catch(e){d.status='error';rPersist(d);return false;}finally{d.saving=false;rSaveStatus(d);if(Object.keys(d.changes).length&&d.status!=='error'){clearTimeout(d.timer);d.timer=setTimeout(()=>rSaveDraft(d),250);}}})();
+  return d.promise;
+}
+function rApplyLength(){
+  const short=new Set(rMode==='week'?['wins','not_done','resource','to_ten','top3']:['wins','joyful','best','lesson','focus']);
+  const el=document.getElementById('rview');el.querySelectorAll('.r-q').forEach(q=>{const input=q.querySelector('[data-rk],[data-rscore]');const k=input?.dataset.rk||(input?.dataset.rscore?'resource':'');q.hidden=rLength==='short'&&!short.has(k);});
+  el.querySelectorAll('.r-h:not(.r-h-out)').forEach(h=>{let n=h.nextElementSibling,visible=false;while(n&&!n.classList.contains('r-h')){if(n.classList.contains('r-q')&&!n.hidden)visible=true;n=n.nextElementSibling;}h.hidden=!visible;});
+  el.querySelectorAll('[data-rlength]').forEach(b=>{const on=b.dataset.rlength===rLength;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+}
+window.addEventListener('online',()=>rDrafts.forEach(d=>{if(Object.keys(d.changes).length)rSaveDraft(d);}));
+window.addEventListener('pagehide',()=>rDrafts.forEach(d=>{rPersist(d);if(Object.keys(d.changes).length)rSaveDraft(d);}));
+window.addEventListener('beforeunload',e=>{if([...rDrafts.values()].some(d=>!d.storageOK&&Object.keys(d.changes).length)){e.preventDefault();e.returnValue='';}});
+
+
 /* ---------- wiring ---------- */
 let sPrevView=null;
 document.getElementById('searchInput').oninput=e=>{filters.q=e.target.value.trim();
@@ -2277,7 +2440,8 @@ document.getElementById('sourceFilter').onchange=e=>{filters.source=e.target.val
 document.getElementById('prioFilter').onchange=e=>{filters.prio=e.target.value;renderBoard();};
 document.getElementById('archiveSwitch').onclick=function(){filters.archived=!filters.archived;this.classList.toggle('on',filters.archived);renderBoard();};
 document.getElementById('newTaskBtn').onclick=()=>openDialog(null);
-document.querySelectorAll('#viewToggle button').forEach(b=>b.onclick=()=>{view=b.dataset.view;sPrevView=null;localStorage.setItem('kanban.view2',view);renderView();});
+document.querySelectorAll('#viewToggle button').forEach(b=>b.onclick=()=>goView(b.dataset.view));
+setupUsability();
 document.getElementById('addProj').onclick=addProject;
 document.getElementById('addMember').onclick=addMember;
 document.getElementById('dlgSave').onclick=saveDialog;
@@ -2347,21 +2511,22 @@ function showLogin(){
   async function submit(){
     if(!em.value.trim()||!pw.value) return;
     err.style.display='none'; btn.disabled=true; btn.textContent='Вхожу…';
-    const {error}=await sb.auth.signInWithPassword({email:em.value.trim(),password:pw.value});
+    const {data,error}=await sb.auth.signInWithPassword({email:em.value.trim(),password:pw.value});
     btn.disabled=false; btn.textContent='Войти';
     if(error){ const net=error.name==='AuthRetryableFetchError'||!error.status||/fetch|network|load failed/i.test(error.message||'');
       err.textContent=net?'Нет связи с базой. Проверьте интернет или включите/выключите VPN':'Неверный email или пароль'; err.style.display='block'; pw.value=''; pw.focus(); }
-    else { startApp(); }
+    else { rSetUser(data?.user?.id);startApp(); }
   }
   btn.onclick=submit;
   em.addEventListener('keydown',e=>{if(e.key==='Enter')pw.focus();});
   pw.addEventListener('keydown',e=>{if(e.key==='Enter')submit();});
   em.focus();
 }
-async function logout(){ await sb.auth.signOut(); _started=false; location.reload(); }
+async function logout(){ rDrafts.forEach(rPersist);rSetUser(null);await sb.auth.signOut(); _started=false; location.reload(); }
 document.getElementById('logoutBtn').onclick=logout;
 (async function(){
   const { data:{ session } } = await sb.auth.getSession();
+  rSetUser(session?.user?.id);
   if(session) startApp(); else showLogin();
 })();
 </script>
