@@ -631,6 +631,7 @@ button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var
 .triage-row{padding:12px 16px;border-top:1px solid var(--border-soft)}.triage-title{font-size:14px;font-weight:600;text-align:left;line-height:1.4;overflow-wrap:anywhere}.triage-title:hover{color:var(--primary)}
 .triage-meta{font-size:12px;color:var(--muted);margin:3px 0 10px}.triage-actions{display:flex;flex-wrap:wrap;gap:6px}.triage-actions button{min-height:40px;border:1px solid var(--border);border-radius:10px;padding:7px 10px;background:var(--card);font-size:12px}.triage-actions button:hover{border-color:var(--primary);color:var(--primary)}
 .triage-date{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}.triage-date input{padding:8px;min-height:44px;color:var(--text);background:var(--card);border:1px solid var(--border);border-radius:10px}.triage-date[hidden]{display:none}
+.triage-actions .triage-done{background:var(--primary-soft);border-color:var(--primary);color:var(--primary);font-weight:700}.triage-date label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}.triage-date .g-btn{min-height:44px}#tview{overflow-anchor:none}
 .triage-undo{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:45;display:flex;align-items:center;gap:12px;max-width:calc(100% - 24px);padding:12px 16px;border-radius:14px;background:var(--text);color:var(--card);box-shadow:var(--shadow-lg);font-size:13px}.triage-undo button{font-weight:700;text-decoration:underline;min-height:40px;white-space:nowrap}.triage-undo[hidden]{display:none}
 .h-display-switch{display:none}.h-day-list{display:none}.h-week-table{overflow:auto}.h-week-table .h-days,.h-week-table .h-row{grid-template-columns:minmax(180px,1fr) repeat(7,40px);min-width:540px;gap:6px}.h-week-table .h-dot{width:40px;height:40px}.h-week-table .h-name{overflow-wrap:normal;word-break:normal}
 .h-day-top{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;gap:8px}.h-day-top strong{text-align:center;font-size:14px}.h-day-group{background:var(--card-2);border-radius:16px;overflow:hidden}.h-day-group h3{font-size:15px;padding:12px 14px;background:var(--primary-soft)}
@@ -1434,6 +1435,7 @@ async function editQuote(){
 }
 function renderToday(){
   const el=document.getElementById('tview'), today=dayStr(0), tomorrow=dayStr(1);
+  const position=captureTodayPosition(el);
   const vis=visible().filter(t=>!t.archived);
   const open=vis.filter(t=>t.status!=='done');
   const overdue=open.filter(t=>t.deadline&&t.deadline<today).sort((a,b)=>a.deadline<b.deadline?-1:1);
@@ -1464,6 +1466,7 @@ function renderToday(){
   el.querySelectorAll('[data-gfocus]').forEach(b=>b.onclick=()=>{view='goals';localStorage.setItem('kanban.view2',view);renderView();});
   el.querySelectorAll('.td-goal').forEach(g=>g.onclick=()=>{if(g.dataset.goal){view='goals';localStorage.setItem('kanban.view2',view);renderView();}else openDialog(g.dataset.id);});
   const add=document.getElementById('tdAdd'); if(add)add.onclick=()=>{openDialog(null);document.getElementById('fDeadline').value=dayStr(0);};
+  restoreTodayPosition(el,position);
 }
 let wWeek=0;
 function renderWeek(){
@@ -2355,15 +2358,35 @@ function setupUsability(){
 }
 
 /* Reschedule and archive deliberately; never delete a task in this review. */
-let triageLast=null;
-function triageHTML(tasks){return `<details class="td-overdue" id="overdueReview"><summary><span>Разобрать просроченное · ${tasks.length}</span><small>без спешки, по одному</small></summary><p class="triage-hint">Выбери новый срок, отложи без даты или убери неактуальное в архив.</p><div class="td-bulk"><button data-bulk="0">Все на сегодня</button><button data-bulk="1">Все на завтра</button></div>${tasks.map(t=>`<div class="triage-row" data-triage-row="${t.id}"><button class="triage-title" data-triage-open="${t.id}">${fire(t)}${esc(t.title)}</button><div class="triage-meta">${esc(projName(t.project_id)||'Без проекта')} · срок ${fmtDeadline(t.deadline).label}</div><div class="triage-actions"><button data-triage="today" data-id="${t.id}">Сегодня</button><button data-triage="tomorrow" data-id="${t.id}">Завтра</button><button data-triage="date" data-id="${t.id}">Выбрать дату</button><button data-triage="later" data-id="${t.id}">Без срока</button><button data-triage="archive" data-id="${t.id}">Неактуально</button></div><div class="triage-date" hidden><input type="date" aria-label="Новая дата задачи" value="${dayStr(1)}"><button class="g-btn" data-triage-date="${t.id}">Перенести</button></div></div>`).join('')}</details>`;}
-async function changeTriage(ids,upd,label){
+let triageLast=null,triageBusy=false;
+function triageDateLabel(value){return new Date(value+'T00:00:00').toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'}).replace(/\sг\.$/,'');}
+function captureTodayPosition(el){
+  const bounds=el.getBoundingClientRect();
+  const anchors=[...el.querySelectorAll('.triage-row,.td-sec,.td-focus,.td-ach,.td-quotes,.td-overdue')].filter(e=>{const r=e.getBoundingClientRect();return r.height&&r.bottom>bounds.top&&r.top<bounds.bottom;}).map(e=>({id:e.dataset.triageRow||null,cls:e.className,offset:e.getBoundingClientRect().top-bounds.top}));
+  return {scroll:el.scrollTop,open:!!el.querySelector('#overdueReview')?.open,quotes:!!el.querySelector('.td-quotes')?.open,anchors,dates:[...el.querySelectorAll('.triage-date:not([hidden])')].map(e=>({id:e.closest('.triage-row').dataset.triageRow,value:e.querySelector('input').value}))};
+}
+function restoreTodayPosition(el,state){
+  const review=el.querySelector('#overdueReview');if(review)review.open=state.open;
+  const quotes=el.querySelector('.td-quotes');if(quotes)quotes.open=state.quotes;
+  for(const d of state.dates){const row=[...el.querySelectorAll('.triage-row')].find(e=>e.dataset.triageRow===d.id);if(row){const box=row.querySelector('.triage-date');box.hidden=false;row.querySelector('[data-triage="date"]').setAttribute('aria-expanded','true');box.querySelector('input').value=d.value;box.querySelector('input').dispatchEvent(new Event('change'));}}
+  el.scrollTop=state.scroll;
+  if(review&&state.anchors.some(a=>a.id)&&!el.querySelector('.triage-row')){el.scrollTop+=review.getBoundingClientRect().top-el.getBoundingClientRect().top;return;}
+  // Prefer an individual surviving task over its much taller containing section.
+  const anchors=[...state.anchors.filter(a=>a.id),...state.anchors.filter(a=>!a.id)];
+  for(const a of anchors){const e=a.id?[...el.querySelectorAll('.triage-row')].find(e=>e.dataset.triageRow===a.id):[...el.children].find(e=>e.className===a.cls);if(e&&e.getBoundingClientRect().height){el.scrollTop+=e.getBoundingClientRect().top-el.getBoundingClientRect().top-a.offset;break;}}
+}
+function triageHTML(tasks){return `<details class="td-overdue" id="overdueReview"><summary><span>Разобрать просроченное · ${tasks.length}</span><small>без спешки, по одному</small></summary><p class="triage-hint">Перенос меняет срок задачи, проект остаётся прежним. «Без срока» отправляет задачу в бэклог на доске и в списке.</p><div class="td-bulk"><button data-bulk="0">Все на сегодня · ${esc(triageDateLabel(dayStr(0)))}</button><button data-bulk="1">Все на завтра · ${esc(triageDateLabel(dayStr(1)))}</button></div>${tasks.map(t=>`<div class="triage-row" data-triage-row="${t.id}"><button class="triage-title" data-triage-open="${t.id}">${fire(t)}${esc(t.title)}</button><div class="triage-meta">${esc(projName(t.project_id)||'Без проекта')} · срок ${fmtDeadline(t.deadline).label}</div><div class="triage-actions"><button class="triage-done" data-triage="done" data-id="${t.id}">✓ Выполнено</button><button data-triage="today" data-id="${t.id}">На сегодня · ${esc(triageDateLabel(dayStr(0)))}</button><button data-triage="tomorrow" data-id="${t.id}">На завтра · ${esc(triageDateLabel(dayStr(1)))}</button><button data-triage="date" data-id="${t.id}" aria-expanded="false">Выбрать дату…</button><button data-triage="later" data-id="${t.id}">Без срока → бэклог</button><button data-triage="archive" data-id="${t.id}">Неактуально</button></div><div class="triage-date" hidden><label>Новый срок<input type="date" aria-label="Новая дата задачи" value="${dayStr(1)}"></label><button class="g-btn" data-triage-date="${t.id}">Перенести на ${esc(triageDateLabel(dayStr(1)))}</button></div></div>`).join('')}</details>`;}
+function setTriageBusy(on){triageBusy=on;document.querySelectorAll('[data-triage],[data-triage-date],[data-bulk],#triageUndoBtn').forEach(b=>b.disabled=on);}
+async function changeTriage(ids,upd,label,allowUndo=true){
+  if(triageBusy)return false;setTriageBusy(true);
+  try{
   const snapshots=ids.map(id=>{const t=D.tasks.find(x=>x.id===id);return t?{id,before:Object.fromEntries(Object.keys(upd).map(k=>[k,t[k]??null]))}:null;}).filter(Boolean);
   const result=await sb.from('tasks').update({...upd,updated_at:new Date().toISOString()}).in('id',ids);
   if(result.error){toast('Не сохранилось: '+result.error.message);return false;}
-  snapshots.forEach(s=>Object.assign(D.tasks.find(t=>t.id===s.id)||{},upd));triageLast=snapshots;
-  document.getElementById('triageUndoText').textContent=label;document.getElementById('triageUndo').hidden=false;
-  renderView();renderSide();const review=document.getElementById('overdueReview');if(review)review.open=true;return true;
+  snapshots.forEach(s=>Object.assign(D.tasks.find(t=>t.id===s.id)||{},upd));triageLast=allowUndo?snapshots:null;
+  document.getElementById('triageUndoText').textContent=label;document.getElementById('triageUndo').hidden=!allowUndo;
+  renderView();renderSide();if(upd.status==='done')await loadAll();toast(label);return true;
+  }finally{setTriageBusy(false);}
 }
 async function undoTriage(){
   if(!triageLast)return;const pending=triageLast;document.getElementById('triageUndoBtn').disabled=true;const failed=[];
@@ -2373,13 +2396,15 @@ async function undoTriage(){
 function wireTriage(el,overdue){
   el.querySelectorAll('[data-triage-open]').forEach(b=>b.onclick=()=>openDialog(b.dataset.triageOpen));
   el.querySelectorAll('[data-triage]').forEach(b=>b.onclick=async()=>{const id=b.dataset.id,a=b.dataset.triage;
-    if(a==='date'){const box=b.closest('.triage-row').querySelector('.triage-date');box.hidden=!box.hidden;if(!box.hidden)box.querySelector('input').focus();return;}
+    if(a==='date'){const box=b.closest('.triage-row').querySelector('.triage-date');box.hidden=!box.hidden;b.setAttribute('aria-expanded',String(!box.hidden));if(!box.hidden)box.querySelector('input').focus({preventScroll:true});return;}
+    if(a==='done'){await changeTriage([id],{status:'done'},'Задача выполнена',false);return;}
     if(a==='archive'){const t=D.tasks.find(x=>x.id===id);if(!confirm(`Убрать «${t.title}» в архив? Задачу можно будет вернуть.`))return;}
     const upd=a==='archive'?{archived:true}:a==='later'?{deadline:null,status:'backlog',priority:(D.tasks.find(t=>t.id===id)||{}).priority==='urgent'?'high':(D.tasks.find(t=>t.id===id)||{}).priority||'medium'}:{deadline:dayStr(a==='today'?0:1)};
-    b.disabled=true;await changeTriage([id],upd,a==='archive'?'Задача в архиве':a==='later'?'Задача отложена без срока':'Срок задачи изменён');if(b.isConnected)b.disabled=false;
+    await changeTriage([id],upd,a==='archive'?'Задача в архиве':a==='later'?'Без срока: задача в бэклоге на доске и в списке':'Новый срок: '+triageDateLabel(upd.deadline)+'. Проект прежний.');
   });
-  el.querySelectorAll('[data-triage-date]').forEach(b=>b.onclick=async()=>{const i=b.parentElement.querySelector('input');if(!i.value||!i.checkValidity())return i.reportValidity();b.disabled=true;await changeTriage([b.dataset.triageDate],{deadline:i.value},'Дата задачи изменена');if(b.isConnected)b.disabled=false;});
+  el.querySelectorAll('[data-triage-date]').forEach(b=>{const i=b.parentElement.querySelector('input');i.onchange=()=>{b.textContent=i.value?'Перенести на '+triageDateLabel(i.value):'Сначала выбери дату';b.disabled=triageBusy||!i.value;};b.onclick=async()=>{if(!i.value||!i.checkValidity())return i.reportValidity();await changeTriage([b.dataset.triageDate],{deadline:i.value},'Новый срок: '+triageDateLabel(i.value)+'. Проект прежний.');};});
   el.querySelectorAll('[data-bulk]').forEach(b=>b.onclick=()=>{if(confirm(`Перенести все просроченные задачи (${overdue.length}) ${b.dataset.bulk==='0'?'на сегодня':'на завтра'}?`))changeTriage(overdue.map(t=>t.id),{deadline:dayStr(+b.dataset.bulk)},'Сроки просроченных задач изменены');});
+  if(triageBusy)setTriageBusy(true);
 }
 
 /* Large mobile checkboxes; full weekly history remains available. */
