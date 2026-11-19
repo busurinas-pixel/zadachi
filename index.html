@@ -651,6 +651,22 @@ html[data-background=calm] body,html[data-background=calm]:not([data-theme=dark]
  .r-savebar{gap:6px}.r-length{flex:1}.r-save-state{flex-basis:100%;order:2}.r-score button{width:40px;height:44px}.r-mob{display:none}
 }
 
+/* ATHENA_CSS_START */
+/* Athena: persistent, account-scoped briefing player. */
+.athena-panel{--ap:#ac4668;--at:#49373e;--am:#927b84;--ab:#eedee3;position:fixed;right:20px;top:150px;bottom:20px;width:370px;box-sizing:border-box;border:1px solid #ffffffc9;border-radius:22px;background:#fffafbf5;box-shadow:0 20px 60px #36212832;backdrop-filter:blur(20px);color:var(--at);font:14px/1.55 'Segoe UI',sans-serif;display:flex;flex-direction:column;overflow:hidden;z-index:20}
+.athena-panel[hidden],.athena-launcher[hidden]{display:none!important}.athena-panel *{box-sizing:border-box}.athena-panel button,.athena-panel select{font:inherit}.athena-panel button{cursor:pointer}.athena-panel button:focus-visible,.athena-panel select:focus-visible,.athena-panel input:focus-visible,.athena-launcher:focus-visible{outline:3px solid #b96a92;outline-offset:3px}.athena-panel button:hover:not(:disabled){filter:brightness(.94)}.athena-panel button:disabled{opacity:.5;cursor:wait}
+.athena-head{display:flex;align-items:center;gap:12px;padding:14px 19px;border-bottom:1px solid var(--ab);flex-shrink:0}.athena-avatar{width:38px;height:38px;flex-shrink:0;border-radius:13px;background:linear-gradient(145deg,#f4dce6,#e9d3ed);display:grid;place-items:center;color:#9c4769;font:23px Georgia,serif}.athena-name{font-size:19px;font-weight:650;letter-spacing:-.4px}.athena-sub{font-size:11px;color:var(--am)}.athena-min{margin-left:auto;border:0;background:transparent;color:var(--am);width:38px;height:38px;border-radius:9px;font-size:25px!important}
+.athena-content{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;min-height:0;padding:0 19px 18px}.athena-stage{position:relative;height:222px;margin:0 -19px 14px;overflow:hidden;background:radial-gradient(ellipse at 50% 38%,#463329 0%,#251e26 48%,#191b24 100%);border-bottom:1px solid #ca9a5140}.athena-stage canvas{width:100%;height:100%;display:block}.athena-stage:after{content:'';position:absolute;inset:0;background:linear-gradient(transparent 65%,#201c27);pointer-events:none}.athena-caption{position:absolute;left:0;right:0;bottom:13px;text-align:center;z-index:1;color:#f5d99e;font-size:12px;letter-spacing:.4px}.athena-caption small{display:block;color:#c1a991;font-size:10px;letter-spacing:1.2px;margin-top:3px}
+.athena-label{display:block;font-size:11px;color:var(--am);margin:10px 0 5px}.athena-select{width:100%;min-height:40px;border:1px solid var(--ab);border-radius:10px;padding:6px 8px;background:#fffafc;color:var(--at);font-size:12px!important}.athena-date{font-size:11px;color:var(--am);margin:7px 0 12px}
+.athena-player{background:linear-gradient(135deg,#f8eaf0,#f5edf7);border:1px solid #efdce6;border-radius:15px;padding:13px}.athena-playrow{display:flex;align-items:center;gap:12px}.athena-play{border:0;border-radius:50%;width:46px;height:46px;flex-shrink:0;background:var(--ap);color:white;display:grid;place-items:center;box-shadow:0 5px 13px #ac46682b}.athena-play svg{width:17px;height:20px}.athena-track{min-width:0;flex:1}.athena-seek{width:100%;accent-color:#ac4668;cursor:pointer;min-height:28px;margin:0;display:block}.athena-times{display:flex;justify-content:space-between;font-size:10px;color:var(--am);font-variant-numeric:tabular-nums}.athena-controls{display:flex;align-items:center;justify-content:space-between;margin-top:10px;border-top:1px solid #e9d9e4;padding-top:7px;color:#866b78;font-size:12px}.athena-controls button{min-height:36px;border:0;background:transparent;color:inherit;padding:3px 7px;border-radius:7px}.athena-controls select{background:#fff8;color:var(--at);border:1px solid #ead9e3;border-radius:7px;min-height:36px;font-size:12px}
+.athena-transcript{font-size:14px;margin:18px 0 10px}.athena-text{border-left:3px solid #b55879;background:#f8edf2;border-radius:0 12px 12px 0;padding:12px 13px;font-size:12px;line-height:1.75;white-space:pre-wrap;overflow-wrap:anywhere}.athena-kicker{font-size:10px;letter-spacing:1.1px;color:var(--am);font-weight:700;margin:16px 0 8px}.athena-task{width:100%;border:1px solid var(--ab);background:#fffdfd;border-radius:12px;display:flex;align-items:center;text-align:left;gap:9px;padding:10px;margin:7px 0;color:var(--at);font-size:12px!important;line-height:1.45!important}.athena-num{width:24px;height:24px;background:#f7eaf0;border-radius:8px;display:grid;place-items:center;color:var(--ap);flex-shrink:0;font-size:11px}.athena-arrow{margin-left:auto;color:#b58d9c;font-size:18px}.athena-task-title{overflow-wrap:anywhere}.athena-footer{margin-top:auto;padding:10px 19px;border-top:1px solid var(--ab);font-size:10px;color:var(--am);display:flex;justify-content:space-between;gap:8px;flex-shrink:0}.athena-footer button{border:0;background:transparent;color:var(--ap);min-height:30px;font-size:11px}.athena-status{font-size:12px;color:var(--am);margin:10px 0;white-space:pre-wrap}.athena-status.error{color:#b03959}.athena-launcher{position:fixed;right:22px;bottom:22px;z-index:22;min-height:48px;padding:10px 18px;background:var(--card);color:var(--primary);border:1px solid var(--border);border-radius:24px;box-shadow:var(--shadow-lg);cursor:pointer;font:600 14px 'Segoe UI',sans-serif}
+[data-theme=dark] .athena-panel{--ap:#db93b2;--at:#f1e3ea;--am:#b99eac;--ab:#624958;background:#30252ff5;border-color:#6a4a5c}[data-theme=dark] .athena-player{background:linear-gradient(135deg,#4a303f,#3c3049);border-color:#664658}[data-theme=dark] .athena-text{background:#49303e}[data-theme=dark] .athena-task{background:#382b35}[data-theme=dark] .athena-select{background:#382b35}[data-theme=dark] .athena-avatar{background:linear-gradient(145deg,#694056,#51405e);color:#f3d8e6}[data-theme=dark] .athena-controls{color:#d0b6c4}[data-theme=dark] .athena-controls select{background:#4a3542}
+@media(min-width:1180px){body.athena-open main.board>:not(.toolbar){width:calc(100% - 400px);max-width:calc(100% - 400px)}body.athena-open main.board>.tview{max-width:min(820px,calc(100% - 400px))}}
+@media(max-width:1179px){.athena-panel{top:88px!important;bottom:84px;right:14px;width:min(390px,calc(100% - 28px));box-shadow:0 16px 60px #21121b60}.athena-launcher{bottom:82px;right:14px}.athena-stage{height:180px}}
+@media(max-height:760px){.athena-stage{height:155px}}
+
+/* ATHENA_CSS_END */
+
 </style>
 </head>
 <body>
@@ -1084,6 +1100,8 @@ function cardHTML(t){
 let view=localStorage.getItem('kanban.view2')||'today';
 let closedSecs=JSON.parse(localStorage.getItem('kanban.closed')||'["done"]');
 function renderView(){
+  athenaLayout();
+  athenaTasks();
   syncUsabilityNav();
   document.querySelectorAll('#viewToggle button').forEach(b=>b.classList.toggle('on',b.dataset.view===view));
   document.getElementById('columns').style.display=view==='board'?'':'none';
@@ -2455,6 +2473,141 @@ window.addEventListener('pagehide',()=>rDrafts.forEach(d=>{rPersist(d);if(Object
 window.addEventListener('beforeunload',e=>{if([...rDrafts.values()].some(d=>!d.storageOK&&Object.keys(d.changes).length)){e.preventDefault();e.returnValue='';}});
 
 
+/* ATHENA_JS_START */
+/* ---------- Athena: private briefing audio, survives all task renders ---------- */
+let athena=null;
+const ATHENA_PLAY='<svg viewBox="0 0 18 20" fill="currentColor" aria-hidden="true"><path d="M3 1L17 10 3 19z"/></svg>';
+const ATHENA_PAUSE='<svg viewBox="0 0 18 20" fill="currentColor" aria-hidden="true"><rect x="2" y="2" width="5" height="16" rx="1"/><rect x="11" y="2" width="5" height="16" rx="1"/></svg>';
+function athenaTime(n){if(!Number.isFinite(n))return '0:00';return Math.floor(n/60)+':'+String(Math.floor(n%60)).padStart(2,'0');}
+function athenaLayout(){
+  if(!athena)return;
+  const a=athena,open=!a.panel.hidden;
+  document.body.classList.toggle('athena-open',open);
+  a.launcher.hidden=open;
+  a.launcher.textContent=a.audio.paused?'✧ Афина':'✧ Афина · слушаю';
+  const bar=document.getElementById('mainToolbar');
+  a.panel.style.top=Math.max(90,(bar?.getBoundingClientRect().bottom||130)+12)+'px';
+  a.panel.querySelector('.athena-min').setAttribute('aria-expanded',String(open));
+  if(open)athenaDraw();
+}
+function athenaProgressKey(a){return 'kanban.athena.position:'+a.user+':'+a.current.audio_path;}
+function athenaRemember(){const a=athena;if(a?.current&&a.audio.currentTime>0)try{localStorage.setItem(athenaProgressKey(a),String(a.audio.currentTime));}catch(e){}}
+function athenaState(label){if(!athena)return;athena.panel.querySelector('.athena-caption span').textContent=label;}
+function athenaStatus(message,error=false){if(!athena)return;const e=athena.panel.querySelector('.athena-status');e.textContent=message;e.classList.toggle('error',error);}
+function athenaTasks(){
+  const a=athena;if(!a)return;
+  const box=a.panel.querySelector('.athena-tasks');box.replaceChildren();
+  const tasks=(a.current?.task_ids||[]).map(id=>D.tasks.find(t=>t.id===id)).filter(Boolean);
+  if(!tasks.length)return;
+  const title=document.createElement('div');title.className='athena-kicker';title.textContent='ЗАДАЧИ ИЗ СВОДКИ';box.append(title);
+  tasks.forEach((task,i)=>{const b=document.createElement('button');b.className='athena-task';b.innerHTML='<span class="athena-num"></span><span class="athena-task-title"></span><span class="athena-arrow">↗</span>';b.querySelector('.athena-num').textContent=task.status==='done'?'✓':i+1;b.querySelector('.athena-task-title').textContent=task.title;b.onclick=()=>{if(D.tasks.some(t=>t.id===task.id))openDialog(task.id);else toast('Задача больше не доступна');};box.append(b);});
+}
+function athenaSelect(id){
+  const a=athena,entry=a.entries.find(e=>e.id===id);if(!entry)return;
+  if(a.current?.audio_path===entry.audio_path){a.current=entry;athenaTasks();return;}
+  athenaRemember();a.audio.pause();a.token++;a.audio.removeAttribute('src');a.audio.load();
+  if(a.blobURL)URL.revokeObjectURL(a.blobURL);a.blobURL=null;a.loaded=null;a.current=entry;
+  a.panel.querySelector('.athena-select').value=entry.id;
+  a.panel.querySelector('.athena-text').textContent=entry.text;
+  a.panel.querySelector('.athena-date').textContent=new Date(entry.day+'T12:00:00').toLocaleDateString('ru',{day:'numeric',month:'long',year:'numeric'})+' · '+entry.title;
+  a.panel.querySelector('.athena-caption small').textContent=entry.title.toLocaleUpperCase('ru');
+  a.panel.querySelector('.athena-play').disabled=false;a.panel.querySelector('.athena-seek').value=0;
+  a.panel.querySelector('.athena-now').textContent='0:00';a.panel.querySelector('.athena-duration').textContent='—';
+  athenaState('Готова к прослушиванию');athenaStatus('');athenaTasks();athenaDraw();
+}
+async function athenaRefresh(){
+  const a=athena;if(!a||a.refreshing)return;a.refreshing=true;
+  try{
+    const {data,error}=await sb.storage.from(BUCKET).download('athena/'+a.user+'/index.json');
+    if(athena!==a)return;
+    if(error){if(String(error.statusCode||error.status)==='404'){if(!a.current)athenaStatus('Свежая сводка появится здесь после её подготовки Афиной.');return;}throw error;}
+    const manifest=JSON.parse(await data.text());if(athena!==a)return;
+    if(manifest.version!==1||!Array.isArray(manifest.entries))throw new Error('format');
+    const prefix='athena/'+a.user+'/';
+    const entries=manifest.entries.filter(e=>e&&typeof e.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(e.day)&&typeof e.text==='string'&&e.text.length<=50000&&typeof e.audio_path==='string'&&e.audio_path.startsWith(prefix)&&!e.audio_path.includes('..')).slice(0,60);
+    a.entries=entries;
+    const sel=a.panel.querySelector('.athena-select');sel.replaceChildren();
+    entries.forEach(e=>{const option=document.createElement('option');option.value=e.id;option.textContent=e.day.split('-').reverse().join('.')+' · '+e.title;sel.append(option);});
+    if(!entries.length){athenaStatus('Пока нет записей сводки.');return;}
+    const current=entries.find(e=>e.id===a.current?.id);
+    if(!a.current)athenaSelect(entries[0].id);
+    else if(current){sel.value=current.id;if(a.audio.paused)athenaSelect(current.id);}
+    else{const option=new Option(a.current.day+' · '+a.current.title,a.current.id);sel.add(option);sel.value=a.current.id;}
+    if(a.current?.id!==entries[0].id)athenaStatus('В списке доступна более свежая сводка.');else athenaStatus('');
+  }catch(e){if(athena===a)athenaStatus('Не удалось обновить сводку. Нажми «Обновить».',true);}
+  finally{a.refreshing=false;}
+}
+async function athenaPlay(){
+  const a=athena;if(!a?.current||a.busy)return;
+  if(!a.audio.paused){a.audio.pause();return;}
+  a.busy=true;const token=a.token,entry=a.current,button=a.panel.querySelector('.athena-play');button.disabled=true;
+  try{
+    // Create/resume in the click gesture, before the authenticated download.
+    try{if(!a.context){const AC=window.AudioContext||window.webkitAudioContext;if(AC){a.context=new AC();a.analyser=a.context.createAnalyser();a.analyser.fftSize=256;a.source=a.context.createMediaElementSource(a.audio);a.source.connect(a.analyser);a.analyser.connect(a.context.destination);a.samples=new Uint8Array(a.analyser.fftSize);}}if(a.context?.state==='suspended')await a.context.resume();}catch(e){if(!a.samples)a.analyser=null;/* Audio remains usable without reactive analysis. */}
+    if(a.loaded!==entry.audio_path){
+      athenaState('Загружаю голос…');
+      const {data,error}=await sb.storage.from(BUCKET).download(entry.audio_path);
+      if(athena!==a||a.token!==token)return;
+      if(error||!data?.size)throw new Error('audio');
+      if(a.blobURL)URL.revokeObjectURL(a.blobURL);a.blobURL=URL.createObjectURL(data);a.audio.src=a.blobURL;a.loaded=entry.audio_path;
+      a.audio.onloadedmetadata=()=>{if(athena!==a||a.token!==token)return;let pos=0;try{pos=Number(localStorage.getItem(athenaProgressKey(a)))||0;}catch(e){}if(pos>0&&pos<a.audio.duration-2)a.audio.currentTime=pos;athenaUpdateTime();};
+    }
+    a.audio.playbackRate=Number(a.panel.querySelector('.athena-speed').value);
+    await a.audio.play();if(athena===a)athenaStatus('');
+  }catch(e){if(athena===a&&a.token===token){athenaState('Не удалось включить запись');athenaStatus('Нажми ▶ ещё раз. Если ошибка повторится, обнови сводку.',true);a.loaded=null;}}
+  finally{a.busy=false;if(athena===a)button.disabled=false;}
+}
+function athenaUpdateTime(){const a=athena;if(!a)return;const duration=a.audio.duration;a.panel.querySelector('.athena-now').textContent=athenaTime(a.audio.currentTime);a.panel.querySelector('.athena-duration').textContent=Number.isFinite(duration)?athenaTime(duration):'—';a.panel.querySelector('.athena-seek').value=duration?a.audio.currentTime/duration*100:0;if(Math.floor(a.audio.currentTime)%2===0)athenaRemember();}
+function athenaDraw(){
+  const a=athena;if(!a)return;cancelAnimationFrame(a.frame);a.frame=0;
+  if(a.panel.hidden||document.hidden)return;
+  const ctx=a.canvas.getContext('2d'),w=740,h=444,cx=370,cy=188;
+  const active=!a.audio.paused&&!a.audio.ended&&a.audio.readyState>=3;
+  const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  let energy=0;if(active&&a.analyser){a.analyser.getByteTimeDomainData(a.samples);for(const v of a.samples)energy+=((v-128)/128)**2;energy=Math.min(1,Math.sqrt(energy/a.samples.length)*4);}
+  const t=reduced?1.6:performance.now()/1000*.65,r=128*(1+energy*.12);
+  ctx.clearRect(0,0,w,h);let glow=ctx.createRadialGradient(cx,cy,0,cx,cy,205);glow.addColorStop(0,`rgba(255,211,134,${.07+energy*.12})`);glow.addColorStop(.6,'#df9c3610');glow.addColorStop(1,'#dda04300');ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
+  const project=(x,y,z)=>{const angle=t*.13,xx=x*Math.cos(angle)+z*Math.sin(angle),zz=-x*Math.sin(angle)+z*Math.cos(angle),b=-.27;return[cx+xx*r,cy+(y*Math.cos(b)-zz*Math.sin(b))*r,y*Math.sin(b)+zz*Math.cos(b)];};
+  ctx.globalCompositeOperation='lighter';
+  for(let lat=1;lat<13;lat++){const phi=Math.PI*lat/13;ctx.beginPath();for(let j=0;j<=80;j++){const th=j/80*Math.PI*2,p=project(Math.sin(phi)*Math.cos(th),Math.cos(phi),Math.sin(phi)*Math.sin(th));j?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);}ctx.strokeStyle='#edb95635';ctx.lineWidth=.8;ctx.stroke();}
+  for(let lon=0;lon<18;lon++){const th=lon/18*Math.PI*2;ctx.beginPath();for(let j=0;j<=45;j++){const phi=j/45*Math.PI,p=project(Math.sin(phi)*Math.cos(th),Math.cos(phi),Math.sin(phi)*Math.sin(th));j?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]);}ctx.strokeStyle='#f6bd5128';ctx.lineWidth=.7;ctx.stroke();}
+  for(let i=0;i<650;i++){const yy=1-2*(i+.5)/650,phi=i*2.399963229728653,rr=Math.sqrt(1-yy*yy),p=project(rr*Math.cos(phi),yy,rr*Math.sin(phi));ctx.fillStyle=`rgba(255,${190+Math.floor(40*Math.sin(i))},114,${.23+.65*(p[2]+1)/2})`;ctx.beginPath();ctx.arc(p[0],p[1],p[2]>.55?1.8:1,0,Math.PI*2);ctx.fill();}
+  for(let k=0;k<4;k++){ctx.save();ctx.translate(cx,cy);ctx.rotate([-.44,.65,-.9,.1][k]+t*(k%2?-.07:.06));ctx.scale(1,[.42,.7,.87,.96][k]);ctx.beginPath();ctx.arc(0,0,r+12+k*5,0,Math.PI*2);ctx.strokeStyle=['#f9cd7777','#efaf5a55','#ffd99855','#dba45630'][k];ctx.lineWidth=1.1;ctx.stroke();ctx.beginPath();ctx.arc(0,0,r+13+k*5,t*.5+k,t*.5+k+.75);ctx.strokeStyle='#ffe5a5cc';ctx.lineWidth=2+energy*2;ctx.shadowColor='#ffc768';ctx.shadowBlur=10+energy*14;ctx.stroke();ctx.restore();}
+  ctx.globalCompositeOperation='source-over';
+  if(active&&!reduced)a.frame=requestAnimationFrame(athenaDraw);
+}
+function athenaDestroy(){const a=athena;if(!a)return;athenaRemember();a.token++;a.audio.pause();a.audio.removeAttribute('src');a.audio.load();cancelAnimationFrame(a.frame);clearInterval(a.poll);if(a.blobURL)URL.revokeObjectURL(a.blobURL);a.context?.close().catch(()=>{});a.observer.disconnect();window.removeEventListener('resize',athenaLayout);document.removeEventListener('visibilitychange',a.visible);window.removeEventListener('pagehide',athenaRemember);a.panel.remove();a.launcher.remove();document.body.classList.remove('athena-open');athena=null;}
+async function athenaInit(){
+  const {data}=await sb.auth.getUser(),user=data?.user?.id;if(!user)return;
+  if(athena?.user===user)return;if(athena)athenaDestroy();
+  const panel=document.createElement('aside');panel.className='athena-panel';panel.id='athenaPanel';panel.setAttribute('aria-label','Голосовая сводка Афины');
+  panel.innerHTML=`<div class="athena-head"><div class="athena-avatar">А</div><div><div class="athena-name">Афина</div><div class="athena-sub">Твой помощник в делах</div></div><button class="athena-min" aria-label="Свернуть Афину" title="Свернуть панель">−</button></div><div class="athena-content"><div class="athena-stage"><canvas width="740" height="444" aria-label="Золотая сфера реагирует на голос"></canvas><div class="athena-caption"><span>Готовлю сводку…</span><small>ТВОЙ ФОКУС НА СЕГОДНЯ</small></div></div><label class="athena-label" for="athenaArchive">Сводка и предыдущие записи</label><select class="athena-select" id="athenaArchive" aria-label="Выбрать сводку"></select><div class="athena-date"></div><div class="athena-player"><div class="athena-playrow"><button class="athena-play" disabled aria-label="Слушать Афину">${ATHENA_PLAY}</button><div class="athena-track"><input class="athena-seek" type="range" min="0" max="100" step=".1" value="0" aria-label="Позиция записи"><div class="athena-times"><span class="athena-now">0:00</span><span class="athena-duration">—</span></div></div></div><div class="athena-controls"><button data-seconds="-15" aria-label="Назад на 15 секунд">↶ 15 сек</button><button data-seconds="15" aria-label="Вперёд на 15 секунд">15 сек ↷</button><select class="athena-speed" aria-label="Скорость записи"><option value=".75">0,75×</option><option value="1" selected>1×</option><option value="1.25">1,25×</option><option value="1.5">1,5×</option><option value="2">2×</option></select></div></div><p class="athena-status" role="status">Загружаю последнюю сводку…</p><h2 class="athena-transcript">Текст сводки</h2><div class="athena-text"></div><div class="athena-tasks"></div></div><div class="athena-footer"><span>Продолжит с того же места</span><button class="athena-refresh">Обновить</button></div>`;
+  const launcher=document.createElement('button');launcher.className='athena-launcher';launcher.textContent='✧ Афина';launcher.setAttribute('aria-controls','athenaPanel');
+  document.body.append(panel,launcher);
+  const a=athena={user,panel,launcher,audio:new Audio(),canvas:panel.querySelector('canvas'),entries:[],current:null,token:0,frame:0,busy:false,refreshing:false,loaded:null,blobURL:null};
+  a.audio.preload='metadata';
+  let open=innerWidth>=1180;try{const pref=localStorage.getItem('kanban.athena.open:'+user);if(pref!==null)open=pref==='1';}catch(e){}panel.hidden=!open;
+  const setOpen=value=>{panel.hidden=!value;try{localStorage.setItem('kanban.athena.open:'+user,value?'1':'0');}catch(e){}athenaLayout();if(value)panel.querySelector('.athena-min').focus({preventScroll:true});else launcher.focus({preventScroll:true});};
+  launcher.onclick=()=>setOpen(true);panel.querySelector('.athena-min').onclick=()=>setOpen(false);
+  panel.onkeydown=e=>{if(e.key==='Escape'){e.stopPropagation();setOpen(false);}};
+  panel.querySelector('.athena-play').onclick=athenaPlay;panel.querySelector('.athena-select').onchange=e=>athenaSelect(e.target.value);panel.querySelector('.athena-refresh').onclick=athenaRefresh;
+  panel.querySelector('.athena-seek').oninput=e=>{if(Number.isFinite(a.audio.duration)){a.audio.currentTime=Number(e.target.value)/100*a.audio.duration;athenaRemember();athenaUpdateTime();}};
+  panel.querySelectorAll('[data-seconds]').forEach(b=>b.onclick=()=>{if(Number.isFinite(a.audio.duration)){a.audio.currentTime=Math.max(0,Math.min(a.audio.duration,a.audio.currentTime+Number(b.dataset.seconds)));athenaUpdateTime();athenaRemember();}});
+  panel.querySelector('.athena-speed').onchange=e=>{a.audio.playbackRate=Number(e.target.value);};
+  a.audio.ontimeupdate=athenaUpdateTime;
+  a.audio.onplaying=()=>{if(athena!==a)return;panel.querySelector('.athena-play').innerHTML=ATHENA_PAUSE;panel.querySelector('.athena-play').setAttribute('aria-label','Пауза');athenaState('Афина говорит');athenaLayout();};
+  a.audio.onpause=()=>{if(athena!==a)return;athenaRemember();panel.querySelector('.athena-play').innerHTML=ATHENA_PLAY;panel.querySelector('.athena-play').setAttribute('aria-label','Продолжить слушать');athenaState('На паузе');athenaLayout();};
+  a.audio.onwaiting=()=>{if(athena===a){athenaState('Загружаю голос…');athenaDraw();}};
+  a.audio.onended=()=>{if(athena!==a)return;try{localStorage.removeItem(athenaProgressKey(a));}catch(e){}athenaState('Сводка прослушана');athenaDraw();};
+  a.audio.onerror=()=>{if(athena===a&&a.current){a.loaded=null;athenaState('Запись не загрузилась');athenaStatus('Не удалось прочитать аудио. Нажми ▶ для повтора.',true);}};
+  a.visible=()=>{athenaDraw();if(!document.hidden)athenaRefresh();};document.addEventListener('visibilitychange',a.visible);window.addEventListener('resize',athenaLayout);window.addEventListener('pagehide',athenaRemember);
+  a.observer=new ResizeObserver(()=>athenaLayout());a.observer.observe(document.getElementById('mainToolbar'));
+  a.poll=setInterval(()=>{if(!document.hidden)athenaRefresh();},60000);
+  athenaLayout();athenaRefresh();
+}
+
+/* ATHENA_JS_END */
+
 /* ---------- wiring ---------- */
 let sPrevView=null;
 document.getElementById('searchInput').oninput=e=>{filters.q=e.target.value.trim();
@@ -2526,6 +2679,7 @@ function startApp(){
     .on('postgres_changes',{event:'*',schema:'public',table:'ideas'},()=>loadIdeas())
     .on('postgres_changes',{event:'*',schema:'public',table:'achievements'},()=>loadAch())
     .subscribe();
+  athenaInit();
   loadAll(); loadHabits(); loadGoals(); loadQuote(); loadWishes(); loadGrowth(); loadReflect(); loadIdeas(); loadAch();
 }
 function showLogin(){
@@ -2547,7 +2701,7 @@ function showLogin(){
   pw.addEventListener('keydown',e=>{if(e.key==='Enter')submit();});
   em.focus();
 }
-async function logout(){ rDrafts.forEach(rPersist);rSetUser(null);await sb.auth.signOut(); _started=false; location.reload(); }
+async function logout(){ athenaDestroy();rDrafts.forEach(rPersist);rSetUser(null);await sb.auth.signOut(); _started=false; location.reload(); }
 document.getElementById('logoutBtn').onclick=logout;
 (async function(){
   const { data:{ session } } = await sb.auth.getSession();
